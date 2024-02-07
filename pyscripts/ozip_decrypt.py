@@ -130,11 +130,11 @@ def main(file_arg):
                     if bdsize < 0x40000:
                         goon = False
                     rr.seek(0x50 + bstart)
-                    while (bdsize > 0):
+                    while bdsize > 0:
                         data = rr.read(0x10)
                         if len(data) == 0:
                             break
-                        size = 0x10;
+                        size = 0x10
                         if bdsize < 0x10:
                             size = bdsize
                         dr = ctx.decrypt(data)

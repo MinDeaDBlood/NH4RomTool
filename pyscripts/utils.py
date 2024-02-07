@@ -185,7 +185,7 @@ def get_time():  # 返回当前时间
 def thrun(fun):  # 调用子线程跑功能，防止卡住
     # showinfo("Test threading...")
     th = threading.Thread(target=fun)
-    th.setDaemon(True)
+    th.daemon = True
     th.start()
 
 
