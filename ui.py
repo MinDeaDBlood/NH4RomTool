@@ -680,7 +680,7 @@ def __smartUnpack():
                     showinfo("正在解包 : " + filename.get())
                     showinfo("使用erofsUnpackRust")
                     statusstart()
-                    runcmd("erofsUnpackRust.exe " + filename.get() + " " + WorkDir + os.sep + dirname)
+                    runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
                     statusend()
 
                 showinfo("在工作目录创建解包目录 : " + dirname)
