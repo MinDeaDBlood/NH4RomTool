@@ -199,11 +199,6 @@ def getShiju():
     return rjason
 
 
-def getCurrentVersion():
-    file = open("version.txt", "r")
-    content = file.read()
-    file.close()
-    return content
 
 
 def getdirsize(dir):

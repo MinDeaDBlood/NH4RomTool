@@ -36,7 +36,7 @@ EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 LICENSE = "Apache 2.0"  # 程序的开源协议
 
 # Var
-VERSION = utils.getCurrentVersion()
+VERSION = '20220411'
 AUTHOR = "affggh"
 WINDOWTITLE = "NH4RomTool " + " [版本: " + VERSION + "] [作者: affggh & ColdWindScholar]"
 THEME = "minty"  # 设置默认主题
