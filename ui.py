@@ -24,7 +24,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 
 # import functions I modified
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
-
+from pyscripts.utils import gettype
 # Flag
 MENUBAR = True  # 菜单栏
 TEXTREADONLY = True  # 文本框只读
@@ -53,8 +53,6 @@ if os.access(LOCALDIR + os.sep + "config.json", os.F_OK):
 else:
     print("config.json is missing")
     sys.exit()
-
-
 
 if EXECPATH:
     utils.addExecPath(EXECPATH)
@@ -444,8 +442,7 @@ def mkWorkdir():
 def detectFileType():
     fileChooseWindow("检测文件类型")
     if os.access(filename.get(), os.F_OK):
-        showinfo("文件格式为 : ")
-        runcmd("gettype -i %s" % (filename.get()))
+        showinfo(f"文件格式为 : {gettype(filename.get())}")
     else:
         showinfo("Error : 文件不存在")
 
@@ -652,7 +649,7 @@ def __smartUnpack():
     fileChooseWindow("选择要智能解包的文件")
     if WorkDir:
         if os.access(filename.get(), os.F_OK):
-            filetype = returnoutput("gettype -i " + filename.get()).replace('\r\n', '')
+            filetype = gettype(filename.get())
             # for windows , end of line basicly is \x0a\x0d which is \r\n
             showinfo("智能识别文件类型为 :  " + filetype)
             unpackdir = os.path.abspath(WorkDir + "/" + filetype)
@@ -954,7 +951,7 @@ def __repackSparseImage():
         imgFilePath = filename.get()
         if not os.path.exists(imgFilePath):
             showinfo("文件不存在: " + imgFilePath)
-        elif returnoutput("gettype -i " + imgFilePath).replace('\r\n', '') != "ext":
+        elif gettype(imgFilePath) != "ext":
             showinfo("选中的文件并非 EXT 镜像，请先转换")
             return
         else:
@@ -985,7 +982,7 @@ def __compressToBr():
         imgFilePath = filename.get()
         if not os.path.exists(imgFilePath):
             showinfo("文件不存在: " + imgFilePath)
-        elif returnoutput("gettype -i " + imgFilePath).replace('\r\n', '') != "dat":
+        elif gettype(imgFilePath) != "dat":
             showinfo("选中的文件并非 DAT，请先转换")
             return
         else:
@@ -1012,7 +1009,7 @@ def __repackDat():
         imgFilePath = filename.get()
         if not os.path.exists(imgFilePath):
             showinfo("文件不存在: " + imgFilePath)
-        elif returnoutput("gettype -i " + imgFilePath).replace('\r\n', '') != "sparse":
+        elif gettype(imgFilePath) != "sparse":
             showinfo("选中的文件并非 SPARSE，请先转换")
             return
         else:
@@ -1358,7 +1355,6 @@ if __name__ == '__main__':
 
     if TEXTSHOWBANNER:
         showbanner()
-
 
     root.update()
     root.mainloop()
