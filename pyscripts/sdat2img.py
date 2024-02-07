@@ -24,7 +24,7 @@ def main(TRANSFER_LIST_FILE, NEW_DATA_FILE, OUTPUT_IMAGE_FILE):
 
         return tuple([(num_set[i], num_set[i + 1]) for i in range(1, len(num_set), 2)])
 
-    def parse_transfer_list_file(path):
+    def parse_transfer_list_file():
         trans_list = open(TRANSFER_LIST_FILE, 'r')
 
         # First line in transfer list is the version number
@@ -58,7 +58,7 @@ def main(TRANSFER_LIST_FILE, NEW_DATA_FILE, OUTPUT_IMAGE_FILE):
 
     BLOCK_SIZE = 4096
 
-    version, new_blocks, commands = parse_transfer_list_file(TRANSFER_LIST_FILE)
+    version, new_blocks, commands = parse_transfer_list_file()
 
     if version == 1:
         print('Android Lollipop 5.0 detected!\n')

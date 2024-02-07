@@ -25,6 +25,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 # import functions I modified
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
+
 # Flag
 MENUBAR = True  # 菜单栏
 TEXTREADONLY = True  # 文本框只读
@@ -581,7 +582,7 @@ def zipcompressfile():
     threading.Thread(target=__zipcompressfile).start()
 
 
-def __xruncmd(event):
+def __xruncmd(event=None):
     cmd = USERCMD.get()
     runcmd("busybox ash -c \"%s\"" % cmd)
     usercmd.delete(0, 'end')
@@ -637,12 +638,6 @@ def patchfsconfig():
     fileChooseWindow("选择fs_config文件")
     fspatch.main(directoryname.get(), filename.get())
     showinfo("修补完成")
-
-
-def xruncmd():
-    cmd = USERCMD.get()
-    runcmd("busybox ash -c \"%s\"" % cmd)
-    usercmd.delete(0, 'end')
 
 
 def __smartUnpack():
@@ -1326,8 +1321,9 @@ if __name__ == '__main__':
         usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
         usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
         usercmd.bind('<Return>', __xruncmd)
-        ttk.Button(frame22, text='运行', command=xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
-                                                                                                fill=X, padx=2, pady=2)
+        ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+                                                                                                  fill=X, padx=2,
+                                                                                                  pady=2)
     # pack frames
     frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
