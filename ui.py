@@ -26,44 +26,24 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 
 # Flag
-DEBUG = False  # 显示调试信息
-HIDE_CONSOLE = False  # 隐藏控制台
 MENUBAR = True  # 菜单栏
-USEMYLOGO = True  # 使用自己的logo
 TEXTREADONLY = True  # 文本框只读
 TEXTSHOWBANNER = False  # 展示那个文本框的字符画
-USEMYSTD = False  # 输出重定向到Text控件
 SHOWSHIJU = False  # 展示诗句
 USESTATUSBAR = True  # 使用状态栏（并不好用）
 ALLOWMODIFYCMD = True  # 提供一个可以输入任意命令的框
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 LICENSE = "Apache 2.0"  # 程序的开源协议
 
-
-# Check Update
-def checkToolUpdate():
-    onlineVersion = utils.getOnlineVersion()
-    if onlineVersion > VERSION:
-        showinfo("有更新可用，请前往 Github 页面查看 (" + VERSION + " -> " + onlineVersion + ")")
-    else:
-        showinfo("当前已是最新版本 (" + VERSION + ")")
-
-
-# Verify
-
-
 # Var
 VERSION = utils.getCurrentVersion()
 AUTHOR = "affggh"
-WINDOWTITLE = "NH4RomTool " + " [版本: " + VERSION + "] [作者: " + AUTHOR + "]"
+WINDOWTITLE = "NH4RomTool " + " [版本: " + VERSION + "] [作者: affggh & ColdWindScholar]"
 THEME = "minty"  # 设置默认主题
 LOGOICO = ".\\bin\\logo.ico"
 BANNER = ".\\bin\\banner"
-TEXTFONT = ['Arial', 5]
-LOCALDIR = os.path.abspath(os.path.dirname(sys.argv[0]))
-
-# CheckUpdate
-threading.Thread(target=checkToolUpdate).start()
+TEXTFONT = ['Arial', 10]
+LOCALDIR = os.getcwd()
 
 # ui config This is for repack tool to detect
 if os.access(LOCALDIR + os.sep + "config.json", os.F_OK):
@@ -79,9 +59,6 @@ if USESTATUSBAR:
 
 if EXECPATH:
     utils.addExecPath(EXECPATH)
-
-if HIDE_CONSOLE:  # 隐藏控制台
-    utils.hideForegroundWindow
 
 style = Style(theme=THEME)
 
@@ -107,7 +84,6 @@ WECHATIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\wechat.png")
 ALIREDPACIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\zfbhb.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
-global WorkDir
 WorkDir = False
 
 # Var
@@ -121,10 +97,6 @@ if ALLOWMODIFYCMD:
 # from https://www.i4k.xyz/article/weixin_49317370/108878373
 class myStdout:  # 重定向类
     def __init__(self):
-        # 将其备份
-        self.stdoutbak = sys.stdout
-        self.stderrbak = sys.stderr
-        # 重定向
         sys.stdout = self
         sys.stderr = self
 
@@ -141,10 +113,8 @@ class myStdout:  # 重定向类
         if TEXTREADONLY:
             text.configure(state='disabled')
 
-    def restoreStd(self):
-        # 恢复标准输出
-        sys.stdout = self.stdoutbak
-        sys.stderr = self.stderrbak
+    def flush(self):
+        ...
 
 
 class MyThread(threading.Thread):
@@ -165,8 +135,7 @@ def logo():
     root.iconbitmap(LOGOICO)
 
 
-if USEMYLOGO:
-    logo()
+logo()
 
 
 def VisitMe():
@@ -375,8 +344,6 @@ def dirChooseWindow(tips):
 
 
 def change_theme(var):
-    if DEBUG:
-        print("change Theme : " + var)
     showinfo("设置主题为 : " + var)
     style = Style(theme=var)
     style.theme_use()
@@ -1181,12 +1148,7 @@ def repackSuper():
 
 
 if __name__ == '__main__':
-
-    if USEMYSTD:
-        mystd = myStdout()
-    else:
-        # mystd.restoreStd()
-        print("Use standard stdout and stderr...")
+    myStdout()
     # 在中心打开主窗口
     screenwidth = root.winfo_screenwidth()  # 屏幕宽度
     screenheight = root.winfo_screenheight()  # 屏幕高度
@@ -1249,12 +1211,6 @@ if __name__ == '__main__':
     table.pack(side=TOP, fill=BOTH, expand=YES)
     table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
     getWorkDir()
-
-
-    # 咕咕咕
-    def functionNotAvailable():
-        showinfo("当你看到这个提示的时候，说明这个功能仍未实装，可能需要至多 2147483647 小时来完成它")
-
 
     # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
@@ -1409,19 +1365,6 @@ if __name__ == '__main__':
     if TEXTSHOWBANNER:
         showbanner()
 
-    if DEBUG:
-        showinfo("Debug 模式已开启")
-        # showinfo("Board id : " + sn.get_board_id())
-        # showinfo(UICONFIG)
-    else:
-        '''
-        showinfo("  Version : %s" %(VERSION))
-        showinfo("  Author  : %s" %(AUTHOR))
-        showinfo("  LICENSE : %s" %(LICENSE))
-        '''
 
     root.update()
     root.mainloop()
-
-    if USEMYSTD:
-        mystd.restoreStd()  # 还原标准输出
