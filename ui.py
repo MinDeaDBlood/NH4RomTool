@@ -29,7 +29,6 @@ from pyscripts.utils import gettype
 # Flag
 MENUBAR = True  # 菜单栏
 TEXTREADONLY = True  # 文本框只读
-TEXTSHOWBANNER = False  # 展示那个文本框的字符画
 SHOWSHIJU = False  # 展示诗句
 USESTATUSBAR = True  # 使用状态栏（并不好用）
 ALLOWMODIFYCMD = True  # 提供一个可以输入任意命令的框
@@ -155,7 +154,7 @@ def runcmd(cmd):
             showinfo(i.decode("utf-8", "ignore").strip())
     except subprocess.CalledProcessError as e:
         for i in iter(e.stdout.readline, b""):
-            showinfo(e.decode("utf-8", "ignore").strip())
+            showinfo(i)
 
 
 def returnoutput(cmd):
@@ -166,20 +165,10 @@ def returnoutput(cmd):
         return e.decode()
 
 
-def showbanner():
-    if TEXTSHOWBANNER:
-        with open(BANNER, "r") as b:
-            for i in b.readlines():
-                showinfo(i.replace('\n', ''))
-
-
 def cleaninfo():
     if TEXTREADONLY:
         text.configure(state='normal')
     text.delete(1.0, END)  # 清空text
-    # text.image_create(END,image=LOGOIMG)
-    # text.insert(END,"\n")
-    showbanner()
     if TEXTREADONLY:
         text.configure(state='disabled')
 
@@ -1322,8 +1311,6 @@ if __name__ == '__main__':
         shijuLable.pack(side=LEFT, padx=8)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
 
-    if TEXTSHOWBANNER:
-        showbanner()
 
     root.update()
     root.mainloop()
