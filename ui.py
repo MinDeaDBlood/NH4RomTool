@@ -210,7 +210,7 @@ def about():
     ttk.Button(aframe1, text='访问作者主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
                                                                                                      expand=YES, padx=5)
     ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
-                                                                                            padx=5)
+                                                                                           padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱 Version %s\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\n%s Copyright(R) Apache 2.0 LICENSE' % (
                   VERSION, AUTHOR)).pack(side=BOTTOM, expand=NO, pady=3)
@@ -337,10 +337,12 @@ def removeDir_EX(workDirEX):
             os.rmdir(os.path.join(root, name))
 
 
+STATUSON = BooleanVar()
+
+
 def statusend():
     if USESTATUSBAR:
-        global STATUSON
-        STATUSON = True
+        STATUSON.set(True)
         statusthread.join()
         statusbar['image'] = DEFAULTSTATUS
     else:
@@ -353,15 +355,13 @@ def __statusstart():
             photo = PhotoImage(file=LOCALDIR + '\\bin\\processing.gif', format='gif -index %i' % i)
             statusbar['image'] = photo
             time.sleep(1 / 18)
-            global STATUSON
-        if STATUSON:
+        if STATUSON.get():
             break
 
 
 def statusstart():
     if USESTATUSBAR:
-        global STATUSON
-        STATUSON = False
+        STATUSON.set(False)
         global statusthread
         statusthread = threading.Thread(target=__statusstart)
         statusthread.start()
@@ -468,7 +468,7 @@ def getMiuiWindow():
     size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
     getmiuiWindow.geometry(size_xy)
     # getmiuiWindow.geometry("300x180")
-    getmiuiWindow.resizable(0, 0)  # 设置最大化窗口不可用
+    getmiuiWindow.resizable(False, False)  # 设置最大化窗口不可用
     getmiuiWindow.title("MIUI 最新rom获取程序")
     DEVICE_CODE = tk.StringVar()
     ttk.Label(getmiuiWindow, text="设备开发代号").pack(side=TOP, expand=NO, padx=5, pady=10)
@@ -1310,7 +1310,6 @@ if __name__ == '__main__':
                                font=shiju_font)
         shijuLable.pack(side=LEFT, padx=8)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
-
 
     root.update()
     root.mainloop()
