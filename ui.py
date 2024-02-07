@@ -700,7 +700,7 @@ def __smartUnpack():
                 def __dpayload():
                     statusstart()
                     t = threading.Thread(target=runcmd, args=[
-                        "python .\\bin\\payload_dumper.py %s --out %s\\payload" % (filename.get(), WorkDir)],
+                        "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
                                          daemon=True)
                     t.start()
                     t.join()
