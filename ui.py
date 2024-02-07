@@ -49,12 +49,10 @@ LOCALDIR = os.getcwd()
 # ui config This is for repack tool to detect
 if os.access(LOCALDIR + os.sep + "config.json", os.F_OK):
     with open("config.json", encoding='utf-8') as f:
-        global UICONFIG
         UICONFIG = json.load(f)
 else:
     print("config.json is missing")
     sys.exit()
-
 if EXECPATH:
     utils.addExecPath(EXECPATH)
 
@@ -147,16 +145,6 @@ def showinfo(textmsg):
         text.configure(state='disabled')
 
 
-def showontime(textmsg):
-    if TEXTREADONLY:
-        text.configure(state='normal')
-    # text.delete(1.0, END)
-    text.insert(END, "[%s]" % (utils.get_time()) + "%s" % textmsg + "\n")
-    text.update()  # 实时返回信息
-    if TEXTREADONLY:
-        text.configure(state='disabled')
-
-
 def runcmd(cmd):
     try:
         ret = subprocess.Popen(cmd, shell=False,
@@ -168,21 +156,6 @@ def runcmd(cmd):
     except subprocess.CalledProcessError as e:
         for i in iter(e.stdout.readline, b""):
             showinfo(e.decode("utf-8", "ignore").strip())
-
-
-def runontime(cmd):
-    try:
-        ret = subprocess.Popen(cmd, shell=False,
-                               stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.STDOUT)
-        for i in iter(ret.stdout.readline, b""):
-            showontime(i.decode("utf-8", "ignore").strip())
-            time.sleep(1)
-    except subprocess.CalledProcessError as e:
-        for i in iter(e.stdout.readline, b""):
-            showontime(e.decode("utf-8", "ignore").strip())
-            time.sleep(1)
 
 
 def returnoutput(cmd):
