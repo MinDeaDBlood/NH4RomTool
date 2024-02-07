@@ -90,7 +90,7 @@ if ALLOWMODIFYCMD:
 class myStdout:  # 重定向类
     def __init__(self):
         sys.stdout = self
-        sys.stderr = self
+        # sys.stderr = self
 
     @staticmethod
     def write(self, info):
@@ -340,16 +340,13 @@ def removeDir_EX(workDirEX):
 
 class cartoon:
     def __init__(self):
-        self.state = None
         ...
 
-    def run(self):
+    def __enter__(self):
         if USESTATUSBAR:
             self.state = False
             self.statusthread = threading.Thread(target=self.__run)
             self.statusthread.start()
-        else:
-            pass
 
     def __run(self):
         while True:
@@ -360,17 +357,14 @@ class cartoon:
             if self.state:
                 break
 
-    def end(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         if USESTATUSBAR:
             self.state = True
             self.statusthread.join()
             statusbar['image'] = DEFAULTSTATUS
 
-    def __enter__(self):
-        self.run()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.end()
+
 
 
 def SelectWorkDir():
@@ -425,7 +419,7 @@ def ozipDecrypt():
 def __ozipEncrypt():
     fileChooseWindow("加密ozip")
     if os.access(filename.get(), os.F_OK):
-        with cartoon:
+        with cartoon():
             runcmd("zip2ozip " + filename.get())
     else:
         showinfo("Error : 文件不存在")
@@ -513,7 +507,7 @@ def __unzipfile():
         fileChooseWindow("选择要解压的文件")
         if os.access(filename.get(), os.F_OK):
             showinfo("正在解压文件: " + filename.get())
-            with cartoon:
+            with cartoon():
                 MyThread(utils.unzip_file(filename.get(), WorkDir + "\\rom"))
             showinfo("解压完成")
         else:
@@ -526,8 +520,7 @@ def unzipfile():
     if WorkDir:
         if os.access(WorkDir + "\\rom", os.F_OK):
             shutil.rmtree(WorkDir + "\\rom")
-    with cartoon:
-        threading.Thread(target=__unzipfile).start()
+    threading.Thread(target=__unzipfile).start()
 
 
 def __zipcompressfile():
@@ -535,7 +528,7 @@ def __zipcompressfile():
     userInputWindow()
     if WorkDir:
         showinfo("正在压缩 : " + inputvar.get() + ".zip")
-        with cartoon:
+        with cartoon():
             MyThread(utils.zip_file(inputvar.get() + ".zip", WorkDir + "\\rom"))
         showinfo("压缩完成")
     else:
@@ -556,7 +549,7 @@ def __xruncmd(event=None):
 def __parsePayload():
     fileChooseWindow("解析payload.bin")
     if os.access(filename.get(), os.F_OK):
-        with cartoon:
+        with cartoon():
             data = returnoutput("bin/parsePayload.exe " + filename.get())
             datadict = dict(json.loads(data.replace("\'", "\"")))
             showinfo("PAYLOAD文件解析结果如下")
@@ -616,7 +609,7 @@ def __smartUnpack():
                 showinfo("正在解密ozip")
 
                 def __dozip():
-                    with cartoon:
+                    with cartoon():
                         ozip_decrypt.main(filename.get())
                         showinfo("解密完成")
 
@@ -629,14 +622,14 @@ def __smartUnpack():
                 def __eext():
                     showinfo("正在解包 : " + filename.get())
                     showinfo("使用imgextractor")
-                    with cartoon:
+                    with cartoon():
                         imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename.get()).split('.')[0])
 
                 def __eerofs():
                     showinfo("正在解包 : " + filename.get())
                     showinfo("使用erofsUnpackRust")
-                    with cartoon:
+                    with cartoon():
                         runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
 
                 showinfo("在工作目录创建解包目录 : " + dirname)
@@ -654,7 +647,7 @@ def __smartUnpack():
 
             else:
                 def __dpayload():
-                    with cartoon:
+                    with cartoon():
                         t = threading.Thread(target=runcmd, args=[
                             "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
                                              daemon=True)
@@ -684,7 +677,7 @@ def __smartUnpack():
                             showinfo("使用 lpunpack 解锁")
 
                             def __dsuper():
-                                with cartoon:
+                                with cartoon():
                                     runcmd("lpunpack " + filename.get() + " " + unpackdir)
 
                             th = threading.Thread(target=__dsuper)
@@ -693,7 +686,7 @@ def __smartUnpack():
                     showinfo("文件类型为sparse, 使用simg2img转换为raw data")
 
                     def __dsimg2img():
-                        with cartoon:
+                        with cartoon():
                             utils.mkdir(WorkDir + "\\rawimg")
                             runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
                                 filename.get()))
@@ -709,7 +702,7 @@ def __smartUnpack():
                         transferpath = os.path.abspath(
                             os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
-                            with cartoon:
+                            with cartoon():
                                 sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
                                 showinfo("sdat已转换为img")
                         else:
@@ -723,7 +716,7 @@ def __smartUnpack():
                     def __dbr():
                         pname = os.path.basename(filename.get()).replace(".br", "")
                         if os.access(filename.get(), os.F_OK):
-                            with cartoon:
+                            with cartoon():
                                 runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
                             showinfo("已解压br文件")
                         else:
@@ -806,7 +799,7 @@ def __repackextimage():
             showinfo("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
             showinfo("开始打包EXT镜像")
-            with cartoon:
+            with cartoon():
                 showinfo(cmd)
                 runcmd(cmd)
                 cmd = "e2fsdroid.exe -e -T 1230768000 -C %s -S %s -f %s -a /%s %s/output/%s.img" % (
@@ -854,7 +847,7 @@ def __repackerofsimage():
         if isFileContexts != "0":
             showinfo("自动搜寻 file_contexts 完成" + isFileContexts)
             filecontexts_path = isFileContexts
-        with cartoon:
+        with cartoon():
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
                 WorkDir, os.path.basename(directoryname.get()), directoryname.get().replace("\\", "/"),
@@ -906,9 +899,9 @@ def __repackSparseImage():
             return
         else:
             showinfo("开始转换")
-            with cartoon:
+            with cartoon():
                 cmd = "%s %s %s/output/%s_sparse.img" % (
-                UICONFIG['SPARSETOOL'], imgFilePath, WorkDir, os.path.basename(directoryname.get()))
+                    UICONFIG['SPARSETOOL'], imgFilePath, WorkDir, os.path.basename(directoryname.get()))
                 runcmd(cmd)
                 showinfo("转换结束")
     else:
@@ -936,7 +929,7 @@ def __compressToBr():
             return
         else:
             showinfo("开始转换")
-            with cartoon:
+            with cartoon():
                 th = threading.Thread(target=runcmd("brotli.exe -q 6 " + imgFilePath))
                 th.start()
             showinfo("转换完毕，脱出到相同文件夹")
@@ -991,7 +984,7 @@ def __repackDat():
                 return
             # img2sdat <image file> <output dir> <version|1=5.0|2=5.1|3=6.0|4=7.0+> <prefix>
             showinfo("开始转换")
-            with cartoon:
+            with cartoon():
                 threading.Thread(
                     target=img2sdat.main(imgFilePath, WorkDir + "/output/", currentVersion, partitionName)).start()
             showinfo("转换完毕，脱出到工作目录下 output 文件夹")
@@ -1005,7 +998,7 @@ def __repackdtb():
         if os.access(filename.get(), os.F_OK):
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
                 utils.mkdir(WorkDir + os.sep + "dtb")
-            with cartoon:
+            with cartoon():
                 runcmd("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
                     filename.get(), WorkDir, os.path.basename(filename.get()).replace(".dts", ".dtb")))
             showinfo("编译为dtb完成")
