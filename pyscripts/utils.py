@@ -202,7 +202,7 @@ def listfile(path, ext):
 def listDirHeader(path, head):
     L = []
     for i in os.listdir(path):
-        if (i.startswith(head)):
+        if i.startswith(head):
             L.append(i)
     return L
 

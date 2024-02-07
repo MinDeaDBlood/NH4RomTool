@@ -98,14 +98,14 @@ def main(TRANSFER_LIST_FILE, NEW_DATA_FILE, OUTPUT_IMAGE_FILE):
                 output_img.seek(begin * BLOCK_SIZE)
 
                 # Copy one block at a time
-                while (block_count > 0):
+                while block_count > 0:
                     output_img.write(new_data_file.read(BLOCK_SIZE))
                     block_count -= 1
         else:
             print('Skipping command {}...'.format(command[0]))
 
     # Make file larger if necessary
-    if (output_img.tell() < max_file_size):
+    if output_img.tell() < max_file_size:
         output_img.truncate(max_file_size)
 
     output_img.close()

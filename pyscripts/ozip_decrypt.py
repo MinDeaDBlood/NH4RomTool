@@ -16,11 +16,13 @@ from Crypto.Cipher import AES
 import zipfile
 from os.path import basename
 
+
 def main(file_arg):
     keys = [
         "D6EECF0AE5ACD4E0E9FE522DE7CE381E",  # mnkey
         "D6ECCF0AE5ACD4E0E92E522DE7C1381E",  # mkey
-        "D6DCCF0AD5ACD4E0292E522DB7C1381E",  # realkey, R9s CPH1607 MSM8953, Plus, R11, RMX1921 Realme XT, RMX1851EX Realme Android 10, RMX1992EX_11_OTA_1050
+        "D6DCCF0AD5ACD4E0292E522DB7C1381E",
+        # realkey, R9s CPH1607 MSM8953, Plus, R11, RMX1921 Realme XT, RMX1851EX Realme Android 10, RMX1992EX_11_OTA_1050
         "D7DCCE1AD4AFDCE2393E5161CBDC4321",  # testkey
         "D7DBCE2AD4ADDCE1393E5521CBDC4321",  # utilkey
         "D7DBCE1AD4AFDCE1393E5121CBDC4321",  # R11s CPH1719 MSM8976, Plus
@@ -53,30 +55,27 @@ def main(file_arg):
         "A1CC75115CAECB890E4A563CA1AC67C8",  # A73(reserved)
         "2132321EA2CA86621A11241ABA512722",  # Realme3(reserved)
         "22A21E821743E5EE33AE81B227B1462E"
-        #F3 Plus CPH1613 - MSM8976
+        # F3 Plus CPH1613 - MSM8976
     ]
-
 
     def keytest(data):
         for key in keys:
             ctx = AES.new(binascii.unhexlify(key), AES.MODE_ECB)
             dat = ctx.decrypt(data)
-            if (dat[0:4] == b'\x50\x4B\x03\x04'):
+            if dat[0:4] == b'\x50\x4B\x03\x04':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
-            elif (dat[0:4] == b'\x41\x56\x42\x30'):
+            elif dat[0:4] == b'\x41\x56\x42\x30':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
-            elif (dat[0:4] == b'\x41\x4E\x44\x52'):
+            elif dat[0:4] == b'\x41\x4E\x44\x52':
                 print("Found correct AES key: " + key)
                 return binascii.unhexlify(key)
         return -1
 
-
     def del_rw(action, name, exc):
         os.chmod(name, stat.S_IWRITE)
         os.remove(name)
-
 
     def rmrf(path):
         if os.path.exists(path):
@@ -86,8 +85,8 @@ def main(file_arg):
                 shutil.rmtree(path, onerror=del_rw)
 
     def decryptfile(key, rfilename):
-        with open(rfilename,'rb') as rr:
-            with open(rfilename+".tmp", 'wb') as wf:
+        with open(rfilename, 'rb') as rr:
+            with open(rfilename + ".tmp", 'wb') as wf:
                 rr.seek(0x10)
                 dsize = int(rr.read(0x10).replace(b"\x00", b"").decode('utf-8'), 10)
                 rr.seek(0x1050)
@@ -95,7 +94,7 @@ def main(file_arg):
                 flen = os.stat(rfilename).st_size - 0x1050
 
                 ctx = AES.new(key, AES.MODE_ECB)
-                while (dsize > 0):
+                while dsize > 0:
                     if flen > 0x4000:
                         size = 0x4000
                     else:
@@ -110,15 +109,15 @@ def main(file_arg):
                     flen -= size
                     dsize -= size
         os.remove(rfilename)
-        os.rename(rfilename+".tmp",rfilename)
+        os.rename(rfilename + ".tmp", rfilename)
 
     def decryptfile2(key, rfilename, wfilename):
-        with open(rfilename,'rb') as rr:
+        with open(rfilename, 'rb') as rr:
             with open(wfilename, 'wb') as wf:
                 ctx = AES.new(key, AES.MODE_ECB)
                 bstart = 0
                 goon = True
-                while (goon):
+                while goon:
                     rr.seek(bstart)
                     header = rr.read(12)
                     if len(header) == 0:
@@ -149,8 +148,8 @@ def main(file_arg):
         return 0
 
     def mode2(filename):
-        temp=os.path.join(os.path.abspath(os.path.dirname(filename)), "temp")
-        out=os.path.join(os.path.abspath(os.path.dirname(filename)), "out")
+        temp = os.path.join(os.path.abspath(os.path.dirname(filename)), "temp")
+        out = os.path.join(os.path.abspath(os.path.dirname(filename)), "out")
         with open(filename, 'rb') as fr:
             magic = fr.read(12)
             if magic[:2] == b"PK":
@@ -163,12 +162,12 @@ def main(file_arg):
                     os.mkdir(out)
                     print("Finding key...  " + file_arg)
                     for zi in zipObj.infolist():
-                        orgfilename=zi.filename
+                        orgfilename = zi.filename
                         if "boot.img" in orgfilename:
                             zi.filename = "out"
                             zipObj.extract(zi, temp)
                             zi.filename = orgfilename
-                            with open(os.path.join(temp,"out"), 'rb') as rr:
+                            with open(os.path.join(temp, "out"), 'rb') as rr:
                                 magic = rr.read(12)
                                 if magic == b"OPPOENCRYPT!":
                                     rr.seek(0x50)
@@ -189,24 +188,25 @@ def main(file_arg):
                         os.remove(outzip)
                     with zipfile.ZipFile(outzip, 'w', zipfile.ZIP_DEFLATED) as WzipObj:
                         for zi in zipObj.infolist():
-                            orgfilename=zi.filename
-                            zi.filename="out"
+                            orgfilename = zi.filename
+                            zi.filename = "out"
                             zipObj.extract(zi, temp)
-                            zi.filename=orgfilename
-                            with open(os.path.join(temp,"out"), 'rb') as rr:
+                            zi.filename = orgfilename
+                            with open(os.path.join(temp, "out"), 'rb') as rr:
                                 magic = rr.read(12)
                                 if magic == b"OPPOENCRYPT!":
                                     print("Decrypting " + orgfilename)
-                                    if decryptfile2(key, os.path.join(temp,"out"), os.path.join(temp,"out")+".dec") == 1:
+                                    if decryptfile2(key, os.path.join(temp, "out"),
+                                                    os.path.join(temp, "out") + ".dec") == 1:
                                         return 1
-                                    WzipObj.write(os.path.join(temp,"out")+".dec", orgfilename)
-                                    os.remove(os.path.join(temp,"out"))
-                                    os.remove(os.path.join(temp,"out")+".dec")
+                                    WzipObj.write(os.path.join(temp, "out") + ".dec", orgfilename)
+                                    os.remove(os.path.join(temp, "out"))
+                                    os.remove(os.path.join(temp, "out") + ".dec")
                                 else:
-                                    WzipObj.write(os.path.join(temp,"out"), orgfilename)
-                                    os.remove(os.path.join(temp,"out"))
+                                    WzipObj.write(os.path.join(temp, "out"), orgfilename)
+                                    os.remove(os.path.join(temp, "out"))
                     rmrf(temp)
-                    print("DONE... file decrypted to: "+outzip)
+                    print("DONE... file decrypted to: " + outzip)
                     return 0
 
     print("ozipdecrypt 1.31 (c) B.Kerler 2017-2021")
@@ -221,11 +221,11 @@ def main(file_arg):
             print("ozip has unknown magic, OPPOENCRYPT! expected!")
             return 1
 
-        if pk == False:
+        if not pk:
             fr.seek(0x1050)
             data = fr.read(16)
             key = keytest(data)
-            if (key == -1):
+            if key == -1:
                 print("Unknown AES key, reverse key from recovery first!")
                 return 1
             ctx = AES.new(key, AES.MODE_ECB)
@@ -274,11 +274,11 @@ def main(file_arg):
                                 rt.seek(0x1050)
                                 data = rt.read(16)
                                 key = keytest(data)
-                                if (key == -1):
+                                if key == -1:
                                     print("Unknown AES key, reverse key from recovery first!")
                                     return 1
                             testkey = False
-                    if testkey == True:
+                    if testkey:
                         print("Unknown image, please report an issue with image name!")
                         return 1
 
@@ -286,22 +286,23 @@ def main(file_arg):
                 with zipfile.ZipFile(outzip, 'w', zipfile.ZIP_DEFLATED) as WzipObj:
                     for info in zo.infolist():
                         print("Extracting " + info.filename)
-                        orgfilename=info.filename
-                        info.filename="out"
+                        orgfilename = info.filename
+                        info.filename = "out"
                         zo.extract(info, outpath)
-                        info.filename=orgfilename
+                        info.filename = orgfilename
                         if len(clist) > 0:
                             if info.filename in clist:
-                                decryptfile(key, os.path.join(outpath,"out"))
+                                decryptfile(key, os.path.join(outpath, "out"))
                                 WzipObj.write(os.path.join(outpath, "out"), orgfilename)
                         else:
-                            with open(os.path.join(outpath,"out"), 'rb') as rr:
+                            with open(os.path.join(outpath, "out"), 'rb') as rr:
                                 magic = rr.read(12)
                             if magic == b"OPPOENCRYPT!":
-                                decryptfile(key, os.path.join(outpath,"out"))
+                                decryptfile(key, os.path.join(outpath, "out"))
                                 WzipObj.write(os.path.join(outpath, "out"), orgfilename)
                 print("DONE... files decrypted to: " + outzip)
                 return 0
+
 
 if __name__ == '__main__':
     import sys, argparse
