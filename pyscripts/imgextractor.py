@@ -2,7 +2,7 @@ import os
 import re
 import struct
 
-import ext4
+from . import ext4
 
 if os.name == 'nt':
     from ctypes.wintypes import LPCSTR, DWORD

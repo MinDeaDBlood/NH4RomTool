@@ -54,8 +54,7 @@ else:
     print("config.json is missing")
     sys.exit()
 
-if USESTATUSBAR:
-    STATUSSTRINGS = ['-', '\\', '|', '/', '-']
+
 
 if EXECPATH:
     utils.addExecPath(EXECPATH)
@@ -392,9 +391,7 @@ def statusend():
 
 def __statusstart():
     while True:
-        # for i in range(len(STATUSSTRINGS)):
         for i in range(33):  # 33是图片帧数
-            # statusbar['text'] = STATUSSTRINGS[i]
             photo = PhotoImage(file=LOCALDIR + '\\bin\\processing.gif', format='gif -index %i' % i)
             statusbar['image'] = photo
             time.sleep(1 / 18)
