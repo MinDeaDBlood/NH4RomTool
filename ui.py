@@ -78,9 +78,6 @@ root.title(WINDOWTITLE)
 
 # Set images
 LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
-ALIPAYIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\alipay.png")
-WECHATIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\wechat.png")
-ALIREDPACIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\zfbhb.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
 WorkDir = False
