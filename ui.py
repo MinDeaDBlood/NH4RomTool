@@ -76,7 +76,7 @@ root.title(WINDOWTITLE)
 LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
-WorkDir = False
+WorkDir = ''
 
 # Var
 filename = tk.StringVar()
@@ -162,7 +162,7 @@ def returnoutput(cmd):
         ret = subprocess.check_output(cmd, shell=False, stderr=subprocess.STDOUT)
         return ret.decode()
     except subprocess.CalledProcessError as e:
-        return e.decode()
+        return str(e)
 
 
 def cleaninfo():
@@ -209,7 +209,7 @@ def about():
     aframe2.pack(side=BOTTOM, expand=YES, pady=3)
     ttk.Button(aframe1, text='访问作者主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
                                                                                                      expand=YES, padx=5)
-    ttk.Button(aframe1, text=' 给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
+    ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
                                                                                             padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱 Version %s\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\n%s Copyright(R) Apache 2.0 LICENSE' % (
@@ -262,7 +262,7 @@ def fileChooseWindow(tips):
     size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
     chooseWindow.geometry(size_xy)
     # chooseWindow.geometry("300x180")
-    chooseWindow.resizable(0, 0)  # 设置最大化窗口不可用
+    chooseWindow.resizable(False, False)  # 设置最大化窗口不可用
     chooseWindow.title(tips)
     ent = ttk.Entry(chooseWindow, textvariable=filename, width=50)
     ent.pack(side=TOP, expand=NO, padx=0, pady=20)
@@ -289,7 +289,7 @@ def dirChooseWindow(tips):
     size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
     chooseWindow.geometry(size_xy)
     # chooseWindow.geometry("300x180")
-    chooseWindow.resizable(0, 0)  # 设置最大化窗口不可用
+    chooseWindow.resizable(False, False)  # 设置最大化窗口不可用
     chooseWindow.title(tips)
     ent = ttk.Entry(chooseWindow, textvariable=directoryname, width=50)
     ent.pack(side=TOP, expand=NO, padx=0, pady=20)
