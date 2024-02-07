@@ -92,6 +92,7 @@ class myStdout:  # 重定向类
         sys.stdout = self
         sys.stderr = self
 
+    @staticmethod
     def write(self, info):
         # info信息即标准输出sys.stdout和sys.stderr接收到的输出信息
         # text.insert('end', info)	# 在多行文本控件最后一行插入print信息
@@ -1055,7 +1056,7 @@ def __repackSuper():
         # 设置窗口初始大小和位置
         size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
         w.geometry(size_xy)
-        w.resizable(0, 0)  # 设置最大化窗口不可用
+        w.resizable(False, False)  # 设置最大化窗口不可用
         w.title("选择你的打包的类型：")
         l1 = ttk.LabelFrame(w, text="选择打包类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Button(l1, text='VAB', width=15, command=lambda: selecttype("VAB")).pack(side=LEFT, expand=YES, padx=5)
