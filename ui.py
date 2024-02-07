@@ -12,7 +12,6 @@ import time
 # import tk/tcl
 import tkinter as tk
 import webbrowser
-from asyncio.windows_events import NULL
 from tkinter import *
 from tkinter import scrolledtext
 from tkinter import ttk
@@ -914,8 +913,8 @@ def __repackextimage():
 def findFsConfig(Path):
     parentPath = os.path.dirname(Path)
     currentPath = os.path.basename(parentPath)
-    if os.path.exists(parentPath + '\config\\' + currentPath + "_fs_config"):
-        return parentPath + '\config\\' + currentPath + "_fs_config"
+    if os.path.exists(os.path.join(parentPath, 'config', currentPath + "_fs_config")):
+        return os.path.join(parentPath, 'config', currentPath + "_fs_config")
     else:
         return "0"
 
@@ -923,8 +922,8 @@ def findFsConfig(Path):
 def findFileContexts(Path):
     parentPath = os.path.dirname(Path)
     currentPath = os.path.basename(parentPath)
-    if os.path.exists(parentPath + '\config\\' + currentPath + "_file_contexts"):
-        return parentPath + '\config\\' + currentPath + "_file_contexts"
+    if os.path.exists(os.path.join(parentPath, 'config', currentPath + "_file_contexts")):
+        return os.path.join(parentPath, 'config', currentPath + "_file_contexts")
     else:
         return "0"
 
@@ -1081,7 +1080,7 @@ def __repackDat():
             if currentVersion == 0:
                 showinfo("Android 版本输入错误，请查看提示重新输入！")
                 return
-            elif partitionName == NULL or partitionName == "":
+            elif partitionName == 0 or partitionName == "":
                 showinfo("分区名输入错误，请查看提示重新输入！")
                 return
             # img2sdat <image file> <output dir> <version|1=5.0|2=5.1|3=6.0|4=7.0+> <prefix>
