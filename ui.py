@@ -207,7 +207,7 @@ def cleaninfo():
     # text.insert(END,"\n")
     showbanner()
     if TEXTREADONLY:
-        text.configure(state='disable')
+        text.configure(state='disabled')
 
 
 def selectFile():
