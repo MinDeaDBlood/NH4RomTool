@@ -12,8 +12,7 @@ import os
 import sys
 import tempfile
 
-import blockimgdiff
-import sparse_img
+from . import blockimgdiff, sparse_img
 
 
 def main(INPUT_IMAGE, OUTDIR='.', VERSION=None, PREFIX='system'):
