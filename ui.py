@@ -526,7 +526,8 @@ def unzipfile():
     if WorkDir:
         if os.access(WorkDir + "\\rom", os.F_OK):
             shutil.rmtree(WorkDir + "\\rom")
-    threading.Thread(target=__unzipfile).start()
+    with cartoon:
+        threading.Thread(target=__unzipfile).start()
 
 
 def __zipcompressfile():
