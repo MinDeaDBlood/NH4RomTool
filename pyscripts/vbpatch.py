@@ -48,16 +48,6 @@ def restore(file):
         print("File does not exist!")
 
 
-def disableDm(file):
-    if os.access(file, os.F_OK):
-        flag = b'\x01'
-        with open(file, "rb+") as f:
-            f.seek(123, 0)
-            f.write(flag)
-    else:
-        print("File does not exist!")
-
-
 def disableAVB(file):
     if os.access(file, os.F_OK):
         flag = b'\x02'
@@ -66,18 +56,3 @@ def disableAVB(file):
             f.write(flag)
     else:
         print("File does not exist!")
-
-
-# 测试用
-if __name__ == "__main__":
-    file = "vbmeta.img"
-    if checkMagic(file):
-        readVerifyFlag(file)
-        disableDm(file)
-        readVerifyFlag(file)
-        disableAVB(file)
-        readVerifyFlag(file)
-        restore(file)
-        readVerifyFlag(file)
-    else:
-        pass
