@@ -712,10 +712,7 @@ def __repackextimage():
             showinfo("修补fs_config文件")
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "busybox ash -c \""
-            if os.path.basename(directoryname.get()).find("odm") != -1:
-                MUTIIMGSIZE = 1.2
-            else:
-                MUTIIMGSIZE = 1.07
+            MUTIIMGSIZE = 1.2 if os.path.basename(directoryname.get()).find("odm") != -1 else 1.07
             if UICONFIG['AUTOMUTIIMGSIZE']:
                 EXTIMGSIZE = int(utils.getdirsize(directoryname.get()) * MUTIIMGSIZE)
             else:
