@@ -12,8 +12,7 @@ import time
 import tkinter as tk
 import webbrowser
 from tkinter import *
-from tkinter import scrolledtext
-from tkinter import ttk
+from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
 
 # from bs4 import BeautifulSoup
@@ -138,13 +137,6 @@ def runcmd(cmd):
         for i in iter(e.stdout.readline, b""):
             showinfo(i)
 
-
-def returnoutput(cmd):
-    try:
-        ret = subprocess.check_output(cmd, shell=False, stderr=subprocess.STDOUT)
-        return ret.decode()
-    except subprocess.CalledProcessError as e:
-        return str(e)
 
 
 def cleaninfo():
