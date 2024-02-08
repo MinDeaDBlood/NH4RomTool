@@ -422,17 +422,9 @@ def __ozipEncrypt():
         showinfo("Error : 文件不存在")
 
 
-def ozipEncrypt():
-    threading.Thread(target=__ozipEncrypt).start()
-
-
 def getMiuiWindow():
-    def __downloadurl(url):
-        webbrowser.open(url)
-
     def downloadurl(url):
-        T = threading.Thread(target=__downloadurl, args=url)
-        T.start()
+        webbrowser.open(url)
 
     def downloadMiuiRom():
         getmiuiWindow.destroy()
@@ -532,10 +524,6 @@ def __zipcompressfile():
         showinfo("Error : 请先选择工作目录")
 
 
-def zipcompressfile():
-    threading.Thread(target=__zipcompressfile).start()
-
-
 def __xruncmd(event=None):
     cmd = USERCMD.get()
     runcmd("busybox ash -c \"%s\"" % cmd)
@@ -558,11 +546,6 @@ def __parsePayload():
             showinfo("  注: HASH值类型为SHA256")
     else:
         showinfo("Error : 文件不存在")
-
-
-def parsePayload():
-    showinfo("解析payload文件")
-    threading.Thread(target=__parsePayload, daemon=True).start()  # 开一个子线程防止卡住
 
 
 def patchvbmeta():
@@ -824,11 +807,6 @@ def __repackDTBO():
         showinfo("请先选择工作目录")
 
 
-def repackDTBO():
-    th = threading.Thread(target=__repackDTBO)
-    th.start()
-
-
 def __repackSparseImage():
     if WorkDir:
         # 只将 EXT 转为 SIMG 而不是重新打包一次
@@ -850,16 +828,6 @@ def __repackSparseImage():
         showinfo("请先选择工作目录")
 
 
-def repackSparseImage():
-    th = threading.Thread(target=__repackSparseImage)
-    th.start()
-
-
-def compressToBr():
-    th = threading.Thread(target=__compressToBr)
-    th.start()
-
-
 def __compressToBr():
     if WorkDir:
         fileChooseWindow("选择要转换为 BR 的 DAT 文件")
@@ -877,11 +845,6 @@ def __compressToBr():
             showinfo("转换完毕，脱出到相同文件夹")
     else:
         showinfo("请先选择工作目录")
-
-
-def repackDat():
-    th = threading.Thread(target=__repackDat)
-    th.start()
 
 
 def __repackDat():
@@ -950,11 +913,6 @@ def __repackdtb():
         showinfo("请先选择工作目录")
 
 
-def repackdtb():
-    th = threading.Thread(target=__repackdtb)
-    th.start()
-
-
 def __repackSuper():
     if WorkDir:
         packtype = tk.StringVar()
@@ -1011,11 +969,6 @@ def __repackSuper():
 
     else:
         showinfo("请先选择工作目录")
-
-
-def repackSuper():
-    th = threading.Thread(target=__repackSuper)
-    th.start()
 
 
 if __name__ == '__main__':
@@ -1126,10 +1079,11 @@ if __name__ == '__main__':
 
     # tab22 // Repack
     tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab22, text='压缩', width=10, command=zipcompressfile, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                             column=0,
-                                                                                                             padx='10',
-                                                                                                             pady='8')
+    ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(__zipcompressfile),
+               style='primiary.Outline.TButton').grid(row=0,
+                                                      column=0,
+                                                      padx='10',
+                                                      pady='8')
     ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0, column=1,
                                                                                                         padx='10',
                                                                                                         pady='8')
@@ -1143,27 +1097,33 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx='10',
                                                       pady='8')
-    ttk.Button(tab22, text='DTS2DTB', width=10, command=repackdtb, style='primiary.Outline.TButton').grid(row=2,
-                                                                                                          column=0,
-                                                                                                          padx='10',
-                                                                                                          pady='8')
-    ttk.Button(tab22, text='DTBO', width=10, command=repackDTBO, style='primiary.Outline.TButton').grid(row=2, column=1,
-                                                                                                        padx='10',
-                                                                                                        pady='8')
-    ttk.Button(tab22, text='SUPER', width=10, command=repackSuper, style='primiary.Outline.TButton').grid(row=3,
-                                                                                                          column=0,
-                                                                                                          padx='10',
-                                                                                                          pady='8')
-    ttk.Button(tab22, text='EXT->SIMG', width=10, command=repackSparseImage, style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repackdtb), style='primiary.Outline.TButton').grid(
+        row=2,
+        column=0,
+        padx='10',
+        pady='8')
+    ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(__repackDTBO), style='primiary.Outline.TButton').grid(
+        row=2, column=1,
+        padx='10',
+        pady='8')
+    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repackSuper), style='primiary.Outline.TButton').grid(
+        row=3,
+        column=0,
+        padx='10',
+        pady='8')
+    ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(__repackSparseImage),
+               style='primiary.Outline.TButton').grid(
         row=3, column=1, padx='10', pady='8')
-    ttk.Button(tab22, text='IMG->DAT', width=10, command=repackDat, style='primiary.Outline.TButton').grid(row=4,
-                                                                                                           column=0,
-                                                                                                           padx='10',
-                                                                                                           pady='8')
-    ttk.Button(tab22, text='DAT->BR', width=10, command=compressToBr, style='primiary.Outline.TButton').grid(row=4,
-                                                                                                             column=1,
-                                                                                                             padx='10',
-                                                                                                             pady='8')
+    ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repackDat),
+               style='primiary.Outline.TButton').grid(row=4,
+                                                      column=0,
+                                                      padx='10',
+                                                      pady='8')
+    ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compressToBr),
+               style='primiary.Outline.TButton').grid(row=4,
+                                                      column=1,
+                                                      padx='10',
+                                                      pady='8')
 
     # pack tab2
     tab21.pack(side=TOP, fill=BOTH, expand=NO)
@@ -1176,8 +1136,10 @@ if __name__ == '__main__':
     ttk.Button(tab33, text='OZIP 解密', width=10, command=ozipDecrypt, bootstyle="link").pack(side=TOP, expand=NO,
                                                                                               fill=X, padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
-    ttk.Button(tab33, text='OZIP 加密', width=10, command=ozipEncrypt, bootstyle="link").pack(side=TOP, expand=NO,
-                                                                                              fill=X, padx=8)
+    ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
+                                                                                                            expand=NO,
+                                                                                                            fill=X,
+                                                                                                            padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='MIUI 更新包获取', width=10, command=getMiuiWindow, bootstyle="link").pack(side=TOP,
                                                                                                       expand=NO, fill=X,
@@ -1186,9 +1148,10 @@ if __name__ == '__main__':
 
     s = ttk.Style()
     s.configure('Button.parsePayload', font=('Helvetica', '5'))
-    ttk.Button(tab33, text='PAYLOAD.bin 解析', width=10, command=parsePayload, bootstyle="link").pack(side=TOP,
-                                                                                                      expand=NO, fill=X,
-                                                                                                      padx=8)
+    ttk.Button(tab33, text='PAYLOAD.bin 解析', width=10, command=lambda: cz(__parsePayload), bootstyle="link").pack(
+        side=TOP,
+        expand=NO, fill=X,
+        padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
                                                                                                      expand=NO, fill=X,
