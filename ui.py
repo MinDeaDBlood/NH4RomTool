@@ -431,7 +431,7 @@ def getMiuiWindow():
         webbrowser.open(url)
 
     def downloadurl(url):
-        T = threading.Thread(target=__downloadurl(url))
+        T = threading.Thread(target=__downloadurl, args=url)
         T.start()
 
     def downloadMiuiRom():
@@ -595,7 +595,10 @@ def patchfsconfig():
 
 
 def cz(func, *args):
-    threading.Thread(target=func, args=args, daemon=True).start()
+    with cartoon():
+        t = threading.Thread(target=func, args=args, daemon=True)
+        t.start()
+        t.join()
 
 
 def __smartUnpack():
@@ -811,11 +814,6 @@ def __repackerofsimage():
             runcmd(cmd)
     else:
         showinfo("请先选择工作目录")
-
-
-def repackerofsimage():
-    th = threading.Thread(target=__repackerofsimage)
-    th.start()
 
 
 def repackextimage():
@@ -1150,10 +1148,11 @@ if __name__ == '__main__':
                                                                                                            column=0,
                                                                                                            padx='10',
                                                                                                            pady='8')
-    ttk.Button(tab22, text='EROFS', width=10, command=repackerofsimage, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                               column=1,
-                                                                                                               padx='10',
-                                                                                                               pady='8')
+    ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(__repackerofsimage),
+               style='primiary.Outline.TButton').grid(row=1,
+                                                      column=1,
+                                                      padx='10',
+                                                      pady='8')
     ttk.Button(tab22, text='DTS2DTB', width=10, command=repackdtb, style='primiary.Outline.TButton').grid(row=2,
                                                                                                           column=0,
                                                                                                           padx='10',
