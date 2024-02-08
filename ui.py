@@ -740,14 +740,14 @@ def __repackextimage():
 
 
 def find_fs_con(path, t=0):
-    parentPath = os.path.dirname(path)
-    currentPath = os.path.basename(parentPath)
+    parent_path = os.path.dirname(path)
+    current_path = os.path.basename(parent_path)
     if t == 0:
         f_ = "_fs_config"
     else:
         f_ = "_file_contexts"
-    if os.path.exists(os.path.join(parentPath, 'config', currentPath + f_)):
-        return os.path.join(parentPath, 'config', currentPath + f_)
+    if os.path.exists(os.path.join(parent_path, 'config', current_path + f_)):
+        return str(os.path.join(parent_path, 'config', current_path + f_))
     else:
         return ''
 
@@ -757,18 +757,18 @@ def __repackerofsimage():
         dirChooseWindow("选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         showinfo("自动搜寻 fs_config")
-        isFsConfig = find_fs_con(directoryname.get())
-        isFileContexts = find_fs_con(directoryname.get(), t=1)
-        if isFsConfig:
-            showinfo("自动搜寻 fs_config 完成: " + isFsConfig)
-            fsconfig_path = isFsConfig
+        is_fs_config = find_fs_con(directoryname.get())
+        is_file_contexts = find_fs_con(directoryname.get(), t=1)
+        if is_fs_config:
+            showinfo("自动搜寻 fs_config 完成: " + is_fs_config)
+            fsconfig_path = is_fs_config
         else:
             showinfo("自动搜寻 fs_config 失败，请手动选择")
             fileChooseWindow("选择你要打包目录的fs_config文件")
             fsconfig_path = filename.get()
-        if isFileContexts:
-            showinfo("自动搜寻 file_contexts 完成" + isFileContexts)
-            filecontexts_path = isFileContexts
+        if is_file_contexts:
+            showinfo("自动搜寻 file_contexts 完成" + is_file_contexts)
+            filecontexts_path = is_file_contexts
         with cartoon():
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
