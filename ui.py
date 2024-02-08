@@ -194,7 +194,7 @@ def about():
                                                                                            padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱 Version %s\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\n%s Copyright(R) Apache 2.0 LICENSE' % (
-                  VERSION, AUTHOR)).pack(side=BOTTOM, expand=NO, pady=3)
+                  20240208, AUTHOR)).pack(side=BOTTOM, expand=NO, pady=3)
     utils.chLocal()
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
