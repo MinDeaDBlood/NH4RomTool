@@ -628,7 +628,7 @@ def __smartUnpack():
 
                 def __eerofs():
                     showinfo("正在解包 : " + filename.get())
-                    showinfo("使用erofsUnpackRust")
+                    showinfo("使用extract.erofs")
                     with cartoon():
                         runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
 
