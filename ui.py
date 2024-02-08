@@ -519,7 +519,7 @@ def __zipcompressfile():
         showinfo("Error : 请先选择工作目录")
 
 
-def __xruncmd(event=None):
+def __xruncmd():
     cmd = USERCMD.get()
     runcmd("busybox ash -c \"%s\"" % cmd)
     usercmd.delete(0, 'end')
@@ -963,9 +963,7 @@ if __name__ == '__main__':
     # 在中心打开主窗口
     screenwidth = root.winfo_screenwidth()  # 屏幕宽度
     screenheight = root.winfo_screenheight()  # 屏幕高度
-    x = int((screenwidth - width) / 2)
-    y = int((screenheight - height) / 2)
-    root.geometry('{}x{}+{}+{}'.format(width, height, x, y))  # 大小以及位置
+    root.geometry('{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))  # 大小以及位置
 
     if MENUBAR:  # 菜单栏
         menuBar = tk.Menu(root)
@@ -1159,7 +1157,7 @@ if __name__ == '__main__':
         frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
         usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
-        usercmd.bind('<Return>', __xruncmd)
+        usercmd.bind('<Return>', lambda *x:__xruncmd)
         ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
                                                                                                   fill=X, padx=2,
                                                                                                   pady=2)
