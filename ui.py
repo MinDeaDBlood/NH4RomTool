@@ -721,10 +721,10 @@ def __repackextimage():
         showinfo("自动搜寻 fs_config")
         isFsConfig = find_fs_con(directoryname.get())
         isFileContexts = find_fs_con(directoryname.get(), t=1)
-        if isFsConfig != "0":
+        if isFsConfig:
             showinfo("自动搜寻 fs_config 完成: " + isFsConfig)
             fsconfig_path = isFsConfig
-        if isFileContexts != "0":
+        if isFileContexts:
             showinfo("自动搜寻 file_contexts 完成" + isFileContexts)
             filecontexts_path = isFileContexts
         else:
@@ -779,7 +779,7 @@ def find_fs_con(path, t=0):
     if os.path.exists(os.path.join(parentPath, 'config', currentPath + f_)):
         return os.path.join(parentPath, 'config', currentPath + f_)
     else:
-        return "0"
+        return ''
 
 
 def __repackerofsimage():
@@ -789,14 +789,14 @@ def __repackerofsimage():
         showinfo("自动搜寻 fs_config")
         isFsConfig = find_fs_con(directoryname.get())
         isFileContexts = find_fs_con(directoryname.get(), t=1)
-        if isFsConfig != "0":
+        if isFsConfig:
             showinfo("自动搜寻 fs_config 完成: " + isFsConfig)
             fsconfig_path = isFsConfig
         else:
             showinfo("自动搜寻 fs_config 失败，请手动选择")
             fileChooseWindow("选择你要打包目录的fs_config文件")
             fsconfig_path = filename.get()
-        if isFileContexts != "0":
+        if isFileContexts:
             showinfo("自动搜寻 file_contexts 完成" + isFileContexts)
             filecontexts_path = isFileContexts
         with cartoon():
