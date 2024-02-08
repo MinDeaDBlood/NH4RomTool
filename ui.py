@@ -493,6 +493,8 @@ def getMiuiWindow():
 
 def __unzipfile():
     if WorkDir:
+        if os.access(WorkDir + "\\rom", os.F_OK):
+            shutil.rmtree(WorkDir + "\\rom")
         fileChooseWindow("选择要解压的文件")
         if os.access(filename.get(), os.F_OK):
             showinfo("正在解压文件: " + filename.get())
@@ -503,13 +505,6 @@ def __unzipfile():
             showinfo("Error : 文件不存在")
     else:
         showinfo("Error : 请先选择工作目录")
-
-
-def unzipfile():
-    if WorkDir:
-        if os.access(WorkDir + "\\rom", os.F_OK):
-            shutil.rmtree(WorkDir + "\\rom")
-    threading.Thread(target=__unzipfile).start()
 
 
 def __zipcompressfile():
@@ -661,7 +656,6 @@ def __smartUnpack():
                             showinfo("未能在dat文件所在目录找到对应的transfer.list文件")
                     if filetype == "br":
                         showinfo("检测到br格式，使用brotli解压")
-
                         pname = os.path.basename(filename.get()).replace(".br", "")
                         if os.access(filename.get(), os.F_OK):
                             with cartoon():
@@ -717,7 +711,6 @@ def __repackextimage():
         if os.path.isdir(directoryname.get()):
             showinfo("修补fs_config文件")
             fspatch.main(directoryname.get(), fsconfig_path)
-            # Thanks DXY provid info
             cmd = "busybox ash -c \""
             if os.path.basename(directoryname.get()).find("odm") != -1:
                 MUTIIMGSIZE = 1.2
@@ -1068,9 +1061,10 @@ if __name__ == '__main__':
 
     # tab21 // Unpack
     tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab21, text='解压', width=10, command=unzipfile, style='primiary.Outline.TButton').grid(row=0, column=0,
-                                                                                                       padx='10',
-                                                                                                       pady='8')
+    ttk.Button(tab21, text='解压', width=10, command=lambda: cz(__unzipfile), style='primiary.Outline.TButton').grid(
+        row=0, column=0,
+        padx='10',
+        pady='8')
     ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smartUnpack),
                style='primiary.Outline.TButton').grid(row=0,
                                                       column=1,
@@ -1199,6 +1193,4 @@ if __name__ == '__main__':
                                font=shiju_font)
         shijuLable.pack(side=LEFT, padx=8)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
-
-    root.update()
     root.mainloop()
