@@ -73,7 +73,7 @@ USERCMD = tk.StringVar()
 class myStdout:  # 重定向类
     def __init__(self):
         sys.stdout = self
-        # sys.stderr = self
+        sys.stderr = self
 
     @staticmethod
     def write(info):
