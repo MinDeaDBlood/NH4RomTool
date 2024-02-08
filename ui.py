@@ -138,7 +138,6 @@ def runcmd(cmd):
             showinfo(i)
 
 
-
 def cleaninfo():
     text.configure(state='normal')
     text.delete(1.0, END)  # 清空text
