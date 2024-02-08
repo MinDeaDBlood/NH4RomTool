@@ -61,35 +61,3 @@ def main(INPUT_IMAGE, OUTDIR='.', VERSION=None, PREFIX='system'):
 
     print('Done! Output files: %s' % os.path.dirname(OUTDIR))
     return
-
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Visit xda thread for more information.')
-    parser.add_argument('image', help='input system image')
-    parser.add_argument('-o', '--outdir', help='output directory (current directory by default)')
-    parser.add_argument('-v', '--version',
-                        help='transfer list version number, will be asked by default - more info on xda thread)')
-    parser.add_argument('-p', '--prefix', help='name of image (prefix.new.dat)')
-
-    args = parser.parse_args()
-
-    INPUT_IMAGE = args.image
-
-    if args.outdir:
-        OUTDIR = args.outdir
-    else:
-        OUTDIR = '.'
-
-    if args.version:
-        VERSION = int(args.version)
-    else:
-        VERSION = None
-
-    if args.prefix:
-        PREFIX = args.prefix
-    else:
-        PREFIX = 'system'
-
-    main(INPUT_IMAGE, OUTDIR, VERSION, PREFIX)
