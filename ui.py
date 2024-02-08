@@ -366,8 +366,8 @@ class cartoon:
 
 def SelectWorkDir():
     item_text = ['']
-    for item in table.selection():
-        item_text = table.item(item, "values")
+    for item_ in table.selection():
+        item_text = table.item(item_, "values")
     if item_text[0] != "":
         global WorkDir
         WorkDir = item_text[0]
@@ -906,30 +906,24 @@ def __repackSuper():
         packsize = tk.StringVar()
         packsize.set("9126805504")
         sparse = tk.IntVar()
-
-        def selecttype(type):
-            packtype.set(type)
-            w.destroy()
-
         showinfo("打包super镜像")
         w = tk.Toplevel()
-        curWidth = 400
-        curHight = 180
+        cur_width = 400
+        cur_hight = 180
         # 获取屏幕宽度和高度
         scn_w, scn_h = root.maxsize()
         # 计算中心坐标
-        cen_x = (scn_w - curWidth) / 2
-        cen_y = (scn_h - curHight) / 2
+        cen_x = (scn_w - cur_width) / 2
+        cen_y = (scn_h - cur_hight) / 2
         # 设置窗口初始大小和位置
-        size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
+        size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
         w.geometry(size_xy)
         w.resizable(False, False)  # 设置最大化窗口不可用
         w.title("选择你的打包的类型：")
         l1 = ttk.LabelFrame(w, text="选择打包类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
-        ttk.Button(l1, text='VAB', width=15, command=lambda: selecttype("VAB")).pack(side=LEFT, expand=YES, padx=5)
-        ttk.Button(l1, text='AB', width=15, command=lambda: selecttype("AB")).pack(side=LEFT, expand=YES, padx=5)
-        ttk.Button(l1, text='A-only', width=15, command=lambda: selecttype("A-only")).pack(side=LEFT, expand=YES,
-                                                                                           padx=5)
+        ttk.Radiobutton(l1, variable=packtype, value='VAB', text='VAB').pack(side=LEFT, expand=YES, padx=5)
+        ttk.Radiobutton(l1, variable=packtype, value='AB', text='AB').pack(side=LEFT, expand=YES, padx=5)
+        ttk.Radiobutton(l1, variable=packtype, value='A-only', text='A-only').pack(side=LEFT, expand=YES, padx=5)
         l1.pack(side=TOP, ipadx=10, ipady=10)
         ttk.Label(w, text="请输入super分区大小(字节数,常见9126805504)").pack(side=TOP)
         ttk.Entry(w, textvariable=packsize, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
