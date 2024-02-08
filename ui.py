@@ -26,10 +26,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 
-# Flag
-MENUBAR = True  # 菜单栏
 TEXTREADONLY = True  # 文本框只读
-SHOWSHIJU = False  # 展示诗句
 USESTATUSBAR = True  # 使用状态栏（并不好用）
 ALLOWMODIFYCMD = True  # 提供一个可以输入任意命令的框
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
@@ -525,24 +522,6 @@ def __xruncmd():
     usercmd.delete(0, 'end')
 
 
-# Parse Payload.bin add by azwhikaru 20220319
-def __parsePayload():
-    fileChooseWindow("解析payload.bin")
-    if os.access(filename.get(), os.F_OK):
-        with cartoon():
-            data = returnoutput("bin/parsePayload.exe " + filename.get())
-            datadict = dict(json.loads(data.replace("\'", "\"")))
-            showinfo("PAYLOAD文件解析结果如下")
-            showinfo("        文件 HASH 值 : %s" % (utils.bytesToHexString(base64.b64decode(datadict["FILE_HASH"]))))
-            showinfo("        文件大小     : %s" % (datadict["FILE_SIZE"]))
-            showinfo(
-                "        METADATA HASH: %s" % (utils.bytesToHexString(base64.b64decode(datadict["METADATA_HASH"]))))
-            showinfo("        METADATA 大小: %s" % (datadict["METADATA_SIZE"]))
-            showinfo("  注: HASH值类型为SHA256")
-    else:
-        showinfo("Error : 文件不存在")
-
-
 def patchvbmeta():
     fileChooseWindow("选择vbmeta文件")
     if os.access(filename.get(), os.F_OK):
@@ -960,23 +939,22 @@ if __name__ == '__main__':
     root.geometry(
         '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))  # 大小以及位置
 
-    if MENUBAR:  # 菜单栏
-        menuBar = tk.Menu(root)
-        root.config(menu=menuBar)
-        menu1 = tk.Menu(menuBar, tearoff=False)
-        menuItem = ["关于", "退出"]
-        for item in menuItem:
-            if item == "关于":
-                menu1.add_command(label=item, command=about)
-            if item == "退出":
-                menu1.add_command(label=item, command=sys.exit)
-        menuBar.add_cascade(label="菜单", menu=menu1)
-        menu2 = tk.Menu(menuBar, tearoff=False)
-        menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
-                    "cyborg", "darkly", "solar", "vapor", "superhero"]
-        for item in menuItem:
-            menu2.add_command(label=item, command=lambda n=item: change_theme(n))
-        menuBar.add_cascade(label="主题", menu=menu2)
+    menuBar = tk.Menu(root)
+    root.config(menu=menuBar)
+    menu1 = tk.Menu(menuBar, tearoff=False)
+    menuItem = ["关于", "退出"]
+    for item in menuItem:
+        if item == "关于":
+            menu1.add_command(label=item, command=about)
+        if item == "退出":
+            menu1.add_command(label=item, command=sys.exit)
+    menuBar.add_cascade(label="菜单", menu=menu1)
+    menu2 = tk.Menu(menuBar, tearoff=False)
+    menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
+                "cyborg", "darkly", "solar", "vapor", "superhero"]
+    for item in menuItem:
+        menu2.add_command(label=item, command=lambda n=item: change_theme(n))
+    menuBar.add_cascade(label="主题", menu=menu2)
 
     # define labels
     frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
@@ -1129,10 +1107,6 @@ if __name__ == '__main__':
 
     s = ttk.Style()
     s.configure('Button.parsePayload', font=('Helvetica', '5'))
-    ttk.Button(tab33, text='PAYLOAD.bin 解析', width=10, command=lambda: cz(__parsePayload), bootstyle="link").pack(
-        side=TOP,
-        expand=NO, fill=X,
-        padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
                                                                                                      expand=NO, fill=X,
@@ -1172,12 +1146,17 @@ if __name__ == '__main__':
         statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
         statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
         statusbar['image'] = DEFAULTSTATUS
+
+
     # shiju
-    if SHOWSHIJU:
+    def SHOWSHIJU():
         shiju = utils.getShiju()
         shiju_font = ('微软雅黑', 12)
         shijuLable = ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                                font=shiju_font)
         shijuLable.pack(side=LEFT, padx=8)
+
+
+    cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     root.mainloop()
