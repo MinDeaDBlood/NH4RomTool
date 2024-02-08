@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import base64
 import glob
 import json
 import os
@@ -25,8 +24,8 @@ from ttkbootstrap.scrolled import ScrolledFrame
 # import functions I modified
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
+
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
-LICENSE = "Apache 2.0"  # 程序的开源协议
 
 # Var
 AUTHOR = "affggh & ColdWindScholar"
