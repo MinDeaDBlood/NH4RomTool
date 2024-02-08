@@ -595,114 +595,113 @@ def patchfsconfig():
 
 
 def cz(func, *args):
-    with cartoon():
-        t = threading.Thread(target=func, args=args, daemon=True)
-        t.start()
-        t.join()
+    t = threading.Thread(target=func, args=args, daemon=True)
+    t.start()
 
 
 def __smartUnpack():
-    fileChooseWindow("选择要智能解包的文件")
-    if WorkDir:
-        if os.access(filename.get(), os.F_OK):
-            filetype = gettype(filename.get())
-            showinfo("智能识别文件类型为 :  " + filetype)
-            unpackdir = os.path.abspath(WorkDir + "/" + filetype)
-            if filetype == "ozip":
-                showinfo("正在解密ozip")
-                ozip_decrypt.main(filename.get())
-                showinfo("解密完成")
-            # list of create new folder
-            if filetype == "ext" or filetype == "erofs":
-                dirname = os.path.basename(filename.get()).split(".")[0]
+    with cartoon():
+        fileChooseWindow("选择要智能解包的文件")
+        if WorkDir:
+            if os.access(filename.get(), os.F_OK):
+                filetype = gettype(filename.get())
+                showinfo("智能识别文件类型为 :  " + filetype)
+                unpackdir = os.path.abspath(WorkDir + "/" + filetype)
+                if filetype == "ozip":
+                    showinfo("正在解密ozip")
+                    ozip_decrypt.main(filename.get())
+                    showinfo("解密完成")
+                # list of create new folder
+                if filetype == "ext" or filetype == "erofs":
+                    dirname = os.path.basename(filename.get()).split(".")[0]
 
-                showinfo("在工作目录创建解包目录 : " + dirname)
-                if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
-                    showinfo("文件夹存在，正在删除")
-                    shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
-                utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
+                    showinfo("在工作目录创建解包目录 : " + dirname)
+                    if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
+                        showinfo("文件夹存在，正在删除")
+                        shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
+                    utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
-                if filetype == "ext":
-                    showinfo("正在解包 : " + filename.get())
-                    showinfo("使用imgextractor")
-                    imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
-                                                  os.path.basename(filename.get()).split('.')[0])
-                if filetype == "erofs":
-                    showinfo("正在解包 : " + filename.get())
-                    showinfo("使用extract.erofs")
-                    runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
+                    if filetype == "ext":
+                        showinfo("正在解包 : " + filename.get())
+                        showinfo("使用imgextractor")
+                        imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
+                                                      os.path.basename(filename.get()).split('.')[0])
+                    if filetype == "erofs":
+                        showinfo("正在解包 : " + filename.get())
+                        showinfo("使用extract.erofs")
+                        runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
 
+                else:
+
+                    for i in ["super", "dtbo", "boot", "payload"]:
+                        if filetype == i:
+                            showinfo("在工作目录创建解包目录 :  " + i)
+                            if os.path.isdir(unpackdir):
+                                showinfo("文件夹存在，正在删除")
+                                shutil.rmtree(unpackdir)
+                            utils.mkdir(unpackdir)
+                            if i == "payload":
+                                showinfo("正在解包payload")
+                                t = threading.Thread(target=runcmd, args=[
+                                    "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
+                                                     daemon=True)
+                                t.start()
+                                t.join()
+                            if i == "boot":
+                                showinfo("正在解包boot")
+                                os.chdir(unpackdir)
+                                runcmd("unpackimg.bat --local %s" % (filename.get()))
+                                os.chdir(LOCALDIR)
+                            if i == "dtbo":
+                                showinfo("使用mkdtboimg解包")
+                                runcmd("mkdtboimg.exe dump " + filename.get() + " -b " + unpackdir + "\\dtb")
+                            if i == "super":
+                                showinfo("使用 lpunpack 解锁")
+                                runcmd("lpunpack " + filename.get() + " " + unpackdir)
+                    if filetype == "sparse":
+                        showinfo("文件类型为sparse, 使用simg2img转换为raw data")
+
+                        utils.mkdir(WorkDir + "\\rawimg")
+                        runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
+                            filename.get()))
+                        showinfo("sparse image 转换结束")
+                    if filetype == "dat":
+                        showinfo("检测到dat,使用sdat2img 且自动在文件所在目录选择transfer.list文件")
+                        pname = os.path.basename(filename.get()).split(".")[0]
+                        transferpath = os.path.abspath(
+                            os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
+                        if os.access(transferpath, os.F_OK):
+                            with cartoon():
+                                sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
+                                showinfo("sdat已转换为img")
+                        else:
+                            showinfo("未能在dat文件所在目录找到对应的transfer.list文件")
+                    if filetype == "br":
+                        showinfo("检测到br格式，使用brotli解压")
+
+                        pname = os.path.basename(filename.get()).replace(".br", "")
+                        if os.access(filename.get(), os.F_OK):
+                            with cartoon():
+                                runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
+                            showinfo("已解压br文件")
+                        else:
+                            showinfo("震惊，文件怎么会不存在？")
+                    if filetype == "vbmeta":
+                        showinfo("检测到vbmtea,此文件不支持解包打包，请前往其他工具修改")
+                    if filetype == "dtb":
+                        showinfo("使用device tree compiler 转换反编译dtb --> dts")
+                        dtname = os.path.basename(filename.get())
+                        runcmd("dtc -q -I dtb -O dts " + filename.get() + " -o " + WorkDir + os.sep + dtname + ".dts")
+                        showinfo("反编译dtb完成")
+                    if filetype == "zip" or filetype == "7z":
+                        showinfo("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
+                    if filetype == "Unknow":
+                        showinfo("文件不受支持")
+                # os.chdir(unpackdir)
             else:
-
-                for i in ["super", "dtbo", "boot", "payload"]:
-                    if filetype == i:
-                        showinfo("在工作目录创建解包目录 :  " + i)
-                        if os.path.isdir(unpackdir):
-                            showinfo("文件夹存在，正在删除")
-                            shutil.rmtree(unpackdir)
-                        utils.mkdir(unpackdir)
-                        if i == "payload":
-                            showinfo("正在解包payload")
-                            t = threading.Thread(target=runcmd, args=[
-                                "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
-                                                 daemon=True)
-                            t.start()
-                            t.join()
-                        if i == "boot":
-                            showinfo("正在解包boot")
-                            os.chdir(unpackdir)
-                            runcmd("unpackimg.bat --local %s" % (filename.get()))
-                            os.chdir(LOCALDIR)
-                        if i == "dtbo":
-                            showinfo("使用mkdtboimg解包")
-                            runcmd("mkdtboimg.exe dump " + filename.get() + " -b " + unpackdir + "\\dtb")
-                        if i == "super":
-                            showinfo("使用 lpunpack 解锁")
-                            runcmd("lpunpack " + filename.get() + " " + unpackdir)
-                if filetype == "sparse":
-                    showinfo("文件类型为sparse, 使用simg2img转换为raw data")
-
-                    utils.mkdir(WorkDir + "\\rawimg")
-                    runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
-                        filename.get()))
-                    showinfo("sparse image 转换结束")
-                if filetype == "dat":
-                    showinfo("检测到dat,使用sdat2img 且自动在文件所在目录选择transfer.list文件")
-                    pname = os.path.basename(filename.get()).split(".")[0]
-                    transferpath = os.path.abspath(
-                        os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
-                    if os.access(transferpath, os.F_OK):
-                        with cartoon():
-                            sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
-                            showinfo("sdat已转换为img")
-                    else:
-                        showinfo("未能在dat文件所在目录找到对应的transfer.list文件")
-                if filetype == "br":
-                    showinfo("检测到br格式，使用brotli解压")
-
-                    pname = os.path.basename(filename.get()).replace(".br", "")
-                    if os.access(filename.get(), os.F_OK):
-                        with cartoon():
-                            runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
-                        showinfo("已解压br文件")
-                    else:
-                        showinfo("震惊，文件怎么会不存在？")
-                if filetype == "vbmeta":
-                    showinfo("检测到vbmtea,此文件不支持解包打包，请前往其他工具修改")
-                if filetype == "dtb":
-                    showinfo("使用device tree compiler 转换反编译dtb --> dts")
-                    dtname = os.path.basename(filename.get())
-                    runcmd("dtc -q -I dtb -O dts " + filename.get() + " -o " + WorkDir + os.sep + dtname + ".dts")
-                    showinfo("反编译dtb完成")
-                if filetype == "zip" or filetype == "7z":
-                    showinfo("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
-                if filetype == "Unknow":
-                    showinfo("文件不受支持")
-            # os.chdir(unpackdir)
+                showinfo("文件不存在")
         else:
-            showinfo("文件不存在")
-    else:
-        showinfo("请先选择工作目录")
+            showinfo("请先选择工作目录")
 
 
 def repackboot():
