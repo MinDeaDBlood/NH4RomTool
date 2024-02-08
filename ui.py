@@ -25,8 +25,6 @@ from ttkbootstrap.scrolled import ScrolledFrame
 # import functions I modified
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
-
-ALLOWMODIFYCMD = True  # 提供一个可以输入任意命令的框
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 LICENSE = "Apache 2.0"  # 程序的开源协议
 
@@ -56,10 +54,7 @@ style = Style(theme=THEME)
 root = style.master
 
 width = 1240
-height = 480
-
-if ALLOWMODIFYCMD:
-    height += 120
+height = 600
 
 root.geometry("%sx%s" % (width, height))
 # root.resizable(0,0) # 设置最大化窗口不可用
@@ -75,8 +70,7 @@ WorkDir = ''
 filename = tk.StringVar()
 directoryname = tk.StringVar()
 inputvar = tk.StringVar()
-if ALLOWMODIFYCMD:
-    USERCMD = tk.StringVar()
+USERCMD = tk.StringVar()
 
 
 # from https://www.i4k.xyz/article/weixin_49317370/108878373
@@ -1111,20 +1105,18 @@ if __name__ == '__main__':
     text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=TEXTFONT, relief=SOLID)  # 信息展示 文本框
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
     # table.bind('<ButtonPress-1>', showinfo("请点击确认目录"))
-    if ALLOWMODIFYCMD:
-        frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
-        usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
-        usercmd.bind('<Return>', lambda *x: __xruncmd)
-        ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+    frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+    usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
+    usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
+    usercmd.bind('<Return>', lambda *x: __xruncmd)
+    ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
                                                                                                   fill=X, padx=2,
                                                                                                   pady=2)
     # pack frames
     frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
-    if ALLOWMODIFYCMD:
-        frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
+    frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
 
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
