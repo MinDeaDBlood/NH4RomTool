@@ -29,12 +29,10 @@ EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 LICENSE = "Apache 2.0"  # 程序的开源协议
 
 # Var
-VERSION = '20220411'
-AUTHOR = "affggh"
-WINDOWTITLE = "NH4RomTool " + " [版本: " + VERSION + "] [作者: affggh & ColdWindScholar]"
+AUTHOR = "affggh & ColdWindScholar"
+WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: {AUTHOR}]"
 THEME = "minty"  # 设置默认主题
 LOGOICO = ".\\bin\\logo.ico"
-BANNER = ".\\bin\\banner"
 TEXTFONT = ['Arial', 10]
 LOCALDIR = os.getcwd()
 
