@@ -93,7 +93,7 @@ class myStdout:  # 重定向类
         # sys.stderr = self
 
     @staticmethod
-    def write(self, info):
+    def write(info):
         # info信息即标准输出sys.stdout和sys.stderr接收到的输出信息
         # text.insert('end', info)	# 在多行文本控件最后一行插入print信息
         # text.update()	# 更新显示的文本，不加这句插入的信息无法显示
