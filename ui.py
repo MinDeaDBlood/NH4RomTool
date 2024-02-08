@@ -693,7 +693,7 @@ def __smartUnpack():
                         dtname = os.path.basename(filename.get())
                         runcmd("dtc -q -I dtb -O dts " + filename.get() + " -o " + WorkDir + os.sep + dtname + ".dts")
                         showinfo("反编译dtb完成")
-                    if filetype == "zip" or filetype == "7z":
+                    if filetype in ["zip", '7z']:
                         showinfo("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
                     if filetype == "Unknow":
                         showinfo("文件不受支持")
