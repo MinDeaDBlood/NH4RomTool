@@ -602,7 +602,6 @@ def __smartUnpack():
     if WorkDir:
         if os.access(filename.get(), os.F_OK):
             filetype = gettype(filename.get())
-            # for windows , end of line basicly is \x0a\x0d which is \r\n
             showinfo("智能识别文件类型为 :  " + filetype)
             unpackdir = os.path.abspath(WorkDir + "/" + filetype)
             if filetype == "ozip":
