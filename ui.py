@@ -655,55 +655,35 @@ def __smartUnpack():
                             runcmd("mkdtboimg.exe dump " + filename.get() + " -b " + unpackdir + "\\dtb")
                         if i == "super":
                             showinfo("使用 lpunpack 解锁")
-
-                            def __dsuper():
-                                with cartoon():
-                                    runcmd("lpunpack " + filename.get() + " " + unpackdir)
-
-                            th = threading.Thread(target=__dsuper)
-                            th.start()
+                            runcmd("lpunpack " + filename.get() + " " + unpackdir)
                 if filetype == "sparse":
                     showinfo("文件类型为sparse, 使用simg2img转换为raw data")
 
-                    def __dsimg2img():
-                        with cartoon():
-                            utils.mkdir(WorkDir + "\\rawimg")
-                            runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
-                                filename.get()))
-                            showinfo("sparse image 转换结束")
-
-                    th = threading.Thread(target=__dsimg2img)
-                    th.start()
+                    utils.mkdir(WorkDir + "\\rawimg")
+                    runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
+                        filename.get()))
+                    showinfo("sparse image 转换结束")
                 if filetype == "dat":
                     showinfo("检测到dat,使用sdat2img 且自动在文件所在目录选择transfer.list文件")
-
-                    def __dsdat():
-                        pname = os.path.basename(filename.get()).split(".")[0]
-                        transferpath = os.path.abspath(
-                            os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
-                        if os.access(transferpath, os.F_OK):
-                            with cartoon():
-                                sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
-                                showinfo("sdat已转换为img")
-                        else:
-                            showinfo("未能在dat文件所在目录找到对应的transfer.list文件")
-
-                    th = threading.Thread(target=__dsdat)
-                    th.start()
+                    pname = os.path.basename(filename.get()).split(".")[0]
+                    transferpath = os.path.abspath(
+                        os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
+                    if os.access(transferpath, os.F_OK):
+                        with cartoon():
+                            sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
+                            showinfo("sdat已转换为img")
+                    else:
+                        showinfo("未能在dat文件所在目录找到对应的transfer.list文件")
                 if filetype == "br":
                     showinfo("检测到br格式，使用brotli解压")
 
-                    def __dbr():
-                        pname = os.path.basename(filename.get()).replace(".br", "")
-                        if os.access(filename.get(), os.F_OK):
-                            with cartoon():
-                                runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
-                            showinfo("已解压br文件")
-                        else:
-                            showinfo("震惊，文件怎么会不存在？")
-
-                    th = threading.Thread(target=__dbr)
-                    th.start()
+                    pname = os.path.basename(filename.get()).replace(".br", "")
+                    if os.access(filename.get(), os.F_OK):
+                        with cartoon():
+                            runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
+                        showinfo("已解压br文件")
+                    else:
+                        showinfo("震惊，文件怎么会不存在？")
                 if filetype == "vbmeta":
                     showinfo("检测到vbmtea,此文件不支持解包打包，请前往其他工具修改")
                 if filetype == "dtb":
@@ -720,11 +700,6 @@ def __smartUnpack():
             showinfo("文件不存在")
     else:
         showinfo("请先选择工作目录")
-
-
-def smartUnpack():
-    T = threading.Thread(target=__smartUnpack, daemon=True)
-    T.start()
 
 
 def repackboot():
@@ -1156,10 +1131,11 @@ if __name__ == '__main__':
     ttk.Button(tab21, text='解压', width=10, command=unzipfile, style='primiary.Outline.TButton').grid(row=0, column=0,
                                                                                                        padx='10',
                                                                                                        pady='8')
-    ttk.Button(tab21, text='万能解包', width=10, command=smartUnpack, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                             column=1,
-                                                                                                             padx='10',
-                                                                                                             pady='8')
+    ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smartUnpack),
+               style='primiary.Outline.TButton').grid(row=0,
+                                                      column=1,
+                                                      padx='10',
+                                                      pady='8')
 
     # tab22 // Repack
     tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
