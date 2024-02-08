@@ -26,8 +26,6 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 
-TEXTREADONLY = True  # 文本框只读
-USESTATUSBAR = True  # 使用状态栏（并不好用）
 ALLOWMODIFYCMD = True  # 提供一个可以输入任意命令的框
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 LICENSE = "Apache 2.0"  # 程序的开源协议
@@ -61,9 +59,7 @@ width = 1240
 height = 480
 
 if ALLOWMODIFYCMD:
-    height += 40
-if USESTATUSBAR:
-    height += 80
+    height += 120
 
 root.geometry("%sx%s" % (width, height))
 # root.resizable(0,0) # 设置最大化窗口不可用
@@ -95,13 +91,12 @@ class myStdout:  # 重定向类
         # text.insert('end', info)	# 在多行文本控件最后一行插入print信息
         # text.update()	# 更新显示的文本，不加这句插入的信息无法显示
         # text.see(tkinter.END)	# 始终显示最后一行，不加这句，当文本溢出控件最后一行时，不会自动显示最后一行
-        if TEXTREADONLY:
-            text.configure(state='normal')
+
+        text.configure(state='normal')
         text.insert(END, "[%s]" % (utils.get_time()) + "%s" % info)
         text.update()  # 实时返回信息
         text.yview('end')
-        if TEXTREADONLY:
-            text.configure(state='disabled')
+        text.configure(state='disabled')
 
     def flush(self):
         ...
@@ -133,13 +128,11 @@ def VisitMe():
 
 
 def showinfo(textmsg):
-    if TEXTREADONLY:
-        text.configure(state='normal')
+    text.configure(state='normal')
     text.insert(END, "[%s]" % (utils.get_time()) + "%s" % textmsg + "\n")
     text.update()  # 实时返回信息
     text.yview('end')
-    if TEXTREADONLY:
-        text.configure(state='disabled')
+    text.configure(state='disabled')
 
 
 def runcmd(cmd):
@@ -164,11 +157,9 @@ def returnoutput(cmd):
 
 
 def cleaninfo():
-    if TEXTREADONLY:
-        text.configure(state='normal')
+    text.configure(state='normal')
     text.delete(1.0, END)  # 清空text
-    if TEXTREADONLY:
-        text.configure(state='disabled')
+    text.configure(state='disabled')
 
 
 def selectFile():
@@ -340,10 +331,9 @@ class cartoon:
         ...
 
     def __enter__(self):
-        if USESTATUSBAR:
-            self.state = False
-            self.statusthread = threading.Thread(target=self.__run)
-            self.statusthread.start()
+        self.state = False
+        self.statusthread = threading.Thread(target=self.__run)
+        self.statusthread.start()
 
     def __run(self):
         while True:
@@ -355,10 +345,9 @@ class cartoon:
                 break
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if USESTATUSBAR:
-            self.state = True
-            self.statusthread.join()
-            statusbar['image'] = DEFAULTSTATUS
+        self.state = True
+        self.statusthread.join()
+        statusbar['image'] = DEFAULTSTATUS
 
 
 def SelectWorkDir():
@@ -1142,13 +1131,12 @@ if __name__ == '__main__':
     ttk.Button(framebotm, text='清理信息', command=cleaninfo, style='secondary.TButton').pack(side=RIGHT, expand=NO,
                                                                                               padx=5, pady=0)
     # Status bar
-    if USESTATUSBAR:
-        statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
-        statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
-        statusbar['image'] = DEFAULTSTATUS
+
+    statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
+    statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
+    statusbar['image'] = DEFAULTSTATUS
 
 
-    # shiju
     def SHOWSHIJU():
         shiju = utils.getShiju()
         shiju_font = ('微软雅黑', 12)
