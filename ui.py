@@ -719,8 +719,8 @@ def __repackextimage():
         dirChooseWindow("选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         showinfo("自动搜寻 fs_config")
-        isFsConfig = findFsConfig(directoryname.get())
-        isFileContexts = findFileContexts(directoryname.get())
+        isFsConfig = find_fs_con(directoryname.get())
+        isFileContexts = find_fs_con(directoryname.get(), t=1)
         if isFsConfig != "0":
             showinfo("自动搜寻 fs_config 完成: " + isFsConfig)
             fsconfig_path = isFsConfig
@@ -769,20 +769,15 @@ def __repackextimage():
         showinfo("请先选择工作目录")
 
 
-def findFsConfig(Path):
-    parentPath = os.path.dirname(Path)
+def find_fs_con(path, t=0):
+    parentPath = os.path.dirname(path)
     currentPath = os.path.basename(parentPath)
-    if os.path.exists(os.path.join(parentPath, 'config', currentPath + "_fs_config")):
-        return os.path.join(parentPath, 'config', currentPath + "_fs_config")
+    if t == 0:
+        f_ = "_fs_config"
     else:
-        return "0"
-
-
-def findFileContexts(Path):
-    parentPath = os.path.dirname(Path)
-    currentPath = os.path.basename(parentPath)
-    if os.path.exists(os.path.join(parentPath, 'config', currentPath + "_file_contexts")):
-        return os.path.join(parentPath, 'config', currentPath + "_file_contexts")
+        f_ = "_file_contexts"
+    if os.path.exists(os.path.join(parentPath, 'config', currentPath + f_)):
+        return os.path.join(parentPath, 'config', currentPath + f_)
     else:
         return "0"
 
@@ -792,8 +787,8 @@ def __repackerofsimage():
         dirChooseWindow("选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         showinfo("自动搜寻 fs_config")
-        isFsConfig = findFsConfig(directoryname.get())
-        isFileContexts = findFileContexts(directoryname.get())
+        isFsConfig = find_fs_con(directoryname.get())
+        isFileContexts = find_fs_con(directoryname.get(), t=1)
         if isFsConfig != "0":
             showinfo("自动搜寻 fs_config 完成: " + isFsConfig)
             fsconfig_path = isFsConfig
@@ -813,11 +808,6 @@ def __repackerofsimage():
             runcmd(cmd)
     else:
         showinfo("请先选择工作目录")
-
-
-def repackextimage():
-    th = threading.Thread(target=__repackextimage)
-    th.start()
 
 
 def __repackDTBO():
@@ -1143,10 +1133,11 @@ if __name__ == '__main__':
     ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0, column=1,
                                                                                                         padx='10',
                                                                                                         pady='8')
-    ttk.Button(tab22, text='EXT', width=10, command=repackextimage, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                           column=0,
-                                                                                                           padx='10',
-                                                                                                           pady='8')
+    ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(__repackextimage),
+               style='primiary.Outline.TButton').grid(row=1,
+                                                      column=0,
+                                                      padx='10',
+                                                      pady='8')
     ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(__repackerofsimage),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=1,
