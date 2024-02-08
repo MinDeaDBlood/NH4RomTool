@@ -735,10 +735,7 @@ def __repackextimage():
             with cartoon():
                 showinfo(cmd)
                 runcmd(cmd)
-                cmd = "e2fsdroid.exe -e -T 1230768000 -C %s -S %s -f %s -a /%s %s/output/%s.img" % (
-                    fsconfig_path, filecontexts_path, directoryname.get(), os.path.basename(directoryname.get()),
-                    WorkDir,
-                    os.path.basename(directoryname.get()))
+                cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname.get()} -a /{os.path.basename(directoryname.get())} {WorkDir}/output/{os.path.basename(directoryname.get())}.img"
                 runcmd(cmd)
                 showinfo("打包结束")
     else:
