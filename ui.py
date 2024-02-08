@@ -1027,24 +1027,24 @@ if __name__ == '__main__':
     tab12 = ttk.Frame(tab1)
     ttk.Button(tab12, text='确认目录', width=10, command=ConfirmWorkDir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                                 column=0,
-                                                                                                                padx='10',
-                                                                                                                pady='8')
+                                                                                                                padx=10,
+                                                                                                                pady=8)
     ttk.Button(tab12, text='删除目录', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                            column=1,
-                                                                                                           padx='10',
-                                                                                                           pady='8')
+                                                                                                           padx=10,
+                                                                                                           pady=8)
     ttk.Button(tab12, text='新建目录', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
                                                                                                            column=0,
-                                                                                                           padx='10',
-                                                                                                           pady='8')
+                                                                                                           padx=10,
+                                                                                                           pady=8)
     ttk.Button(tab12, text='刷新目录', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
                                                                                                             column=1,
-                                                                                                            padx='10',
-                                                                                                            pady='8')
+                                                                                                            padx=10,
+                                                                                                            pady=8)
     ttk.Button(tab12, text='清理目录', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
                                                                                                               column=0,
-                                                                                                              padx='10',
-                                                                                                              pady='8')
+                                                                                                              padx=10,
+                                                                                                              pady=8)
 
     # Pack Buttons
     tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
@@ -1057,61 +1057,61 @@ if __name__ == '__main__':
     tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     ttk.Button(tab21, text='解压', width=10, command=lambda: cz(__unzipfile), style='primiary.Outline.TButton').grid(
         row=0, column=0,
-        padx='10',
-        pady='8')
+        padx=10,
+        pady=8)
     ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smartUnpack),
                style='primiary.Outline.TButton').grid(row=0,
                                                       column=1,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
 
     # tab22 // Repack
     tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(__zipcompressfile),
                style='primiary.Outline.TButton').grid(row=0,
                                                       column=0,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0, column=1,
-                                                                                                        padx='10',
-                                                                                                        pady='8')
+                                                                                                        padx=10,
+                                                                                                        pady=8)
     ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(__repackextimage),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=0,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(__repackerofsimage),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=1,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repackdtb), style='primiary.Outline.TButton').grid(
         row=2,
         column=0,
-        padx='10',
-        pady='8')
+        padx=10,
+        pady=8)
     ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(__repackDTBO), style='primiary.Outline.TButton').grid(
         row=2, column=1,
-        padx='10',
-        pady='8')
+        padx=10,
+        pady=8)
     ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repackSuper), style='primiary.Outline.TButton').grid(
         row=3,
         column=0,
-        padx='10',
-        pady='8')
+        padx=10,
+        pady=8)
     ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(__repackSparseImage),
                style='primiary.Outline.TButton').grid(
-        row=3, column=1, padx='10', pady='8')
+        row=3, column=1, padx=10, pady=8)
     ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repackDat),
                style='primiary.Outline.TButton').grid(row=4,
                                                       column=0,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compressToBr),
                style='primiary.Outline.TButton').grid(row=4,
                                                       column=1,
-                                                      padx='10',
-                                                      pady='8')
+                                                      padx=10,
+                                                      pady=8)
 
     # pack tab2
     tab21.pack(side=TOP, fill=BOTH, expand=NO)
