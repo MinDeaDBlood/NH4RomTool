@@ -22,7 +22,7 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 
 # import functions I modified
-from pyscripts import utils, ozip_decrypt, get_miui, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
+from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
@@ -397,75 +397,6 @@ def __ozipEncrypt():
             runcmd("zip2ozip " + filename.get())
     else:
         showinfo("Error : 文件不存在")
-
-
-def getMiuiWindow():
-    def downloadurl(url):
-        webbrowser.open(url)
-
-    def downloadMiuiRom():
-        getmiuiWindow.destroy()
-        url = get_miui.get("%s" % (DEVICE_CODE.get()),
-                           "%s" % (regionselect.get()),
-                           "%s" % (packagetype.get()),
-                           "%s" % (ver.get()))
-        utils.thrun(downloadurl(url))
-
-    def showurl():
-        url = get_miui.get("%s" % (DEVICE_CODE.get()), "%s" % (regionselect.get()), "%s" % (packagetype.get()),
-                           "%s" % (ver.get()))
-        showinfo("url : " + url)
-
-    getmiuiWindow = tk.Toplevel()
-    curWidth = 260
-    curHight = 380
-    # 获取屏幕宽度和高度
-    scn_w, scn_h = root.maxsize()
-    # print(scn_w, scn_h)
-    # 计算中心坐标
-    cen_x = (scn_w - curWidth) / 2
-    cen_y = (scn_h - curHight) / 2
-    # print(cen_x, cen_y)
-
-    # 设置窗口初始大小和位置
-    size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
-    getmiuiWindow.geometry(size_xy)
-    # getmiuiWindow.geometry("300x180")
-    getmiuiWindow.resizable(False, False)  # 设置最大化窗口不可用
-    getmiuiWindow.title("MIUI 最新rom获取程序")
-    DEVICE_CODE = tk.StringVar()
-    ttk.Label(getmiuiWindow, text="设备开发代号").pack(side=TOP, expand=NO, padx=5, pady=10)
-    ent = ttk.Entry(getmiuiWindow, textvariable=DEVICE_CODE, width=25)
-    ent.pack(side=TOP, expand=NO, padx=5)
-    regionselect = tk.StringVar()
-    regions = ['CN', 'RU', 'Global', 'ID', 'IN', 'EEA', 'TR', 'TW', 'JP', 'SG']
-    ttk.Label(getmiuiWindow, text="区域").pack(side=TOP, expand=NO, padx=5, pady=10)
-    comboxlist = ttk.Combobox(getmiuiWindow, textvariable=regionselect, width=23)
-    comboxlist["values"] = regions
-    comboxlist.current(0)  # 选择第一个
-    comboxlist.pack(side=TOP, expand=NO, padx=5)
-
-    packagetype = tk.StringVar()
-    types = ['recovery', 'fastboot']
-    ttk.Label(getmiuiWindow, text="类型").pack(side=TOP, expand=NO, padx=5, pady=10)
-    comboxlist2 = ttk.Combobox(getmiuiWindow, textvariable=packagetype, width=23)
-    comboxlist2["values"] = types
-    comboxlist2.current(0)  # 选择第一个
-    comboxlist2.pack(side=TOP, expand=NO, padx=5)
-
-    ver = tk.StringVar()
-    vers = ['stable', 'beta']
-    ttk.Label(getmiuiWindow, text="稳定版/开发版").pack(side=TOP, expand=NO, padx=5, pady=10)
-    comboxlist3 = ttk.Combobox(getmiuiWindow, textvariable=ver, width=23)
-    comboxlist3["values"] = vers
-    comboxlist3.current(0)  # 选择第一个
-    comboxlist3.pack(side=TOP, expand=NO, padx=5)
-    ttk.Button(getmiuiWindow, text='确认', width=10, command=lambda: [showurl(), getmiuiWindow.destroy()],
-               style='primiary.Outline.TButton').pack(side=LEFT, expand=YES, padx=10)
-    ttk.Button(getmiuiWindow, text='下载', width=10, command=downloadMiuiRom, style='primiary.TButton').pack(side=LEFT,
-                                                                                                             expand=YES,
-                                                                                                             padx=10)
-    getmiuiWindow.wait_window()
 
 
 def __unzipfile():
@@ -1080,9 +1011,6 @@ if __name__ == '__main__':
                                                                                                             fill=X,
                                                                                                             padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
-    ttk.Button(tab33, text='MIUI 更新包获取', width=10, command=getMiuiWindow, bootstyle="link").pack(side=TOP,
-                                                                                                      expand=NO, fill=X,
-                                                                                                      padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
     s = ttk.Style()
@@ -1107,8 +1035,8 @@ if __name__ == '__main__':
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
     usercmd.bind('<Return>', lambda *x: __xruncmd)
     ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
-                                                                                                  fill=X, padx=2,
-                                                                                                  pady=2)
+                                                                                              fill=X, padx=2,
+                                                                                              pady=2)
     # pack frames
     frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
