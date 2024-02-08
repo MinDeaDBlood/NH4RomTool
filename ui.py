@@ -182,12 +182,12 @@ def about():
     root2.geometry(size_xy)
     # root2.geometry("300x180")
     root2.resizable(False, False)  # 设置最大化窗口不可用
-    root2.title("关于脚本和作者信息")
+    root2.title("关于")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, expand=YES, pady=3)
     aframe2.pack(side=BOTTOM, expand=YES, pady=3)
-    ttk.Button(aframe1, text='访问作者主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
+    ttk.Button(aframe1, text='访问工具主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
                                                                                                      expand=YES, padx=5)
     ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
                                                                                            padx=5)
