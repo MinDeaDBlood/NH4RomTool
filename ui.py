@@ -364,9 +364,6 @@ class cartoon:
             statusbar['image'] = DEFAULTSTATUS
 
 
-
-
-
 def SelectWorkDir():
     item_text = ['']
     for item in table.selection():
@@ -597,6 +594,10 @@ def patchfsconfig():
     showinfo("修补完成")
 
 
+def cz(func, *args):
+    threading.Thread(target=func, args=args, daemon=True).start()
+
+
 def __smartUnpack():
     fileChooseWindow("选择要智能解包的文件")
     if WorkDir:
@@ -606,30 +607,11 @@ def __smartUnpack():
             unpackdir = os.path.abspath(WorkDir + "/" + filetype)
             if filetype == "ozip":
                 showinfo("正在解密ozip")
-
-                def __dozip():
-                    with cartoon():
-                        ozip_decrypt.main(filename.get())
-                        showinfo("解密完成")
-
-                th = threading.Thread(target=__dozip)
-                th.start()
+                ozip_decrypt.main(filename.get())
+                showinfo("解密完成")
             # list of create new folder
             if filetype == "ext" or filetype == "erofs":
                 dirname = os.path.basename(filename.get()).split(".")[0]
-
-                def __eext():
-                    showinfo("正在解包 : " + filename.get())
-                    showinfo("使用imgextractor")
-                    with cartoon():
-                        imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
-                                                      os.path.basename(filename.get()).split('.')[0])
-
-                def __eerofs():
-                    showinfo("正在解包 : " + filename.get())
-                    showinfo("使用extract.erofs")
-                    with cartoon():
-                        runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
 
                 showinfo("在工作目录创建解包目录 : " + dirname)
                 if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
@@ -638,20 +620,16 @@ def __smartUnpack():
                 utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                 if filetype == "ext":
-                    th = threading.Thread(target=__eext)
-                    th.start()
+                    showinfo("正在解包 : " + filename.get())
+                    showinfo("使用imgextractor")
+                    imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
+                                                  os.path.basename(filename.get()).split('.')[0])
                 if filetype == "erofs":
-                    th = threading.Thread(target=__eerofs)
-                    th.start()
+                    showinfo("正在解包 : " + filename.get())
+                    showinfo("使用extract.erofs")
+                    runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
 
             else:
-                def __dpayload():
-                    with cartoon():
-                        t = threading.Thread(target=runcmd, args=[
-                            "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
-                                             daemon=True)
-                        t.start()
-                        t.join()
 
                 for i in ["super", "dtbo", "boot", "payload"]:
                     if filetype == i:
@@ -662,8 +640,11 @@ def __smartUnpack():
                         utils.mkdir(unpackdir)
                         if i == "payload":
                             showinfo("正在解包payload")
-                            th = threading.Thread(target=__dpayload)
-                            th.start()
+                            t = threading.Thread(target=runcmd, args=[
+                                "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
+                                                 daemon=True)
+                            t.start()
+                            t.join()
                         if i == "boot":
                             showinfo("正在解包boot")
                             os.chdir(unpackdir)
