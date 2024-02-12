@@ -451,7 +451,7 @@ def __repackextimage():
                 extimgsize = settings.modifiedimgsize
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
-            cmd += f"-t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
+            cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
             print("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
             print("开始打包EXT镜像")
