@@ -4,6 +4,7 @@ import os
 import shutil
 import subprocess
 import sys
+import zipfile
 from threading import Thread
 import time
 from webbrowser import open as open_url
@@ -232,7 +233,8 @@ def __unzipfile():
         if os.access(filename, os.F_OK):
             print("正在解压文件: " + filename)
             with cartoon():
-                cz(utils.unzip_file, filename, WorkDir + os.sep + "rom")
+                zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
+                    filename) else print('This is not zip')
             print("解压完成")
         else:
             print("Error : 文件不存在")
@@ -442,6 +444,13 @@ def find_fs_con(directoryname):
     return filecontexts_path, fsconfig_path
 
 
+def getdirsize(dir_):
+    size = 0
+    for root, dirs, files in os.walk(dir_):
+        size += sum([os.path.getsize(os.path.join(root, name)) for name in files])
+    return size
+
+
 def __repackextimage():
     if WorkDir:
         directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
@@ -449,7 +458,7 @@ def __repackextimage():
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
             if settings.automutiimgsize:
-                extimgsize = int(utils.getdirsize(directoryname) * mutiimgsize)
+                extimgsize = int(getdirsize(directoryname) * mutiimgsize)
             else:
                 size = f if os.path.exists((f := os.path.join(directoryname, '..', 'config',
                                                               f'{os.path.basename(directoryname)}_size.txt'))) else ''

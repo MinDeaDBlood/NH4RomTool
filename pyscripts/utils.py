@@ -61,13 +61,6 @@ def mkdir(path):
     os.makedirs(path) if not os.path.exists(path) else ...
 
 
-def unzip_file(zip_src, dst_dir):
-    if zipfile.is_zipfile(zip_src):
-        zipfile.ZipFile(zip_src, 'r').extractall(dst_dir)
-    else:
-        print('This is not zip')
-
-
 def zip_file(file, dst_dir):
     def get_all_file_paths(directory):
         # 初始化文件路径列表
@@ -88,10 +81,3 @@ def zip_file(file, dst_dir):
         for f in get_all_file_paths('.'):
             zip.write(f)
     os.chdir(path)
-
-
-def getdirsize(dir):
-    size = 0
-    for root, dirs, files in os.walk(dir):
-        size += sum([os.path.getsize(os.path.join(root, name)) for name in files])
-    return size
