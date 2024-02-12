@@ -173,7 +173,11 @@ def clearWorkDir():
     else:
         print("将清理: " + WorkDir)
         try:
-            shutil.rmtree(os.getcwd() + os.sep + WorkDir)
+            for i in os.listdir(WorkDir):
+                if os.path.isdir(os.path.join(WorkDir, i)):
+                    shutil.rmtree(os.getcwd() + os.sep + WorkDir)
+                if os.path.isfile(os.path.join(WorkDir, i)):
+                    os.remove(os.path.join(WorkDir, i))
         except IOError:
             print("清理失败, 请检查是否有程序正在占用它...?")
         else:
