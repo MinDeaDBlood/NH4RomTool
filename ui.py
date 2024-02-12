@@ -398,7 +398,8 @@ def repackboot():
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
             os.chdir('ramdisk')
-            runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath('bin/cpio.exe').replace('\\','/'))
+            runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
+                LOCALDIR + '/bin/cpio.exe').replace('\\', '/'))
             os.chdir(directoryname)
             with open("comp", "r", encoding='utf-8') as compf:
                 comp = compf.read()
