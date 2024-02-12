@@ -347,7 +347,7 @@ def __smartUnpack():
                                 print("使用 lpunpack 解锁")
                                 runcmd("lpunpack " + filename + " " + unpackdir)
                     if filetype == "sparse":
-                        print("文件类型为sparse, 使用simg2img转换为raw data")
+                        print("正在转换Sparse-->Raw")
 
                         utils.mkdir(WorkDir + "\\rawimg")
                         runcmd("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
@@ -373,16 +373,14 @@ def __smartUnpack():
                             print("已解压br文件")
                         else:
                             print("震惊，文件怎么会不存在？")
-                    if filetype == "vbmeta":
-                        print("检测到vbmtea,此文件不支持解包打包，请前往其他工具修改")
                     if filetype == "dtb":
                         print("使用device tree compiler 转换反编译dtb --> dts")
                         dtname = os.path.basename(filename)
                         runcmd("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
                         print("反编译dtb完成")
-                    if filetype in ["zip", '7z']:
-                        print("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
-                    if filetype == "Unknow":
+                    if filetype in ["zip"]:
+                        print("请使用解压功能解压zip")
+                    elif filetype == "Unknow":
                         print("文件不受支持")
             else:
                 print("文件不存在")
