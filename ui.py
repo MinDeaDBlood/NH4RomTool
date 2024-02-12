@@ -552,8 +552,6 @@ def __compressToBr():
 
 def __repackDat():
     if WorkDir:
-        # TO-DO: 打包后自动定位转换好的 simg   20220331
-        # TO-DO: 自动识别Android版本   20220331
         imgFilePath = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
         if not os.path.exists(imgFilePath):
             print("文件不存在: " + imgFilePath)
@@ -562,26 +560,24 @@ def __repackDat():
             return
         else:
             print("警告: 只接受大版本输入，例如 7.1.2 请直接输入 7.1！")
-            inputvar = userInputWindow("输入Android版本")
-            inputVersion = float(inputvar)
-            currentVersion = 0
-            if inputVersion == 5.0:  # Android 5
+            input_version = float(userInputWindow("输入Android版本"))
+            current_version = 0
+            if input_version == 5.0:  # Android 5
                 print("已选择: Android 5.0")
-                currentVersion = 1
-            elif inputVersion == 5.1:  # Android 5.1
+                current_version = 1
+            elif input_version == 5.1:  # Android 5.1
                 print("已选择: Android 5.1")
-                currentVersion = 2
-            elif 6.0 <= inputVersion < 7.0:  # Android 6.X
+                current_version = 2
+            elif 6.0 <= input_version < 7.0:  # Android 6.X
                 print("已选择: Android 6.X")
-                currentVersion = 3
-            elif inputVersion >= 7.0:  # Android 7.0+
+                current_version = 3
+            elif input_version >= 7.0:  # Android 7.0+
                 print("已选择: Android 7.X+")
-                currentVersion = 4
+                current_version = 4
             # PREFIX
             print("提示: 输入分区名 (例如 system、vendor、odm)")
-            userInputWindow("输入分区名")
-            partitionName = inputvar
-            if currentVersion == 0:
+            partitionName = userInputWindow("输入分区名")
+            if current_version == 0:
                 print("Android 版本输入错误，请查看提示重新输入！")
                 return
             elif partitionName == 0 or not partitionName:
@@ -591,7 +587,7 @@ def __repackDat():
             print("开始转换")
             with cartoon():
                 threading.Thread(
-                    target=img2sdat.main(imgFilePath, WorkDir + "/output/", currentVersion, partitionName)).start()
+                    target=img2sdat.main(imgFilePath, WorkDir + "/output/", current_version, partitionName)).start()
             print("转换完毕，脱出到工作目录下 output 文件夹")
     else:
         print("请先选择工作目录")
