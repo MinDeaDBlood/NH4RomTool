@@ -874,11 +874,9 @@ if __name__ == '__main__':
         text.delete(1.0, END)
         text.configure(state='disabled')
 
-
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     statusbar = ttk.Label(framebotm, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=X, ipadx=12)
-
 
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
