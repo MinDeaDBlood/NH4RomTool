@@ -498,7 +498,7 @@ def __smartUnpack():
                             if i == "payload":
                                 print("正在解包payload")
                                 t = threading.Thread(target=runcmd, args=[
-                                    "payload-dumper-go.exe -o %s %s\\payload" % (WorkDir, filename.get())],
+                                    "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename.get())],
                                                      daemon=True)
                                 t.start()
                                 t.join()
