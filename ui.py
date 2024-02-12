@@ -93,6 +93,7 @@ class MyThread(threading.Thread):
     def run(self):
         self.func(*self.args)
 
+
 def runcmd(cmd):
     if not os.path.exists(cmd.split()[0]):
         cmd = os.path.join(LOCALDIR, 'bin') + os.sep + cmd
@@ -116,8 +117,9 @@ def about():
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
-    ttk.Button(aframe1, text='开源地址', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"), style='success.TButton').pack(side=LEFT, expand=YES,
-                                                                                        padx=5)
+    ttk.Button(aframe1, text='开源地址', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
+               style='success.TButton').pack(side=LEFT, expand=YES,
+                                             padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
         side=BOTTOM, expand=NO, pady=3)
@@ -751,7 +753,7 @@ def __repackSuper():
         print("请先选择工作目录")
 
 
-if __name__ == '__main__':
+def main():
     myStdout()
     # 在中心打开主窗口
     screenwidth = root.winfo_screenwidth()  # 屏幕宽度
@@ -812,10 +814,12 @@ if __name__ == '__main__':
 
     # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
-    ttk.Button(tab12, text='确认', width=10, command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"), style='primiary.Outline.TButton').grid(row=0,
-                                                                                                            column=0,
-                                                                                                            padx=10,
-                                                                                                            pady=8)
+    ttk.Button(tab12, text='确认', width=10,
+               command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
+               style='primiary.Outline.TButton').grid(row=0,
+                                                      column=0,
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                        column=1,
                                                                                                        padx=10,
@@ -930,7 +934,6 @@ if __name__ == '__main__':
     # table.bind('<ButtonPress-1>', print("请点击确认目录"))
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
-
     def __xruncmd():
         cmd = usercmd.get()
         if not cmd:
@@ -941,7 +944,6 @@ if __name__ == '__main__':
                 return
         runcmd("busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
-
 
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
@@ -957,12 +959,10 @@ if __name__ == '__main__':
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
-
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)  # 清空text
         text.configure(state='disabled')
-
 
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     # Status bar
@@ -970,14 +970,16 @@ if __name__ == '__main__':
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
 
-
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                        "https": None}).json()
         ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
-
     cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     root.mainloop()
+
+
+if __name__ == '__main__':
+    main()
