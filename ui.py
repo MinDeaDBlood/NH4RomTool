@@ -29,7 +29,6 @@ EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 # Var
 AUTHOR = "affggh & ColdWindScholar"
 WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: {AUTHOR}]"
-THEME = "minty"  # 设置默认主题
 LOGOICO = ".\\bin\\logo.ico"
 TEXTFONT = ['Arial', 10]
 LOCALDIR = os.getcwd()
@@ -70,7 +69,8 @@ settings.load()
 if EXECPATH:
     utils.addExecPath(EXECPATH)
 
-style = Style(theme=THEME)
+style = Style(theme=settings.theme
+              )
 
 # Begin of window
 root = style.master
@@ -281,6 +281,7 @@ def dirChooseWindow(tips):
 def change_theme(var):
     print("设置主题为 : " + var)
     style = Style(theme=var)
+    settings.change('theme', var)
     style.theme_use()
 
 

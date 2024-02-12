@@ -4,5 +4,6 @@
    "extrepacktype": "ext4",
    "extblocksize": "4096",
    "extfueature": "^has_journal",
-   "erofstype": "lz4hc"
+   "erofstype": "lz4hc",
+   "theme": "minty"
 }
