@@ -36,29 +36,25 @@ setfile = LOCALDIR + os.sep + "config.json"
 
 
 class set_utils:
-    def __init__(self, set_file):
-        if not os.path.exists(set_file):
-            print("config.json is missing")
-            sys.exit()
-        self.set_file = set_file
+    def __init__(self, path):
+        self.path = path
 
     def load(self):
-        with open(self.set_file, 'r') as s:
-            data = json.load(s)
-            for i in data:
-                setattr(self, i, data.get(i, ''))
+        with open(self.path, 'r') as ss:
+            data = json.load(ss)
+            [setattr(self, v, data[v]) for v in data]
 
-    def change(self, n, v):
-        with open(self.set_file) as s:
-            data = json.load(s)
-        with open(self.set_file, 'w+') as s:
-            data[n] = v
-            json.dump(s, data, indent=4)
+    def change(self, name, value):
+        with open(self.path, 'r') as ss:
+            data = json.load(ss)
+        with open(self.path, 'w', encoding='utf-8') as ss:
+            data[name] = value
+            json.dump(data, ss, ensure_ascii=False, indent=4)
         self.load()
 
-    def __getattr__(self, item):
+    def __getattr__(self, item_):
         try:
-            return getattr(self, item)
+            return getattr(self, item_)
         except:
             return ''
 
