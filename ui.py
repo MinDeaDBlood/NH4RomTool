@@ -577,7 +577,7 @@ def __repackerofsimage():
             print("自动搜寻 file_contexts 完成" + is_file_contexts)
             filecontexts_path = is_file_contexts
         with cartoon():
-            fspatch.main(directoryname.get(), fsconfig_path)
+            fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
                 WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
                 settings.erofstype, os.path.basename(directoryname), fsconfig_path, filecontexts_path)
