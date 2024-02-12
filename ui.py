@@ -125,12 +125,6 @@ def runcmd(cmd):
             print(i)
 
 
-def cleaninfo():
-    text.configure(state='normal')
-    text.delete(1.0, END)  # 清空text
-    text.configure(state='disabled')
-
-
 def selectFile():
     filepath = askopenfilename()  # 选择打开什么文件，返回文件名
     filename.set(filepath.replace('/', '\\'))  # 设置变量filename的值
@@ -1056,8 +1050,16 @@ if __name__ == '__main__':
 
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
-    ttk.Button(framebotm, text='清理信息', command=cleaninfo, style='secondary.TButton').pack(side=RIGHT, expand=NO,
-                                                                                              padx=5, pady=0)
+
+
+    def clean():
+        text.configure(state='normal')
+        text.delete(1.0, END)  # 清空text
+        text.configure(state='disabled')
+
+
+    ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, expand=NO,
+                                                                                      padx=5, pady=0)
     # Status bar
 
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
