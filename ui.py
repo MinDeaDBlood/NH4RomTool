@@ -372,7 +372,7 @@ def __smartUnpack():
                                 runcmd("brotli -d " + filename + " " + WorkDir + os.sep + pname)
                             print("已解压br文件")
                         else:
-                            print("震惊，文件怎么会不存在？")
+                            print("文件不可访问！")
                     if filetype == "dtb":
                         print("使用device tree compiler 转换反编译dtb --> dts")
                         dtname = os.path.basename(filename)
