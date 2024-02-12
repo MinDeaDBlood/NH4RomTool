@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from glob import glob
+from glob import iglob
 import json
 import os
 import shutil
@@ -21,6 +21,12 @@ from tkinter import Checkbutton
 
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
+
+
+def glob(pathname, *, root_dir=None, dir_fd=None, recursive=False,
+         include_hidden=False):
+    return list(iglob(pathname, root_dir=root_dir, dir_fd=dir_fd, recursive=recursive,
+                      include_hidden=include_hidden))
 
 
 class set_utils:
