@@ -19,6 +19,7 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 from tkinter import Checkbutton
+
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
@@ -121,7 +122,7 @@ def about():
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
     ttk.Button(aframe1, text='开源地址', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
-                                                                                           padx=5)
+                                                                                        padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
         side=BOTTOM, expand=NO, pady=3)
@@ -216,13 +217,6 @@ def SelectWorkDir():
         global WorkDir
         WorkDir = item_text[0]
         print("选择工作目录为: %s" % WorkDir)
-
-
-def ConfirmWorkDir():
-    if not WorkDir:
-        print("Warning : 请选择一个目录")
-    else:
-        tabControl.select(tab2)
 
 
 def rmWorkDir():
@@ -668,9 +662,6 @@ def __repackdtb():
         print("请先选择工作目录")
 
 
-
-
-
 def __repackSuper():
     def chose_dir():
         img_dir.set(askdirectory(title="选择super分区镜像文件所在目录"))
@@ -822,7 +813,7 @@ if __name__ == '__main__':
 
     # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
-    ttk.Button(tab12, text='确认', width=10, command=ConfirmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+    ttk.Button(tab12, text='确认', width=10, command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"), style='primiary.Outline.TButton').grid(row=0,
                                                                                                             column=0,
                                                                                                             padx=10,
                                                                                                             pady=8)
