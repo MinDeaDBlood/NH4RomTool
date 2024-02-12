@@ -849,7 +849,7 @@ if __name__ == '__main__':
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
 
-    def __xruncmd():
+    def run_cmd():
         cmd = usercmd.get()
         if not cmd:
             return
@@ -863,10 +863,10 @@ if __name__ == '__main__':
 
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
-    usercmd.bind('<Return>', lambda *x: __xruncmd())
-    ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
-                                                                                              fill=X, padx=2,
-                                                                                              pady=2)
+    usercmd.bind('<Return>', lambda *x: run_cmd())
+    ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+                                                                                            fill=X, padx=2,
+                                                                                            pady=2)
     # pack frames
     frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
