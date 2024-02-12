@@ -25,10 +25,9 @@ from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspa
 from pyscripts.utils import gettype
 
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
-
+utils.addExecPath(EXECPATH)
 # Var
-AUTHOR = "affggh & ColdWindScholar"
-WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: {AUTHOR}]"
+WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: affggh & ColdWindScholar]"
 LOGOICO = ".\\bin\\logo.ico"
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + "config.json"
@@ -61,8 +60,8 @@ class set_utils:
 settings = set_utils(setfile)
 settings.load()
 
-if EXECPATH:
-    utils.addExecPath(EXECPATH)
+
+
 
 style = Style(theme=settings.theme)
 
@@ -184,8 +183,7 @@ def about():
     ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
                                                                                            padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱 Version %s\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\n%s Copyright(R) Apache 2.0 LICENSE' % (
-                  20240208, AUTHOR)).pack(side=BOTTOM, expand=NO, pady=3)
+              text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(side=BOTTOM, expand=NO, pady=3)
     utils.chLocal()
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
