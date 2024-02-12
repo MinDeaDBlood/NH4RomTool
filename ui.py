@@ -422,13 +422,22 @@ def repackboot():
         print("文件夹不存在")
 
 
+def find_fs_con(directoryname):
+    is_fs_config = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',
+                                                                          f'{os.path.basename(directoryname)}_fs_config'))) else ''
+    is_fs_config = os.path.realpath(is_fs_config)
+    is_file_contexts = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',
+                                                                              f'{os.path.basename(directoryname)}_file_contexts'))) else ''
+    is_file_contexts = os.path.realpath(is_file_contexts)
+    return is_file_contexts, is_fs_config
+
+
 def __repackextimage():
     if WorkDir:
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_fs_config = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',  f'{os.path.basename(directoryname)}_fs_config'))) else ''
-        is_file_contexts = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',  f'{os.path.basename(directoryname)}_file_contexts'))) else ''
+        is_file_contexts, is_fs_config = find_fs_con(directoryname)
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
@@ -470,8 +479,7 @@ def __repackerofsimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_fs_config = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',  f'{os.path.basename(directoryname)}_fs_config'))) else ''
-        is_file_contexts = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',  f'{os.path.basename(directoryname)}_file_contexts'))) else ''
+        is_file_contexts, is_fs_config = find_fs_con(directoryname)
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
