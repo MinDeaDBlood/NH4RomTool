@@ -776,14 +776,7 @@ if __name__ == '__main__':
 
     # Treeview  use to list work dir
     tab11 = ttk.Frame(tab1)
-
-    columns = ["Workdir"]
-    table = ttk.Treeview(
-        tab11,  # 父容器
-        height=10,  # 表格显示的行数,height行
-        columns=columns,  # 显示的列
-        show='headings',  # 隐藏首列
-    )
+    table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
     table.column('Workdir', width=100, anchor='center')
     table.heading('Workdir', text='项目')
     table.pack(side=TOP, fill=BOTH, expand=YES)
