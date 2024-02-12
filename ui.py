@@ -80,19 +80,6 @@ class myStdout:  # 重定向类
         ...
 
 
-class MyThread(threading.Thread):
-    def __init__(self, func, *args):
-        super().__init__()
-
-        self.func = func
-        self.args = args
-        self.daemon = True
-        self.start()  # 在这里开始
-
-    def run(self):
-        self.func(*self.args)
-
-
 def runcmd(cmd):
     if not os.path.exists(cmd.split()[0]):
         cmd = os.path.join(LOCALDIR, 'bin') + os.sep + cmd
@@ -215,7 +202,7 @@ def SelectWorkDir():
     item_text = ['']
     for item_ in table.selection():
         item_text = table.item(item_, "values")
-    if item_text[0] != "":
+    if item_text[0]:
         global WorkDir
         WorkDir = item_text[0]
         print("选择工作目录为: %s" % WorkDir)
@@ -270,7 +257,7 @@ def __unzipfile():
         if os.access(filename, os.F_OK):
             print("正在解压文件: " + filename)
             with cartoon():
-                MyThread(utils.unzip_file(filename, WorkDir + os.sep + "rom"))
+                cz(utils.unzip_file, (filename, WorkDir + os.sep + "rom"))
             print("解压完成")
         else:
             print("Error : 文件不存在")
@@ -284,7 +271,7 @@ def __zipcompressfile():
     if WorkDir:
         print("正在压缩 : " + inputvar + ".zip")
         with cartoon():
-            MyThread(utils.zip_file(inputvar + ".zip", WorkDir + os.sep + "rom"))
+            cz(utils.zip_file, (inputvar + ".zip", WorkDir + os.sep + "rom"))
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
