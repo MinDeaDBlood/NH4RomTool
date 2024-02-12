@@ -72,8 +72,6 @@ def unzip_file(zip_src, dst_dir):
         print('This is not zip')
 
 
-
-
 def zip_file(file, dst_dir):
     def get_all_file_paths(directory):
         # 初始化文件路径列表

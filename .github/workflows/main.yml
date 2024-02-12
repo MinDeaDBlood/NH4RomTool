@@ -1,0 +1,44 @@
+name: "Build Tool"
+permissions:
+  contents: write
+  discussions: write
+on:
+  push:
+    paths:
+      - "build.py"
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.8.10
+        uses: actions/setup-python@v4
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.8.10'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+      - name: Update pip
+        run: python -m pip install -U --force-reinstall pip
+      - name: Build tool
+        run: |
+          python build.py
+      - name: Rename Tool
+        run: |
+          move ./NH4RomTool-win.zip ../NH4RomTool-${{ github.run_number }}-win.zip
+      - name: Upload release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          omitBodyDuringUpdate: true
+          removeArtifacts: true
+          name: "NH4RomTool.${{ github.run_number }}"
+          tag: "CI_BUILD_${{ github.run_number }}"
+          body: |
+            Build times: ${{ github.run_number }}
+            Version: 4
+            Note:If u cannot run it in linux,you may need do "chmod a+x ./*"
+            Minimum support: Ubuntu 20.04 (64bit),Windows Vista (32bit)
+          artifacts: "*.zip"
