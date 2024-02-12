@@ -804,7 +804,7 @@ if __name__ == '__main__':
                                                       pady=8)
     tab21.pack(side=TOP, fill=BOTH)
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
-    for t, c in {("检测文件格式", lambda: print(
+    for t, c in (("检测文件格式", lambda: print(
             f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
                                                              os.F_OK) else "Error : 文件不存在")), ('OZIP 解密',
                                                                                                     lambda: ozip_decrypt.main(
@@ -816,7 +816,7 @@ if __name__ == '__main__':
                                                                                                         "Error : 文件不存在")),
                  ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patchvbmeta),
                  ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                                    askopenfilename(title="选择fs_config文件")))}:
+                                                    askopenfilename(title="选择fs_config文件")))):
         ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
             side=TOP, expand=NO,
             fill=X, padx=8)

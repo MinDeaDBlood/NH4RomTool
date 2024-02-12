@@ -5,5 +5,5 @@
     "extblocksize": "4096",
     "extfueature": "^has_journal",
     "erofstype": "lz4hc",
-    "theme": "minty"
+    "theme": "pulse"
 }
