@@ -514,7 +514,7 @@ def __smartUnpack():
                                     if comp != "unknow":
                                         runcmd("magiskboot decompress ramdisk.cpio ramdisk.raw")
                                         os.remove('ramdisk.cpio')
-                                        os.rename('ramdisk.raw','ramdisk.cpio')
+                                        os.rename('ramdisk.raw', 'ramdisk.cpio')
                                     os.makedirs('ramdisk')
                                     runcmd("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
@@ -597,8 +597,6 @@ def repackboot():
         shutil.rmtree(directoryname.get())
     else:
         print("文件夹不存在")
-
-
 
 
 def __repackextimage():
@@ -718,7 +716,7 @@ def __repackSparseImage():
             print("开始转换")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
-                imgFilePath, WorkDir, os.path.basename(directoryname.get()))
+                    imgFilePath, WorkDir, os.path.basename(directoryname.get()))
                 runcmd(cmd)
                 print("转换结束")
     else:
@@ -817,6 +815,7 @@ def __repackSuper():
     def chose_dir():
         dirChooseWindow("选择super分区镜像文件所在目录")
         img_dir.set(directoryname.get())
+
     if WorkDir:
         packtype = tk.StringVar(value='VAB')
         packsize = tk.StringVar(value="9126805504")
@@ -847,7 +846,7 @@ def __repackSuper():
         ttk.Label(w, text="请输入super分区簇名").pack()
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
         l2 = ttk.Labelframe(w, text="镜像文件夹:", labelanchor="nw", relief=GROOVE, borderwidth=1)
-        ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10,  fill=X)
+        ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10, fill=X)
         ttk.Button(l2, text="浏览", command=chose_dir).pack()
         l2.pack(ipadx=10, ipady=10)
         Checkbutton(w, text="Sparse", variable=sparse).pack(side=TOP, padx=10, pady=10)
@@ -1103,18 +1102,25 @@ if __name__ == '__main__':
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
+
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)  # 清空text
         text.configure(state='disabled')
 
+
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info").pack(side=RIGHT, fill=tk.X, ipadx=12)
+    # Status bar
+
+    statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
+    statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
+
+
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
-                                                                  "https": None}).json()
+                                                                       "https": None}).json()
         ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
-                               font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
+                  font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
 
     cz(SHOWSHIJU)
