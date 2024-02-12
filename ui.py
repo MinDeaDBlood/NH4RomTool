@@ -354,7 +354,7 @@ def __smartUnpack():
                             filename))
                         print("sparse image 转换结束")
                     if filetype == "dat":
-                        print("检测到dat,使用sdat2img 且自动在文件所在目录选择transfer.list文件")
+                        print("正在解包Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
