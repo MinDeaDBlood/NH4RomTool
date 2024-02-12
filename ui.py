@@ -25,8 +25,6 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 
-# Var
-LOGOICO = ".\\bin\\logo.ico"
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
@@ -62,7 +60,7 @@ style = Style(theme=settings.theme)
 
 # Begin of window
 root = style.master
-
+root.iconbitmap(".\\bin\\logo.ico")
 width = 1240
 height = 600
 
@@ -112,14 +110,6 @@ class MyThread(threading.Thread):
 
     def run(self):
         self.func(*self.args)
-
-
-def logo():
-    root.iconbitmap(LOGOICO)
-
-
-logo()
-
 
 def VisitMe():
     open_url("https://github.com/ColdWindScholar/NH4RomTool")
