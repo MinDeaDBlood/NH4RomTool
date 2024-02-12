@@ -77,8 +77,7 @@ def listDirHeader(path, head):
 
 
 def unzip_file(zip_src, dst_dir):
-    r = zipfile.is_zipfile(zip_src)
-    if r:
+    if zipfile.is_zipfile(zip_src):
         fz = zipfile.ZipFile(zip_src, 'r')
         for file in fz.namelist():
             fz.extract(file, dst_dir)
