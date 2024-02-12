@@ -62,7 +62,7 @@ DEFAULTSTATUS = tk.PhotoImage(file="bin\\processdone.png")
 WorkDir = ''
 
 
-class myStdout:  # 重定向类
+class myStdout:
     def __init__(self):
         sys.stdout = self
         sys.stderr = self
@@ -72,7 +72,7 @@ class myStdout:  # 重定向类
         text.configure(state='normal')
         if info != '\n':
             text.insert(END, "[%s]%s\n" % (time.strftime('%H:%M:%S'), info))
-        text.update()  # 实时返回信息
+        text.update()
         text.yview('end')
         text.configure(state='disabled')
 
@@ -97,7 +97,7 @@ def runcmd(cmd):
 
 def about():
     root2 = tk.Toplevel()
-    root2.resizable(False, False)  # 设置最大化窗口不可用
+    root2.resizable(False, False)
     root2.title("关于")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
@@ -120,18 +120,11 @@ def userInputWindow(title='输入文本'):
     curWidth = 400
     curHight = 120
     ent = tk.StringVar()
-    # 获取屏幕宽度和高度
     scn_w, scn_h = root.maxsize()
-    # print(scn_w, scn_h)
-    # 计算中心坐标
     cen_x = (scn_w - curWidth) / 2
     cen_y = (scn_h - curHight) / 2
-    # print(cen_x, cen_y)
-
-    # 设置窗口初始大小和位置
     size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
     inputWindow.geometry(size_xy)
-    # inputWindow.geometry("300x180")
     inputWindow.resizable(False, False)  # 设置最大化窗口不可用
     inputWindow.title(title)
     ent_ = ttk.Entry(inputWindow, textvariable=ent, width=50)
@@ -223,14 +216,6 @@ def mkWorkdir():
     if not os.path.exists(f'NH4_{inputvar}'):
         os.mkdir(f'NH4_{inputvar}')
     getWorkDir()
-
-
-def ozipDecrypt():
-    filename = askopenfilename(title="解密ozip")
-    if os.access(filename, os.F_OK):
-        ozip_decrypt.main(filename)
-    else:
-        print("Error : 文件不存在")
 
 
 def __ozipEncrypt():
@@ -884,7 +869,7 @@ if __name__ == '__main__':
                                                          os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(
         side=TOP, expand=NO,
         fill=X, padx=8)
-    ttk.Button(tab33, text='OZIP 解密', width=10, command=ozipDecrypt, bootstyle="link").pack(side=TOP, expand=NO,
+    ttk.Button(tab33, text='OZIP 解密', width=10, command=lambda: ozip_decrypt.main(filename) if os.access((filename:=askopenfilename(title="解密ozip")), os.F_OK) else print("Error : 文件不存在"), bootstyle="link").pack(side=TOP, expand=NO,
                                                                                               fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
                                                                                                             expand=NO,
@@ -937,13 +922,10 @@ if __name__ == '__main__':
 
     def clean():
         text.configure(state='normal')
-        text.delete(1.0, END)  # 清空text
+        text.delete(1.0, END)
         text.configure(state='disabled')
 
-
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    # Status bar
-
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
 
