@@ -56,8 +56,8 @@ width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
 root.title("NH4RomTool")
-LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
-DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
+LOGOIMG = tk.PhotoImage(file="bin\\logo.png")
+DEFAULTSTATUS = tk.PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
 
