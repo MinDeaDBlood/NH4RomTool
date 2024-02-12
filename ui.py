@@ -401,6 +401,8 @@ def __zipcompressfile():
 
 def __xruncmd():
     cmd = USERCMD.get()
+    if not cmd:
+        return
     for i in ["bash", 'ash', 'cmd']:
         if i in cmd.split()[0]:
             print("这种命令会阻塞窗口， 所以终止执行")
