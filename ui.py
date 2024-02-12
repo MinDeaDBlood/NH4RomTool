@@ -5,29 +5,21 @@ import os
 import shutil
 import subprocess
 import sys
-# using threading in some function
 import threading
 import time
-# import tk/tcl
 import tkinter as tk
 from webbrowser import open as open_url
 from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
-
 import requests
-# from bs4 import BeautifulSoup
-from ttkbootstrap import Style  # use ttkbootstrap theme
+from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
-
-# import functions I modified
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
-
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
-
 
 class set_utils:
     def __init__(self, path):
@@ -55,26 +47,19 @@ class set_utils:
 
 settings = set_utils(setfile)
 settings.load()
-
 style = Style(theme=settings.theme)
-
-# Begin of window
 root = style.master
 root.iconbitmap(".\\bin\\logo.ico")
 width = 1240
 height = 600
-
 root.geometry("%sx%s" % (width, height))
-# root.resizable(0,0) # 设置最大化窗口不可用
 root.title("NH4RomTool [版本: 20240208] [作者: affggh & ColdWindScholar]")
-
-# Set images
 LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
 WorkDir = ''
 
-inputvar = tk.StringVar()
+
 USERCMD = tk.StringVar()
 
 
@@ -166,12 +151,13 @@ def userInputWindow(title='输入文本'):
     # inputWindow.geometry("300x180")
     inputWindow.resizable(False, False)  # 设置最大化窗口不可用
     inputWindow.title(title)
-    ent = ttk.Entry(inputWindow, textvariable=inputvar, width=50)
+    ent = ttk.Entry(inputWindow, width=50)
     ent.pack(side=TOP, expand=YES, padx=5)
     ttk.Button(inputWindow, text='确认', command=inputWindow.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                              expand=YES,
                                                                                                              padx=5)
     inputWindow.wait_window()
+    return ent.get()
 
 
 def change_theme(var):
@@ -252,9 +238,9 @@ def rmWorkDir():
 
 
 def mkWorkdir():
-    userInputWindow()
-    print("用户输入: %s" % (inputvar.get()))
-    utils.mkdir("NH4_" + "%s" % (inputvar.get()))
+    inputvar = userInputWindow()
+    print(f"用户输入: {inputvar}")
+    utils.mkdir("NH4_%s" % inputvar)
     getWorkDir()
 
 
@@ -301,11 +287,11 @@ def __unzipfile():
 
 def __zipcompressfile():
     print("输入生成的文件名")
-    userInputWindow()
+    inputvar = userInputWindow()
     if WorkDir:
-        print("正在压缩 : " + inputvar.get() + ".zip")
+        print("正在压缩 : " + inputvar + ".zip")
         with cartoon():
-            MyThread(utils.zip_file(inputvar.get() + ".zip", WorkDir + os.sep + "rom"))
+            MyThread(utils.zip_file(inputvar + ".zip", WorkDir + os.sep + "rom"))
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
@@ -648,8 +634,8 @@ def __repackDat():
             return
         else:
             print("警告: 只接受大版本输入，例如 7.1.2 请直接输入 7.1！")
-            userInputWindow("输入Android版本")
-            inputVersion = float(inputvar.get())
+            inputvar = userInputWindow("输入Android版本")
+            inputVersion = float(inputvar)
             currentVersion = 0
             if inputVersion == 5.0:  # Android 5
                 print("已选择: Android 5.0")
@@ -664,10 +650,9 @@ def __repackDat():
                 print("已选择: Android 7.X+")
                 currentVersion = 4
             # PREFIX
-            inputvar.set("")
             print("提示: 输入分区名 (例如 system、vendor、odm)")
             userInputWindow("输入分区名")
-            partitionName = inputvar.get()
+            partitionName = inputvar
             if currentVersion == 0:
                 print("Android 版本输入错误，请查看提示重新输入！")
                 return
