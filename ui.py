@@ -111,6 +111,7 @@ class MyThread(threading.Thread):
     def run(self):
         self.func(*self.args)
 
+
 def VisitMe():
     open_url("https://github.com/ColdWindScholar/NH4RomTool")
 
