@@ -52,7 +52,6 @@ settings = set_utils(setfile)
 settings.load()
 style = Style(theme=settings.theme)
 root = style.master
-root.iconbitmap(".\\bin\\logo.ico")
 width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
@@ -984,4 +983,5 @@ if __name__ == '__main__':
 
     cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
+    cz(root.iconbitmap, ".\\bin\\logo.ico")
     root.mainloop()
