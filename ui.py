@@ -688,7 +688,6 @@ if __name__ == '__main__':
     screenheight = root.winfo_screenheight()
     root.geometry(
         '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
-
     menuBar = Menu(root)
     root.config(menu=menuBar)
     menu1 = Menu(menuBar, tearoff=False)
