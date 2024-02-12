@@ -30,7 +30,6 @@ EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 AUTHOR = "affggh & ColdWindScholar"
 WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: {AUTHOR}]"
 LOGOICO = ".\\bin\\logo.ico"
-TEXTFONT = ['Arial', 10]
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + "config.json"
 
@@ -1053,7 +1052,7 @@ if __name__ == '__main__':
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
     # ScrolledText
-    text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=TEXTFONT, relief=SOLID)  # 信息展示 文本框
+    text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)  # 信息展示 文本框
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
     # table.bind('<ButtonPress-1>', print("请点击确认目录"))
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
