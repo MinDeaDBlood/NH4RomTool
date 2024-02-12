@@ -682,7 +682,6 @@ def __repackSuper():
 
 if __name__ == '__main__':
     myStdout()
-    # 在中心打开主窗口
     screenwidth = root.winfo_screenwidth()  # 屏幕宽度
     screenheight = root.winfo_screenheight()  # 屏幕高度
     root.geometry(
