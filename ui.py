@@ -69,8 +69,7 @@ settings.load()
 if EXECPATH:
     utils.addExecPath(EXECPATH)
 
-style = Style(theme=settings.theme
-              )
+style = Style(theme=settings.theme)
 
 # Begin of window
 root = style.master
