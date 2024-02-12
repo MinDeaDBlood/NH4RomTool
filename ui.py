@@ -235,7 +235,7 @@ def __unzipfile():
         if os.access(filename, os.F_OK):
             print("正在解压文件: " + filename)
             with cartoon():
-                cz(utils.unzip_file, (filename, WorkDir + os.sep + "rom"))
+                cz(utils.unzip_file, filename, WorkDir + os.sep + "rom")
             print("解压完成")
         else:
             print("Error : 文件不存在")
@@ -249,7 +249,7 @@ def __zipcompressfile():
     if WorkDir:
         print("正在压缩 : " + inputvar + ".zip")
         with cartoon():
-            cz(utils.zip_file, (inputvar + ".zip", WorkDir + os.sep + "rom"))
+            cz(utils.zip_file, inputvar + ".zip", WorkDir + os.sep + "rom")
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
@@ -544,7 +544,7 @@ def __compressToBr():
         else:
             print("开始转换")
             with cartoon():
-                cz(runcmd, ("brotli.exe -q 6 " + img_file_path))
+                cz(runcmd, "brotli.exe -q 6 " + img_file_path)
             print("转换完毕，脱出到相同文件夹")
     else:
         print("请先选择工作目录")
@@ -585,7 +585,7 @@ def __repackDat():
                 return
             print("开始转换")
             with cartoon():
-                cz(img2sdat.main, (img_file_path, WorkDir + "/output/", current_version, partition_name))
+                cz(img2sdat.main, img_file_path, WorkDir + "/output/", current_version, partition_name)
             print("转换完毕，脱出到工作目录下 output 文件夹")
     else:
         print("请先选择工作目录")
