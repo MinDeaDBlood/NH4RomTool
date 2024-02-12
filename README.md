@@ -4,7 +4,7 @@
 Free Rom Unpack and Repack tool on windows !!! 
 
 ## LOGO
-![image](https://github.com/affggh/NH4RomTool/blob/master/bin/logo.png)
+![image](https://github.com/ColdWindScholar/NH4RomTool/blob/master/bin/logo.png)
 
 ## 目前实现的
 ***解压压缩***    
@@ -13,6 +13,8 @@ Free Rom Unpack and Repack tool on windows !!!
 ***简单读取文件格式***
 ***解包payload***     
 ***修补vbmeta***
+***打包Super***
+***解打EXT4/Erofs***
 ## 用法
 ``` Batchfile
 pip install -r requirements.txt
