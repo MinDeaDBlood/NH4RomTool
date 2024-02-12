@@ -10,7 +10,7 @@ from webbrowser import open as open_url
 from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
-import requests
+from requests import get as requests_get
 from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
@@ -858,7 +858,7 @@ if __name__ == '__main__':
 
 
     def SHOWSHIJU():
-        shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
+        shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                        "https": None}).json()
         ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
