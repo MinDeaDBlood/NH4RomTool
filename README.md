@@ -19,5 +19,5 @@ pip install -r requirements.txt
 :: 运行主界面
 python ui.py
 ```
-### （随口一提， 这玩意真是个石山
+### （删除了石山
 期待更多大佬加入:blush:
