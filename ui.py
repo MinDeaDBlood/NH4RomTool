@@ -613,7 +613,7 @@ def __repackDat():
             if currentVersion == 0:
                 print("Android 版本输入错误，请查看提示重新输入！")
                 return
-            elif partitionName == 0 or partitionName == "":
+            elif partitionName == 0 or not partitionName:
                 print("分区名输入错误，请查看提示重新输入！")
                 return
             # img2sdat <image file> <output dir> <version|1=5.0|2=5.1|3=6.0|4=7.0+> <prefix>
@@ -680,7 +680,7 @@ def __repackSuper():
         Checkbutton(w, text="Sparse", variable=sparse).pack(side=TOP, padx=10, pady=10)
         Button(w, text="打包", command=w.destroy, width=20, height=20).pack(padx=10, pady=10)
         w.wait_window()
-        if packtype.get() == "":
+        if not packtype.get():
             print("没有获取到选项")
         else:
             superdir = img_dir.get()
