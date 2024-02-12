@@ -17,7 +17,6 @@ from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
-from pyscripts.utils import gettype
 from tkinter import Checkbutton
 
 LOCALDIR = os.getcwd()
@@ -322,7 +321,7 @@ def __smartUnpack():
                                 print("正在解包payload")
                                 t = Thread(target=runcmd, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
-                                                     daemon=True)
+                                           daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
@@ -427,8 +426,8 @@ def __repackextimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_fs_config = find_fs_con(directoryname)
-        is_file_contexts = find_fs_con(directoryname, t=1)
+        is_fs_config = ''
+        is_file_contexts = ''
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
@@ -465,21 +464,13 @@ def __repackextimage():
         print("请先选择工作目录")
 
 
-def find_fs_con(path, t=0):
-    parent_path = os.path.dirname(path)
-    current_path = os.path.basename(parent_path)
-    f_ = "_fs_config" if t == 0 else "_file_contexts"
-    return str(os.path.join(parent_path, 'config', current_path + f_)) if os.path.exists(
-        os.path.join(parent_path, 'config', current_path + f_)) else ''
-
-
 def __repackerofsimage():
     if WorkDir:
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_fs_config = find_fs_con(directoryname)
-        is_file_contexts = find_fs_con(directoryname, t=1)
+        is_fs_config = ''
+        is_file_contexts = ''
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
