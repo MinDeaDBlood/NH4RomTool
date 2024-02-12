@@ -44,7 +44,7 @@ class set_utils:
     def __getattr__(self, item_):
         try:
             return getattr(self, item_)
-        except:
+        except (Exception, BaseException):
             return ''
 
 
