@@ -41,7 +41,7 @@ def zip_folder(folder_path):
 
 import PyInstaller.__main__
 
-PyInstaller.__main__.run(['-F', 'ui.py', '--exclude-module=numpy', '-i', 'icon.ico'])
+PyInstaller.__main__.run(['-F', 'ui.py', '--exclude-module=numpy', '-i', 'bin/logo.ico'])
 
 if os.name == 'nt':
     if os.path.exists(local + os.sep + "dist" + os.sep + "ui.exe"):
