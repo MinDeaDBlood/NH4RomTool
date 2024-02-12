@@ -717,7 +717,7 @@ def __repackSuper():
         packgroup = tk.StringVar(value='main')
         img_dir = tk.StringVar()
         sparse = tk.IntVar()
-        print("打包super镜像")
+        print("打包super")
         w = tk.Toplevel()
         cur_width = 400
         cur_hight = 450
@@ -736,9 +736,9 @@ def __repackSuper():
         ttk.Radiobutton(l1, variable=packtype, value='AB', text='AB').pack(side=LEFT, expand=YES, padx=5)
         ttk.Radiobutton(l1, variable=packtype, value='A-only', text='A-only').pack(side=LEFT, expand=YES, padx=5)
         l1.pack(side=TOP, ipadx=10, ipady=10)
-        ttk.Label(w, text="请输入super分区大小(字节数,常见9126805504)").pack(side=TOP)
+        ttk.Label(w, text="super分区大小(字节数,常见9126805504)").pack(side=TOP)
         ttk.Entry(w, textvariable=packsize, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
-        ttk.Label(w, text="请输入super分区簇名").pack()
+        ttk.Label(w, text="super分区簇名").pack()
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
         l2 = ttk.Labelframe(w, text="镜像文件夹:", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10, fill=X)
