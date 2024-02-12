@@ -69,7 +69,6 @@ inputvar = tk.StringVar()
 USERCMD = tk.StringVar()
 
 
-# from https://www.i4k.xyz/article/weixin_49317370/108878373
 class myStdout:  # 重定向类
     def __init__(self):
         sys.stdout = self
@@ -77,11 +76,6 @@ class myStdout:  # 重定向类
 
     @staticmethod
     def write(info):
-        # info信息即标准输出sys.stdout和sys.stderr接收到的输出信息
-        # text.insert('end', info)	# 在多行文本控件最后一行插入print信息
-        # text.update()	# 更新显示的文本，不加这句插入的信息无法显示
-        # text.see(tkinter.END)	# 始终显示最后一行，不加这句，当文本溢出控件最后一行时，不会自动显示最后一行
-
         text.configure(state='normal')
         if info != '\n':
             text.insert(END, "[%s]%s\n" % (utils.get_time(), info))
