@@ -1038,7 +1038,7 @@ if __name__ == '__main__':
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
-    usercmd.bind('<Return>', lambda *x: __xruncmd)
+    usercmd.bind('<Return>', lambda *x: __xruncmd())
     ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
                                                                                               fill=X, padx=2,
                                                                                               pady=2)
@@ -1058,8 +1058,7 @@ if __name__ == '__main__':
         text.configure(state='disabled')
 
 
-    ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, expand=NO,
-                                                                                      padx=5, pady=0)
+    ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     # Status bar
 
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
