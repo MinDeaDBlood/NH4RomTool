@@ -5,7 +5,7 @@ import os
 import shutil
 import subprocess
 import sys
-import threading
+from threading import Thread
 import time
 import tkinter as tk
 from webbrowser import open as open_url
@@ -131,8 +131,8 @@ def userInputWindow(title='输入文本'):
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
     ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
-                                                                                                             expand=YES,
-                                                                                                             padx=5)
+                                                                                                               expand=YES,
+                                                                                                               padx=5)
     input_window.wait_window()
     return ent.get()
 
@@ -174,7 +174,7 @@ class cartoon:
 
     def __enter__(self):
         self.state = False
-        self.statusthread = threading.Thread(target=self.__run)
+        self.statusthread = Thread(target=self.__run)
         self.statusthread.start()
 
     def __run(self):
@@ -278,7 +278,7 @@ def patchvbmeta():
 
 
 def cz(func, *args):
-    threading.Thread(target=func, args=args, daemon=True).start()
+    Thread(target=func, args=args, daemon=True).start()
 
 
 def __smartUnpack():
@@ -320,7 +320,7 @@ def __smartUnpack():
                             utils.mkdir(unpackdir)
                             if i == "payload":
                                 print("正在解包payload")
-                                t = threading.Thread(target=runcmd, args=[
+                                t = Thread(target=runcmd, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                                      daemon=True)
                                 t.start()
@@ -544,7 +544,7 @@ def __compressToBr():
         else:
             print("开始转换")
             with cartoon():
-                threading.Thread(target=runcmd("brotli.exe -q 6 " + img_file_path)).start()
+                cz(runcmd, ("brotli.exe -q 6 " + img_file_path))
             print("转换完毕，脱出到相同文件夹")
     else:
         print("请先选择工作目录")
@@ -585,8 +585,7 @@ def __repackDat():
                 return
             print("开始转换")
             with cartoon():
-                threading.Thread(
-                    target=img2sdat.main(img_file_path, WorkDir + "/output/", current_version, partition_name)).start()
+                cz(img2sdat.main, (img_file_path, WorkDir + "/output/", current_version, partition_name))
             print("转换完毕，脱出到工作目录下 output 文件夹")
     else:
         print("请先选择工作目录")
