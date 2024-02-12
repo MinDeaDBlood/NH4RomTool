@@ -335,7 +335,7 @@ def __smartUnpack():
                                     print("Ramdisk is %s" % comp)
                                     with open("comp", "w") as f:
                                         f.write(comp)
-                                    if comp != "unknow":
+                                    if comp != "unknow" and comp != 'cpio':
                                         runcmd("magiskboot decompress ramdisk.cpio ramdisk.raw")
                                         os.remove('ramdisk.cpio')
                                         os.rename('ramdisk.raw', 'ramdisk.cpio')
