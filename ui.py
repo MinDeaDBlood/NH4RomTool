@@ -262,7 +262,7 @@ def change_theme(var):
 def getWorkDir():
     for item in table.get_children():
         table.delete(item)
-    for item in utils.listDirHeader('.\\', 'NH4_'):
+    for item in utils.listDirHeader(LOCALDIR, 'NH4_'):
         table.insert('', 'end', values=item)
 
 
@@ -272,8 +272,7 @@ def clearWorkDir():
     else:
         print("将清理: " + WorkDir)
         try:
-            removeDir_EX(os.getcwd() + '\\' + WorkDir)
-            # print(os.getcwd() + '\\' + WorkDir)
+            removeDir_EX(os.getcwd() + os.sep + WorkDir)
         except IOError:
             print("清理失败, 请检查是否有程序正在占用它...?")
         else:
@@ -373,13 +372,13 @@ def __ozipEncrypt():
 
 def __unzipfile():
     if WorkDir:
-        if os.access(WorkDir + "\\rom", os.F_OK):
-            shutil.rmtree(WorkDir + "\\rom")
+        if os.access(WorkDir + os.sep + "rom", os.F_OK):
+            shutil.rmtree(WorkDir + os.sep + "rom")
         fileChooseWindow("选择要解压的文件")
         if os.access(filename.get(), os.F_OK):
             print("正在解压文件: " + filename.get())
             with cartoon():
-                MyThread(utils.unzip_file(filename.get(), WorkDir + "\\rom"))
+                MyThread(utils.unzip_file(filename.get(), WorkDir + os.sep + "rom"))
             print("解压完成")
         else:
             print("Error : 文件不存在")
@@ -393,7 +392,7 @@ def __zipcompressfile():
     if WorkDir:
         print("正在压缩 : " + inputvar.get() + ".zip")
         with cartoon():
-            MyThread(utils.zip_file(inputvar.get() + ".zip", WorkDir + "\\rom"))
+            MyThread(utils.zip_file(inputvar.get() + ".zip", WorkDir + os.sep + "rom"))
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
