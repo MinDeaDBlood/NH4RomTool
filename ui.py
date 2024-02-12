@@ -851,7 +851,7 @@ if __name__ == '__main__':
         show='headings',  # 隐藏首列
     )
     table.column('Workdir', width=100, anchor='center')
-    table.heading('Workdir', text='工作目录')
+    table.heading('Workdir', text='项目')
     table.pack(side=TOP, fill=BOTH, expand=YES)
     table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
     getWorkDir()
