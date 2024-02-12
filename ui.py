@@ -107,7 +107,8 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE', font=(None, 15)).pack(
+              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE',
+              font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
@@ -642,9 +643,6 @@ def __repackdtb():
 
 
 def __repackSuper():
-    def chose_dir():
-        img_dir.set(askdirectory(title="选择super分区镜像文件所在目录"))
-
     if WorkDir:
         packtype = tk.StringVar(value='VAB')
         packsize = tk.StringVar(value="9126805504")
@@ -676,7 +674,8 @@ def __repackSuper():
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
         l2 = ttk.Labelframe(w, text="镜像文件夹:", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10, fill=X)
-        ttk.Button(l2, text="浏览", command=chose_dir).pack()
+        ttk.Button(l2, text="浏览",
+                   command=lambda: img_dir.set(askdirectory(title="选择super分区镜像文件所在目录"))).pack()
         l2.pack(ipadx=10, ipady=10)
         Checkbutton(w, text="Sparse", variable=sparse).pack(side=TOP, padx=10, pady=10)
         Button(w, text="打包", command=w.destroy, width=20, height=20).pack(padx=10, pady=10)
@@ -880,8 +879,11 @@ if __name__ == '__main__':
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
 
     # tab3
-    ttk.Button(tab33, text='检测文件格式', width=10, command=lambda: print(f"文件格式为 : {gettype(filename)}" if os.access((filename:=askopenfilename(title="检测文件类型")), os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(side=TOP, expand=NO,
-                                                                                                    fill=X, padx=8)
+    ttk.Button(tab33, text='检测文件格式', width=10, command=lambda: print(
+        f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
+                                                         os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(
+        side=TOP, expand=NO,
+        fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 解密', width=10, command=ozipDecrypt, bootstyle="link").pack(side=TOP, expand=NO,
                                                                                               fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
