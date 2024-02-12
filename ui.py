@@ -466,10 +466,7 @@ def find_fs_con(path, t=0):
     parent_path = os.path.dirname(path)
     current_path = os.path.basename(parent_path)
     f_ = "_fs_config" if t == 0 else "_file_contexts"
-    if os.path.exists(os.path.join(parent_path, 'config', current_path + f_)):
-        return str(os.path.join(parent_path, 'config', current_path + f_))
-    else:
-        return ''
+    return str(os.path.join(parent_path, 'config', current_path + f_)) if os.path.exists(os.path.join(parent_path, 'config', current_path + f_)) else ''
 
 
 def __repackerofsimage():
