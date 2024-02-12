@@ -154,26 +154,12 @@ def selectDir():
 
 def about():
     root2 = tk.Toplevel()
-    curWidth = 300
-    curHight = 180
-    # 获取屏幕宽度和高度
-    scn_w, scn_h = root.maxsize()
-    # print(scn_w, scn_h)
-    # 计算中心坐标
-    cen_x = (scn_w - curWidth) / 2
-    cen_y = (scn_h - curHight) / 2
-    # print(cen_x, cen_y)
-
-    # 设置窗口初始大小和位置
-    size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
-    root2.geometry(size_xy)
-    # root2.geometry("300x180")
     root2.resizable(False, False)  # 设置最大化窗口不可用
     root2.title("关于")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
-    aframe1.pack(side=BOTTOM, expand=YES, pady=3)
-    aframe2.pack(side=BOTTOM, expand=YES, pady=3)
+    aframe1.pack(side=BOTTOM, pady=3)
+    aframe2.pack(side=BOTTOM, pady=3)
     ttk.Button(aframe1, text='访问工具主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
                                                                                                      expand=YES, padx=5)
     ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
@@ -415,6 +401,8 @@ def __zipcompressfile():
 
 def __xruncmd():
     cmd = USERCMD.get()
+    if "sh" in cmd.split()[0]:
+        print("这种命令会阻塞窗口， 所以终止执行")
     runcmd("busybox ash -c \"%s\"" % cmd)
     usercmd.delete(0, 'end')
 
