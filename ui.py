@@ -451,7 +451,14 @@ def __repackextimage():
             if settings.automutiimgsize:
                 extimgsize = int(utils.getdirsize(directoryname) * mutiimgsize)
             else:
-                extimgsize = settings.modifiedimgsize
+                size = f if os.path.exists((f := os.path.join(directoryname, '..', 'config',
+                                                                              f'{os.path.basename(directoryname)}_size.txt'))) else ''
+                size = os.path.realpath(size)
+                if os.path.isfile(size):
+                    with open(size, 'r') as z:
+                        extimgsize = int(z.read())
+                else:
+                    extimgsize = settings.modifiedimgsize
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
             cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
