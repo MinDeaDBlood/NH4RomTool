@@ -148,6 +148,7 @@ def userInputWindow(title='输入文本'):
     inputWindow.resizable(False, False)  # 设置最大化窗口不可用
     inputWindow.title(title)
     ent_ = ttk.Entry(inputWindow, textvariable=ent, width=50)
+    ent_.bind("<Return>", lambda *x: inputWindow.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
     ttk.Button(inputWindow, text='确认', command=inputWindow.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                              expand=YES,
