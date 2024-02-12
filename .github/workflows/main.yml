@@ -19,7 +19,7 @@ jobs:
           # Semantic version range syntax or exact version of a Python version
           python-version: '3.8.10'
           # Optional - x64 or x86 architecture, defaults to x64
-          architecture: 'x64'
+          architecture: 'x86'
       - name: Update pip
         run: python -m pip install -U --force-reinstall pip
       - name: Build tool
@@ -27,7 +27,7 @@ jobs:
           python build.py
       - name: Rename Tool
         run: |
-          move ./NH4RomTool-win.zip ../NH4RomTool-${{ github.run_number }}-win.zip
+          move ./NH4RomTool-win.zip ./NH4RomTool-${{ github.run_number }}-win.zip
       - name: Upload release
         uses: ncipollo/release-action@v1
         with:
