@@ -485,7 +485,7 @@ def __smartUnpack():
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
-                                sdat2img.main(transferpath, filename, WorkDir + os.sep + pname + ".img")
+                                sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
                                 print("sdat已转换为img")
                         else:
                             print("未能在dat文件所在目录找到对应的transfer.list文件")
