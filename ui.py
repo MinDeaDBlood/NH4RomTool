@@ -1041,8 +1041,7 @@ if __name__ == '__main__':
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
-    s = ttk.Style()
-    s.configure('Button.parsePayload', font=('Helvetica', '5'))
+
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
                                                                                                      expand=NO, fill=X,
@@ -1070,7 +1069,6 @@ if __name__ == '__main__':
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
-
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
