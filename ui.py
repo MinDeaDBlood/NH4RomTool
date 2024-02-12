@@ -25,7 +25,6 @@ from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
 
-EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
 # Var
 LOGOICO = ".\\bin\\logo.ico"
 LOCALDIR = os.getcwd()
@@ -128,7 +127,7 @@ def VisitMe():
 
 def runcmd(cmd):
     if not os.path.exists(cmd.split()[0]):
-        cmd = os.path.realpath(EXECPATH) + os.sep + cmd
+        cmd = os.path.join(LOCALDIR, 'bin') + os.sep + cmd
     try:
         ret = subprocess.Popen(cmd, shell=False,
                                stdin=subprocess.PIPE,
@@ -505,7 +504,18 @@ def __smartUnpack():
                             if i == "boot":
                                 print("正在解包boot")
                                 os.chdir(unpackdir)
-                                runcmd("unpackimg.bat --local %s" % (filename.get()))
+                                runcmd("magiskboot unpack -h %s" % filename.get())
+                                if os.path.exists('ramdisk.cpio'):
+                                    comp = gettype("ramdisk.cpio")
+                                    print("Ramdisk is %s" % comp)
+                                    with open("comp", "w") as f:
+                                        f.write(comp)
+                                    if comp != "unknow":
+                                        runcmd("magiskboot decompress ramdisk.cpio ramdisk.raw")
+                                        os.remove('ramdisk.cpio')
+                                        os.rename('ramdisk.raw','ramdisk.cpio')
+                                    os.makedirs('ramdisk')
+                                    runcmd("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
                                 print("使用mkdtboimg解包")
