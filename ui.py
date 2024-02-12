@@ -18,7 +18,7 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
-
+from tkinter import Checkbutton
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
@@ -356,7 +356,6 @@ def __smartUnpack():
                         runcmd(f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
-
                     for i in ["super", "dtbo", "boot", "payload"]:
                         if filetype == i:
                             print("在工作目录创建解包目录 :  " + i)
@@ -671,7 +670,7 @@ def __repackdtb():
         print("请先选择工作目录")
 
 
-from tkinter import Checkbutton
+
 
 
 def __repackSuper():
@@ -920,29 +919,22 @@ if __name__ == '__main__':
     # tab3
     ttk.Button(tab33, text='检测文件格式', width=10, command=detectFileType, bootstyle="link").pack(side=TOP, expand=NO,
                                                                                                     fill=X, padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 解密', width=10, command=ozipDecrypt, bootstyle="link").pack(side=TOP, expand=NO,
                                                                                               fill=X, padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
                                                                                                             expand=NO,
                                                                                                             fill=X,
                                                                                                             padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
                                                                                                      expand=NO, fill=X,
                                                                                                      padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
     ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10,
                command=lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
                                   askopenfilename(title="选择fs_config文件")), bootstyle="link").pack(side=TOP,
                                                                                                       expand=NO,
                                                                                                       fill=X,
                                                                                                       padx=8)
-    ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
     # ScrolledText
     text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)  # 信息展示 文本框
