@@ -821,7 +821,6 @@ if __name__ == '__main__':
         ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
             side=TOP, expand=NO,
             fill=X, padx=8)
-
     text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
