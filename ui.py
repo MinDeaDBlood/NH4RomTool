@@ -116,24 +116,24 @@ def about():
 
 
 def userInputWindow(title='输入文本'):
-    inputWindow = tk.Toplevel()
-    curWidth = 400
-    curHight = 120
+    input_window = tk.Toplevel()
+    cur_width = 400
+    cur_hight = 120
     ent = tk.StringVar()
     scn_w, scn_h = root.maxsize()
-    cen_x = (scn_w - curWidth) / 2
-    cen_y = (scn_h - curHight) / 2
-    size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
-    inputWindow.geometry(size_xy)
-    inputWindow.resizable(False, False)  # 设置最大化窗口不可用
-    inputWindow.title(title)
-    ent_ = ttk.Entry(inputWindow, textvariable=ent, width=50)
-    ent_.bind("<Return>", lambda *x: inputWindow.destroy())
+    cen_x = (scn_w - cur_width) / 2
+    cen_y = (scn_h - cur_hight) / 2
+    size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
+    input_window.geometry(size_xy)
+    input_window.resizable(False, False)  # 设置最大化窗口不可用
+    input_window.title(title)
+    ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
+    ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(inputWindow, text='确认', command=inputWindow.destroy, style='primiary.Outline.TButton').pack(side=TOP,
+    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                              expand=YES,
                                                                                                              padx=5)
-    inputWindow.wait_window()
+    input_window.wait_window()
     return ent.get()
 
 
@@ -427,28 +427,28 @@ def __repackextimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        isFsConfig = find_fs_con(directoryname)
-        isFileContexts = find_fs_con(directoryname, t=1)
-        if isFsConfig:
-            print("自动搜寻 fs_config 完成: " + isFsConfig)
-            fsconfig_path = isFsConfig
-        if isFileContexts:
-            print("自动搜寻 file_contexts 完成" + isFileContexts)
-            filecontexts_path = isFileContexts
+        is_fs_config = find_fs_con(directoryname)
+        is_file_contexts = find_fs_con(directoryname, t=1)
+        if is_fs_config:
+            print("自动搜寻 fs_config 完成: " + is_fs_config)
+            fsconfig_path = is_fs_config
+        if is_file_contexts:
+            print("自动搜寻 file_contexts 完成" + is_file_contexts)
+            filecontexts_path = is_file_contexts
         else:
             print("自动搜寻 fs_config 失败，请手动选择")
             fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
         if os.path.isdir(directoryname):
             print("修补fs_config文件")
             fspatch.main(directoryname, fsconfig_path)
-            MUTIIMGSIZE = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
+            mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
             if settings.automutiimgsize:
-                EXTIMGSIZE = int(utils.getdirsize(directoryname) * MUTIIMGSIZE)
+                extimgsize = int(utils.getdirsize(directoryname) * mutiimgsize)
             else:
-                EXTIMGSIZE = settings.modifiedimgsize
+                extimgsize = settings.modifiedimgsize
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
-            cmd += f"-t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(EXTIMGSIZE / 4096)}"
+            cmd += f"-t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
             print("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
             print("开始打包EXT镜像")
@@ -466,7 +466,8 @@ def find_fs_con(path, t=0):
     parent_path = os.path.dirname(path)
     current_path = os.path.basename(parent_path)
     f_ = "_fs_config" if t == 0 else "_file_contexts"
-    return str(os.path.join(parent_path, 'config', current_path + f_)) if os.path.exists(os.path.join(parent_path, 'config', current_path + f_)) else ''
+    return str(os.path.join(parent_path, 'config', current_path + f_)) if os.path.exists(
+        os.path.join(parent_path, 'config', current_path + f_)) else ''
 
 
 def __repackerofsimage():
@@ -515,17 +516,17 @@ def __repackDTBO():
 
 def __repackSparseImage():
     if WorkDir:
-        imgFilePath = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
-        if not os.path.exists(imgFilePath):
-            print("文件不存在: " + imgFilePath)
-        elif gettype(imgFilePath) != "ext":
+        img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
+        if not os.path.exists(img_file_path):
+            print("文件不存在: " + img_file_path)
+        elif gettype(img_file_path) != "ext":
             print("选中的文件并非 EXT 镜像，请先转换")
             return
         else:
             print("开始转换")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
-                    imgFilePath, WorkDir, os.path.basename(imgFilePath.replace('.img', '')))
+                    img_file_path, WorkDir, os.path.basename(img_file_path.replace('.img', '')))
                 runcmd(cmd)
                 print("转换结束")
     else:
@@ -534,16 +535,16 @@ def __repackSparseImage():
 
 def __compressToBr():
     if WorkDir:
-        imgFilePath = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
-        if not os.path.exists(imgFilePath):
-            print("文件不存在: " + imgFilePath)
-        elif gettype(imgFilePath) != "dat":
+        img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
+        if not os.path.exists(img_file_path):
+            print("文件不存在: " + img_file_path)
+        elif gettype(img_file_path) != "dat":
             print("选中的文件并非 DAT，请先转换")
             return
         else:
             print("开始转换")
             with cartoon():
-                threading.Thread(target=runcmd("brotli.exe -q 6 " + imgFilePath)).start()
+                threading.Thread(target=runcmd("brotli.exe -q 6 " + img_file_path)).start()
             print("转换完毕，脱出到相同文件夹")
     else:
         print("请先选择工作目录")
@@ -551,10 +552,10 @@ def __compressToBr():
 
 def __repackDat():
     if WorkDir:
-        imgFilePath = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
-        if not os.path.exists(imgFilePath):
-            print("文件不存在: " + imgFilePath)
-        elif gettype(imgFilePath) != "sparse":
+        img_file_path = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
+        if not os.path.exists(img_file_path):
+            print("文件不存在: " + img_file_path)
+        elif gettype(img_file_path) != "sparse":
             print("选中的文件并非 SPARSE，请先转换")
             return
         else:
@@ -575,17 +576,17 @@ def __repackDat():
                 current_version = 4
             # PREFIX
             print("提示: 输入分区名 (例如 system、vendor、odm)")
-            partitionName = userInputWindow("输入分区名")
+            partition_name = userInputWindow("输入分区名")
             if current_version == 0:
                 print("Android 版本输入错误，请查看提示重新输入！")
                 return
-            elif partitionName == 0 or not partitionName:
+            elif partition_name == 0 or not partition_name:
                 print("分区名输入错误，请查看提示重新输入！")
                 return
             print("开始转换")
             with cartoon():
                 threading.Thread(
-                    target=img2sdat.main(imgFilePath, WorkDir + "/output/", current_version, partitionName)).start()
+                    target=img2sdat.main(img_file_path, WorkDir + "/output/", current_version, partition_name)).start()
             print("转换完毕，脱出到工作目录下 output 文件夹")
     else:
         print("请先选择工作目录")
@@ -846,8 +847,11 @@ if __name__ == '__main__':
                                                          os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(
         side=TOP, expand=NO,
         fill=X, padx=8)
-    ttk.Button(tab33, text='OZIP 解密', width=10, command=lambda: ozip_decrypt.main(filename) if os.access((filename:=askopenfilename(title="解密ozip")), os.F_OK) else print("Error : 文件不存在"), bootstyle="link").pack(side=TOP, expand=NO,
-                                                                                              fill=X, padx=8)
+    ttk.Button(tab33, text='OZIP 解密', width=10,
+               command=lambda: ozip_decrypt.main(filename) if os.access((filename := askopenfilename(title="解密ozip")),
+                                                                        os.F_OK) else print("Error : 文件不存在"),
+               bootstyle="link").pack(side=TOP, expand=NO,
+                                      fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
                                                                                                             expand=NO,
                                                                                                             fill=X,
@@ -899,6 +903,7 @@ if __name__ == '__main__':
         text.configure(state='normal')
         text.delete(1.0, END)
         text.configure(state='disabled')
+
 
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
