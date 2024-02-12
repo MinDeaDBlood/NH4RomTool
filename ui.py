@@ -17,7 +17,55 @@ from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 
-from pyscripts import ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
+from pyscripts import ozip_decrypt, imgextractor, sdat2img, fspatch, img2sdat
+
+
+def checkMagic(file):
+    if os.access(file, os.F_OK):
+        magic = b'AVB0'
+        with open(file, "rb") as f:
+            buf = f.read(4)
+            return magic == buf
+    else:
+        print("File dose not exist!")
+
+
+def readVerifyFlag(file):
+    if os.access(file, os.F_OK):
+        with open(file, "rb") as f:
+            f.seek(123, 0)
+            flag = f.read(1)
+            if flag == b'\x00':
+                return 0
+            elif flag == b'\x01':
+                return 1
+            elif flag == b'\x02':
+                return 2
+            else:
+                print("Unknow")
+    else:
+        print("File does not exist!")
+
+
+def restore(file):
+    if os.access(file, os.F_OK):
+        flag = b'\x00'
+        with open(file, "rb+") as f:
+            f.seek(123, 0)
+            f.write(flag)
+    else:
+        print("File does not exist!")
+
+
+def disableAVB(file):
+    if os.access(file, os.F_OK):
+        flag = b'\x02'
+        with open(file, "rb+") as f:
+            f.seek(123, 0)
+            f.write(flag)
+    else:
+        print("File does not exist!")
+
 
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
            [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
@@ -333,17 +381,17 @@ def __zipcompressfile():
 def patchvbmeta():
     filename = askopenfilename(title="选择vbmeta文件")
     if os.access(filename, os.F_OK):
-        if vbpatch.checkMagic(filename):
-            flag = vbpatch.readVerifyFlag(filename)
+        if checkMagic(filename):
+            flag = readVerifyFlag(filename)
             if flag == 0:
                 print("检测到AVB为打开状态，正在关闭...")
-                vbpatch.disableAVB(filename)
+                disableAVB(filename)
             elif flag == 1:
                 print("检测到仅关闭了DM校验，正在关闭AVB...")
-                vbpatch.disableAVB(filename)
+                disableAVB(filename)
             elif flag == 2:
                 print("检测AVB校验已关闭，正在开启...")
-                vbpatch.restore(filename)
+                restore(filename)
             else:
                 print("未知错误")
         else:
