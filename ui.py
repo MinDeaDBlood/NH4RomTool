@@ -303,13 +303,11 @@ def __smartUnpack():
                     utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包 : " + filename)
-                        print("使用imgextractor")
+                        print("正在解包[ext]: " + filename)
                         imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包 : " + filename)
-                        print("使用extract.erofs")
+                        print("正在解包[erofs]: " + filename)
                         runcmd(f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
