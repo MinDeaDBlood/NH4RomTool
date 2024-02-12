@@ -673,10 +673,7 @@ def __repackSuper():
                             packgroup.get(), os.path.basename(i).replace('.img', ''), os.path.join(superdir, i))
             cmd += '--out %s' % (os.path.join(WorkDir, 'super.img'))
             runcmd(cmd)
-            if os.path.join(WorkDir, 'super.img'):
-                print("打包成功")
-            else:
-                print("打包失败")
+            print("打包成功") if os.path.join(WorkDir, 'super.img') else print("打包失败")
 
     else:
         print("请先选择工作目录")
