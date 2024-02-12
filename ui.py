@@ -83,7 +83,8 @@ class myStdout:  # 重定向类
         # text.see(tkinter.END)	# 始终显示最后一行，不加这句，当文本溢出控件最后一行时，不会自动显示最后一行
 
         text.configure(state='normal')
-        text.insert(END, "[%s]" % (utils.get_time()) + "%s" % info)
+        if info != '\n':
+            text.insert(END, "[%s]%s\n" % (utils.get_time(), info))
         text.update()  # 实时返回信息
         text.yview('end')
         text.configure(state='disabled')
