@@ -569,13 +569,34 @@ def __smartUnpack():
 
 
 def repackboot():
-    dirChooseWindow("选择你要打包的目录 based on android image kitchen")
+    dirChooseWindow("选择你要打包的目录")
     if os.path.isdir(directoryname.get()):
         os.chdir(directoryname.get())
-        runcmd("repackimg.bat --local")
+        if os.path.exists('ramdisk'):
+            os.chdir('ramdisk')
+            runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"")
+            os.chdir(directoryname.get())
+            with open("comp", "r", encoding='utf-8') as compf:
+                comp = compf.read()
+            print("Compressing:%s" % comp)
+            if comp != 'unknow':
+                runcmd("magiskboot compress=%s ramdisk-new.cpio" % comp)
+                if os.path.exists('ramdisk.cpio'):
+                    os.remove('ramdisk.cpio')
+                os.rename("ramdisk-new.cpio.%s" % comp.split('_')[0], "ramdisk.cpio")
+            else:
+                if os.path.exists('ramdisk.cpio'):
+                    os.remove('ramdisk.cpio')
+                os.rename("ramdisk-new.cpio", "ramdisk.cpio")
+            if os.path.exists('boot.img'):
+                os.remove('boot.img')
+            os.rename("new-boot.img", 'boot.img')
         os.chdir(LOCALDIR)
+        shutil.rmtree(directoryname.get())
     else:
         print("文件夹不存在")
+
+
 
 
 def __repackextimage():
