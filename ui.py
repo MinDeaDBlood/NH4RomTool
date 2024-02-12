@@ -615,7 +615,6 @@ def __repackSuper():
         packgroup = tk.StringVar(value='main')
         img_dir = tk.StringVar()
         sparse = tk.IntVar()
-        print("打包super")
         w = tk.Toplevel()
         cur_width = 400
         cur_hight = 450
@@ -628,13 +627,13 @@ def __repackSuper():
         size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
         w.geometry(size_xy)
         w.resizable(False, False)  # 设置最大化窗口不可用
-        w.title("选择你的打包的类型：")
-        l1 = ttk.LabelFrame(w, text="选择打包类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
+        w.title("打包Super")
+        l1 = ttk.LabelFrame(w, text="分区类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Radiobutton(l1, variable=packtype, value='VAB', text='VAB').pack(side=LEFT, expand=YES, padx=5)
         ttk.Radiobutton(l1, variable=packtype, value='AB', text='AB').pack(side=LEFT, expand=YES, padx=5)
         ttk.Radiobutton(l1, variable=packtype, value='A-only', text='A-only').pack(side=LEFT, expand=YES, padx=5)
         l1.pack(side=TOP, ipadx=10, ipady=10)
-        ttk.Label(w, text="super分区大小(字节数,常见9126805504)").pack(side=TOP)
+        ttk.Label(w, text="super分区大小(字节 常见9126805504)").pack(side=TOP)
         ttk.Entry(w, textvariable=packsize, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
         ttk.Label(w, text="super分区簇名").pack()
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
