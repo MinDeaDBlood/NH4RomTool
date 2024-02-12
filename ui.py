@@ -446,7 +446,7 @@ def find_fs_con(directoryname):
 
 def __repackextimage():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             print("修补fs_config文件")
