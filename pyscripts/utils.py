@@ -88,15 +88,13 @@ def unzip_file(zip_src, dst_dir):
 def zip_file(file, dst_dir):
     def get_all_file_paths(directory):
         # 初始化文件路径列表
-        file_paths = []
         for root, directories, files in os.walk(directory):
             for filename in files:
                 # 连接字符串形成完整的路径
                 filepath = os.path.join(root, filename)
-                file_paths.append(filepath)
+                yield filepath
 
         # 返回所有文件路径
-        return file_paths
 
     # 假设要把一个叫testdir中的文件全部添加到压缩包里（这里只添加一级子目录中的文件）
     path = os.getcwd()
