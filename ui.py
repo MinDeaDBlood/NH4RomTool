@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import glob
+from glob import glob
 import json
 import os
 import shutil
@@ -10,7 +10,7 @@ import threading
 import time
 # import tk/tcl
 import tkinter as tk
-import webbrowser
+from webbrowser import open
 from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
@@ -122,7 +122,7 @@ logo()
 
 
 def VisitMe():
-    webbrowser.open("https://github.com/ColdWindScholar/NH4RomTool")
+    open("https://github.com/ColdWindScholar/NH4RomTool")
 
 
 def runcmd(cmd):
@@ -694,7 +694,7 @@ def __repackDTBO():
         if not os.path.isdir(WorkDir + os.sep + "output"):
             utils.mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
-        for i in range(len(glob.glob(directoryname.get() + os.sep + "*"))):
+        for i in range(len(glob(directoryname.get() + os.sep + "*"))):
             cmd += "%s\\dtb.%s " % (directoryname.get(), i)
         runcmd(cmd)
         print("打包结束")
