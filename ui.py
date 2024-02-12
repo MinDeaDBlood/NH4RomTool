@@ -811,8 +811,8 @@ if __name__ == '__main__':
                                                                                                     lambda: ozip_decrypt.main(
                                                                                                         filename) if os.access(
                                                                                                         (
-                                                                                                        filename := askopenfilename(
-                                                                                                            title="解密ozip")),
+                                                                                                                filename := askopenfilename(
+                                                                                                                    title="解密ozip")),
                                                                                                         os.F_OK) else print(
                                                                                                         "Error : 文件不存在")),
                  ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patchvbmeta),
