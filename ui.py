@@ -805,29 +805,22 @@ if __name__ == '__main__':
                                                       pady=8)
     tab21.pack(side=TOP, fill=BOTH, expand=NO)
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
-    ttk.Button(tab33, text='检测文件格式', width=10, command=lambda: print(
-        f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
-                                                         os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(
-        side=TOP, expand=NO,
-        fill=X, padx=8)
-    ttk.Button(tab33, text='OZIP 解密', width=10,
-               command=lambda: ozip_decrypt.main(filename) if os.access((filename := askopenfilename(title="解密ozip")),
-                                                                        os.F_OK) else print("Error : 文件不存在"),
-               bootstyle="link").pack(side=TOP, expand=NO,
-                                      fill=X, padx=8)
-    ttk.Button(tab33, text='OZIP 加密', width=10, command=lambda: cz(__ozipEncrypt), bootstyle="link").pack(side=TOP,
-                                                                                                            expand=NO,
-                                                                                                            fill=X,
-                                                                                                            padx=8)
-    ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
-                                                                                                     expand=NO, fill=X,
-                                                                                                     padx=8)
-    ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10,
-               command=lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                  askopenfilename(title="选择fs_config文件")), bootstyle="link").pack(side=TOP,
-                                                                                                      expand=NO,
-                                                                                                      fill=X,
-                                                                                                      padx=8)
+    for t, c in {("检测文件格式", lambda: print(
+            f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
+                                                             os.F_OK) else "Error : 文件不存在")), ('OZIP 解密',
+                                                                                                    lambda: ozip_decrypt.main(
+                                                                                                        filename) if os.access(
+                                                                                                        (
+                                                                                                        filename := askopenfilename(
+                                                                                                            title="解密ozip")),
+                                                                                                        os.F_OK) else print(
+                                                                                                        "Error : 文件不存在")),
+                 ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patchvbmeta),
+                 ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
+                                                    askopenfilename(title="选择fs_config文件")))}:
+        ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
+            side=TOP, expand=NO,
+            fill=X, padx=8)
 
     text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
@@ -845,6 +838,7 @@ if __name__ == '__main__':
         runcmd("busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
 
+
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
     usercmd.bind('<Return>', lambda *x: run_cmd())
@@ -856,6 +850,7 @@ if __name__ == '__main__':
     frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
+
 
     def clean():
         text.configure(state='normal')
