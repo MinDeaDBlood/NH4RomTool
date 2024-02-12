@@ -124,12 +124,14 @@ def userInputWindow(title='输入文本'):
     cen_y = (scn_h - cur_hight) / 2
     size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
     input_window.geometry(size_xy)
-    input_window.resizable(False, False)  # 设置最大化窗口不可用
+    input_window.resizable(False, False)
     input_window.title(title)
     ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP, expand=YES, padx=5)
+    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
+                                                                                                               expand=YES,
+                                                                                                               padx=5)
     input_window.wait_window()
     return ent.get()
 
@@ -452,7 +454,7 @@ def __repackextimage():
                 extimgsize = int(utils.getdirsize(directoryname) * mutiimgsize)
             else:
                 size = f if os.path.exists((f := os.path.join(directoryname, '..', 'config',
-                                                                              f'{os.path.basename(directoryname)}_size.txt'))) else ''
+                                                              f'{os.path.basename(directoryname)}_size.txt'))) else ''
                 size = os.path.realpath(size)
                 if os.path.isfile(size):
                     with open(size, 'r') as z:
@@ -564,7 +566,6 @@ def __repackDat():
             elif input_version >= 7.0:  # Android 7.0+
                 print("已选择: Android 7.X+")
                 current_version = 4
-            # PREFIX
             print("提示: 输入分区名 (例如 system、vendor、odm)")
             partition_name = userInputWindow("输入分区名")
             if current_version == 0:
@@ -607,15 +608,12 @@ def __repackSuper():
         w = Toplevel()
         cur_width = 400
         cur_hight = 450
-        # 获取屏幕宽度和高度
         scn_w, scn_h = root.maxsize()
-        # 计算中心坐标
         cen_x = (scn_w - cur_width) / 2
         cen_y = (scn_h - cur_hight) / 2
-        # 设置窗口初始大小和位置
         size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
         w.geometry(size_xy)
-        w.resizable(False, False)  # 设置最大化窗口不可用
+        w.resizable(False, False)
         w.title("打包Super")
         l1 = ttk.LabelFrame(w, text="分区类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Radiobutton(l1, variable=packtype, value='VAB', text='VAB').pack(side=LEFT, expand=YES, padx=5)
@@ -686,10 +684,10 @@ def __repackSuper():
 
 if __name__ == '__main__':
     myStdout()
-    screenwidth = root.winfo_screenwidth()  # 屏幕宽度
-    screenheight = root.winfo_screenheight()  # 屏幕高度
+    screenwidth = root.winfo_screenwidth()
+    screenheight = root.winfo_screenheight()
     root.geometry(
-        '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))  # 大小以及位置
+        '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
 
     menuBar = Menu(root)
     root.config(menu=menuBar)
@@ -746,15 +744,9 @@ if __name__ == '__main__':
                                                                                                           column=0,
                                                                                                           padx=10,
                                                                                                           pady=8)
-
-    # Pack Buttons
     tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
-
-    # pack Notebook
     tabControl.pack(fill=BOTH, expand=YES)
     tab11.pack(side=TOP, fill=BOTH, expand=YES)
-
-    # tab21 // Unpack
     tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     ttk.Button(tab21, text='解压', width=10, command=lambda: cz(__unzipfile), style='primiary.Outline.TButton').grid(
         row=0, column=0,
@@ -765,8 +757,6 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx=10,
                                                       pady=8)
-
-    # tab22 // Repack
     tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(__zipcompressfile),
                style='primiary.Outline.TButton').grid(row=0,
@@ -813,12 +803,8 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx=10,
                                                       pady=8)
-
-    # pack tab2
     tab21.pack(side=TOP, fill=BOTH, expand=NO)
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
-
-    # tab3
     ttk.Button(tab33, text='检测文件格式', width=10, command=lambda: print(
         f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
                                                          os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(
@@ -833,7 +819,6 @@ if __name__ == '__main__':
                                                                                                             expand=NO,
                                                                                                             fill=X,
                                                                                                             padx=8)
-
     ttk.Button(tab33, text='关闭 VBMETA 校验', width=10, command=patchvbmeta, bootstyle="link").pack(side=TOP,
                                                                                                      expand=NO, fill=X,
                                                                                                      padx=8)
@@ -860,30 +845,28 @@ if __name__ == '__main__':
         runcmd("busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
 
-
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
     usercmd.bind('<Return>', lambda *x: run_cmd())
     ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
                                                                                             fill=X, padx=2,
                                                                                             pady=2)
-    # pack frames
     frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
-    # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
-
 
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)
         text.configure(state='disabled')
 
+
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     statusbar = ttk.Label(framebotm, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=X, ipadx=12)
+
 
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
