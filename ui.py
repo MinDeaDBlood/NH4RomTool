@@ -906,12 +906,8 @@ if __name__ == '__main__':
     menuBar = tk.Menu(root)
     root.config(menu=menuBar)
     menu1 = tk.Menu(menuBar, tearoff=False)
-    menuItem = ["关于", "退出"]
-    for item in menuItem:
-        if item == "关于":
-            menu1.add_command(label=item, command=about)
-        if item == "退出":
-            menu1.add_command(label=item, command=sys.exit)
+    menu1.add_command(label="关于", command=about)
+    menu1.add_command(label="退出", command=sys.exit)
     menuBar.add_cascade(label="菜单", menu=menu1)
     menu2 = tk.Menu(menuBar, tearoff=False)
     menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
