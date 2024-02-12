@@ -74,8 +74,6 @@ DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
 WorkDir = ''
 
-
-directoryname = tk.StringVar()
 inputvar = tk.StringVar()
 USERCMD = tk.StringVar()
 
@@ -130,14 +128,6 @@ def runcmd(cmd):
             print(i)
 
 
-
-
-def selectDir():
-    dirpath = askdirectory()  # 选择文件夹
-    directoryname.set(dirpath.replace('/', '\\'))
-    print("选择文件夹为: %s" % (dirpath.replace('/', '\\')))
-
-
 def about():
     root2 = tk.Toplevel()
     root2.resizable(False, False)  # 设置最大化窗口不可用
@@ -182,36 +172,6 @@ def userInputWindow(title='输入文本'):
                                                                                                              expand=YES,
                                                                                                              padx=5)
     inputWindow.wait_window()
-
-
-
-
-
-def dirChooseWindow(tips):
-    chooseWindow = tk.Toplevel()
-    curWidth = 400
-    curHight = 120
-    # 获取屏幕宽度和高度
-    scn_w, scn_h = root.maxsize()
-    # print(scn_w, scn_h)
-    # 计算中心坐标
-    cen_x = (scn_w - curWidth) / 2
-    cen_y = (scn_h - curHight) / 2
-    # print(cen_x, cen_y)
-
-    # 设置窗口初始大小和位置
-    size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
-    chooseWindow.geometry(size_xy)
-    # chooseWindow.geometry("300x180")
-    chooseWindow.resizable(False, False)  # 设置最大化窗口不可用
-    chooseWindow.title(tips)
-    ent = ttk.Entry(chooseWindow, textvariable=directoryname, width=50)
-    ent.pack(side=TOP, expand=NO, padx=0, pady=20)
-    ttk.Button(chooseWindow, text='确认', width=15, command=chooseWindow.destroy,
-               style='primiary.Outline.TButton').pack(side=RIGHT, expand=YES, padx=5, pady=5)
-    ttk.Button(chooseWindow, text='选择文件夹', width=15, command=lambda: [selectDir(), chooseWindow.destroy()],
-               style='primiary.TButton').pack(side=RIGHT, expand=YES, padx=5, pady=5)
-    chooseWindow.wait_window()
 
 
 def change_theme(var):
@@ -386,8 +346,7 @@ def patchvbmeta():
 
 
 def patchfsconfig():
-    dirChooseWindow("选择你要打包的目录")
-    fspatch.main(directoryname.get(), askopenfilename(title="选择fs_config文件"))
+    fspatch.main(askdirectory(title="选择你要打包的目录"), askopenfilename(title="选择fs_config文件"))
     print("修补完成")
 
 
@@ -513,13 +472,13 @@ def __smartUnpack():
 
 
 def repackboot():
-    dirChooseWindow("选择你要打包的目录")
-    if os.path.isdir(directoryname.get()):
-        os.chdir(directoryname.get())
+    directoryname = askdirectory(title="选择你要打包的目录")
+    if os.path.isdir(directoryname):
+        os.chdir(directoryname)
         if os.path.exists('ramdisk'):
             os.chdir('ramdisk')
             runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"")
-            os.chdir(directoryname.get())
+            os.chdir(directoryname)
             with open("comp", "r", encoding='utf-8') as compf:
                 comp = compf.read()
             print("Compressing:%s" % comp)
@@ -537,18 +496,18 @@ def repackboot():
             os.remove('boot.img')
         shutil.copyfile("new-boot.img", os.path.join(LOCALDIR, WorkDir, 'boot.img'))
         os.chdir(LOCALDIR)
-        shutil.rmtree(directoryname.get())
+        shutil.rmtree(directoryname)
     else:
         print("文件夹不存在")
 
 
 def __repackextimage():
     if WorkDir:
-        dirChooseWindow("选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        isFsConfig = find_fs_con(directoryname.get())
-        isFileContexts = find_fs_con(directoryname.get(), t=1)
+        isFsConfig = find_fs_con(directoryname)
+        isFileContexts = find_fs_con(directoryname, t=1)
         if isFsConfig:
             print("自动搜寻 fs_config 完成: " + isFsConfig)
             fsconfig_path = isFsConfig
@@ -558,22 +517,22 @@ def __repackextimage():
         else:
             print("自动搜寻 fs_config 失败，请手动选择")
             fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
-        if os.path.isdir(directoryname.get()):
+        if os.path.isdir(directoryname):
             print("修补fs_config文件")
-            fspatch.main(directoryname.get(), fsconfig_path)
-            MUTIIMGSIZE = 1.2 if os.path.basename(directoryname.get()).find("odm") != -1 else 1.07
+            fspatch.main(directoryname, fsconfig_path)
+            MUTIIMGSIZE = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
             if settings.automutiimgsize:
-                EXTIMGSIZE = int(utils.getdirsize(directoryname.get()) * MUTIIMGSIZE)
+                EXTIMGSIZE = int(utils.getdirsize(directoryname) * MUTIIMGSIZE)
             else:
                 EXTIMGSIZE = settings.modifiedimgsize
             cmd = "mke2fs.exe "
             cmd += "-O %s " % settings.extfueature
-            cmd += "-L %s " % (os.path.basename(directoryname.get()))
+            cmd += "-L %s " % (os.path.basename(directoryname))
             cmd += "-I 256 "
-            cmd += "-M /%s -m 0 " % (os.path.basename(directoryname.get()))  # mount point
+            cmd += "-M /%s -m 0 " % (os.path.basename(directoryname))  # mount point
             cmd += "-t %s " % settings.extrepacktype
             cmd += "-b %s " % settings.extblocksize
-            cmd += "%s/output/%s.img " % (WorkDir, os.path.basename(directoryname.get()))
+            cmd += "%s/output/%s.img " % (WorkDir, os.path.basename(directoryname))
             cmd += "%s" % (int(EXTIMGSIZE / 4096))
             print("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
@@ -581,7 +540,7 @@ def __repackextimage():
             with cartoon():
                 print(cmd)
                 runcmd(cmd)
-                cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname.get()} -a /{os.path.basename(directoryname.get())} {WorkDir}/output/{os.path.basename(directoryname.get())}.img"
+                cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{os.path.basename(directoryname)} {WorkDir}/output/{os.path.basename(directoryname)}.img"
                 runcmd(cmd)
                 print("打包结束")
     else:
@@ -603,11 +562,11 @@ def find_fs_con(path, t=0):
 
 def __repackerofsimage():
     if WorkDir:
-        dirChooseWindow("选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_fs_config = find_fs_con(directoryname.get())
-        is_file_contexts = find_fs_con(directoryname.get(), t=1)
+        is_fs_config = find_fs_con(directoryname)
+        is_file_contexts = find_fs_con(directoryname, t=1)
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
@@ -620,8 +579,8 @@ def __repackerofsimage():
         with cartoon():
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
-                WorkDir, os.path.basename(directoryname.get()), directoryname.get().replace("\\", "/"),
-                settings.erofstype, os.path.basename(directoryname.get()), fsconfig_path, filecontexts_path)
+                WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
+                settings.erofstype, os.path.basename(directoryname), fsconfig_path, filecontexts_path)
             print(cmd)
             runcmd(cmd)
     else:
@@ -630,12 +589,12 @@ def __repackerofsimage():
 
 def __repackDTBO():
     if WorkDir:
-        dirChooseWindow("选择dtbo文件夹")
+        directoryname = askdirectory(title="选择dtbo文件夹")
         if not os.path.isdir(WorkDir + os.sep + "output"):
             utils.mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
-        for i in range(len(glob(directoryname.get() + os.sep + "*"))):
-            cmd += "%s\\dtb.%s " % (directoryname.get(), i)
+        for i in range(len(glob(directoryname + os.sep + "*"))):
+            cmd += "%s\\dtb.%s " % (directoryname, i)
         runcmd(cmd)
         print("打包结束")
     else:
@@ -655,7 +614,7 @@ def __repackSparseImage():
             print("开始转换")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
-                    imgFilePath, WorkDir, os.path.basename(directoryname.get()))
+                    imgFilePath, WorkDir, os.path.basename(imgFilePath.replace('.img', '')))
                 runcmd(cmd)
                 print("转换结束")
     else:
@@ -750,8 +709,7 @@ from tkinter import Checkbutton
 
 def __repackSuper():
     def chose_dir():
-        dirChooseWindow("选择super分区镜像文件所在目录")
-        img_dir.set(directoryname.get())
+        img_dir.set(askdirectory(title="选择super分区镜像文件所在目录"))
 
     if WorkDir:
         packtype = tk.StringVar(value='VAB')
