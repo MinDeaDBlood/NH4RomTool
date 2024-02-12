@@ -224,14 +224,6 @@ def mkWorkdir():
     getWorkDir()
 
 
-def detectFileType():
-    filename = askopenfilename(title="检测文件类型")
-    if os.access(filename, os.F_OK):
-        print(f"文件格式为 : {gettype(filename)}")
-    else:
-        print("Error : 文件不存在")
-
-
 def ozipDecrypt():
     filename = askopenfilename(title="解密ozip")
     if os.access(filename, os.F_OK):
@@ -895,7 +887,7 @@ if __name__ == '__main__':
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
 
     # tab3
-    ttk.Button(tab33, text='检测文件格式', width=10, command=detectFileType, bootstyle="link").pack(side=TOP, expand=NO,
+    ttk.Button(tab33, text='检测文件格式', width=10, command=lambda: print(f"文件格式为 : {gettype(filename)}" if os.access((filename:=askopenfilename(title="检测文件类型")), os.F_OK) else "Error : 文件不存在"), bootstyle="link").pack(side=TOP, expand=NO,
                                                                                                     fill=X, padx=8)
     ttk.Button(tab33, text='OZIP 解密', width=10, command=ozipDecrypt, bootstyle="link").pack(side=TOP, expand=NO,
                                                                                               fill=X, padx=8)
