@@ -437,6 +437,8 @@ def find_fs_con(directoryname):
     else:
         print("自动搜寻 fs_context 失败，请手动选择")
         filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
+    print("修补fs_config文件")
+    fspatch.main(directoryname, fsconfig_path)
     return filecontexts_path, fsconfig_path
 
 
@@ -445,8 +447,6 @@ def __repackextimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
-            print("修补fs_config文件")
-            fspatch.main(directoryname, fsconfig_path)
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
             if settings.automutiimgsize:
                 extimgsize = int(utils.getdirsize(directoryname) * mutiimgsize)
