@@ -1,5 +1,4 @@
 import os
-import sys
 import zipfile
 
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
