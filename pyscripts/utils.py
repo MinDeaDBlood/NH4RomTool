@@ -85,15 +85,13 @@ def zip_file(file, dst_dir):
 
     # 假设要把一个叫testdir中的文件全部添加到压缩包里（这里只添加一级子目录中的文件）
     path = os.getcwd()
-    relpath = os.path.abspath(file)
     os.chdir(dst_dir)
-    file_paths = get_all_file_paths('.')
     # compression
     # 生成压缩文件
-    with zipfile.ZipFile(relpath, 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
+    with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
         # 遍历写入文件
-        for file in file_paths:
-            zip.write(file)
+        for f in get_all_file_paths('.'):
+            zip.write(f)
     os.chdir(path)
 
 
