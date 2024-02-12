@@ -10,7 +10,7 @@ import threading
 import time
 # import tk/tcl
 import tkinter as tk
-from webbrowser import open
+from webbrowser import open as open_url
 from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
@@ -122,7 +122,7 @@ logo()
 
 
 def VisitMe():
-    open("https://github.com/ColdWindScholar/NH4RomTool")
+    open_url("https://github.com/ColdWindScholar/NH4RomTool")
 
 
 def runcmd(cmd):
