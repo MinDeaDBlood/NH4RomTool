@@ -583,7 +583,6 @@ def __repackDat():
             elif partitionName == 0 or not partitionName:
                 print("分区名输入错误，请查看提示重新输入！")
                 return
-            # img2sdat <image file> <output dir> <version|1=5.0|2=5.1|3=6.0|4=7.0+> <prefix>
             print("开始转换")
             with cartoon():
                 threading.Thread(
