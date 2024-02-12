@@ -814,15 +814,19 @@ from tkinter import Checkbutton
 
 
 def __repackSuper():
+    def chose_dir():
+        dirChooseWindow("选择super分区镜像文件所在目录")
+        img_dir.set(directoryname.get())
     if WorkDir:
         packtype = tk.StringVar(value='VAB')
         packsize = tk.StringVar(value="9126805504")
         packgroup = tk.StringVar(value='main')
+        img_dir = tk.StringVar()
         sparse = tk.IntVar()
         print("打包super镜像")
         w = tk.Toplevel()
         cur_width = 400
-        cur_hight = 250
+        cur_hight = 450
         # 获取屏幕宽度和高度
         scn_w, scn_h = root.maxsize()
         # 计算中心坐标
@@ -842,13 +846,17 @@ def __repackSuper():
         ttk.Entry(w, textvariable=packsize, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
         ttk.Label(w, text="请输入super分区簇名").pack()
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
+        l2 = ttk.Labelframe(w, text="镜像文件夹:", labelanchor="nw", relief=GROOVE, borderwidth=1)
+        ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10,  fill=X)
+        ttk.Button(l2, text="浏览", command=chose_dir).pack()
+        l2.pack(ipadx=10, ipady=10)
         Checkbutton(w, text="Sparse", variable=sparse).pack(side=TOP, padx=10, pady=10)
+        Button(w, text="打包", command=w.destroy, width=20, height=20).pack(padx=10, pady=10)
         w.wait_window()
         if packtype.get() == "":
             print("没有获取到选项")
         else:
-            dirChooseWindow("选择super分区镜像文件所在目录")
-            superdir = directoryname.get()
+            superdir = img_dir.get()
             if not superdir or not os.path.join(superdir):
                 print("目录不存在")
                 return
