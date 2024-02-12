@@ -56,7 +56,7 @@ root.iconbitmap(".\\bin\\logo.ico")
 width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
-root.title("NH4RomTool [版本: 20240208] [作者: affggh & ColdWindScholar]")
+root.title("NH4RomTool")
 LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
@@ -233,7 +233,6 @@ def rmWorkDir():
 
 def mkWorkdir():
     inputvar = userInputWindow()
-    print(f"用户输入: {inputvar}")
     if not os.path.exists(f'NH4_{inputvar}'):
         os.mkdir(f'NH4_{inputvar}')
     getWorkDir()
@@ -330,7 +329,6 @@ def __smartUnpack():
                     print("正在解密ozip")
                     ozip_decrypt.main(filename)
                     print("解密完成")
-                # list of create new folder
                 if filetype == "ext" or filetype == "erofs":
                     dirname = os.path.basename(filename).split(".")[0]
 
