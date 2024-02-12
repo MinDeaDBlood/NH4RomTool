@@ -1,9 +1,9 @@
 {
-   "automutiimgsize": true,
-   "modifiedimgsize": "2684254560",
-   "extrepacktype": "ext4",
-   "extblocksize": "4096",
-   "extfueature": "^has_journal",
-   "erofstype": "lz4hc",
-   "theme": "minty"
+    "automutiimgsize": true,
+    "modifiedimgsize": "2684254560",
+    "extrepacktype": "ext4",
+    "extblocksize": "4096",
+    "extfueature": "^has_journal",
+    "erofstype": "lz4hc",
+    "theme": "minty"
 }
