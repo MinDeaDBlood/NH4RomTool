@@ -593,8 +593,10 @@ def repackboot():
             if os.path.exists('boot.img'):
                 os.remove('boot.img')
             os.rename("new-boot.img", 'boot.img')
+            os.rename("new-boot.img", os.path.join(WorkDir, 'boot.img'))
         else:
             runcmd("magiskboot repack boot.img")
+            os.rename("boot.img", os.path.join(WorkDir, 'boot.img'))
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname.get())
     else:
