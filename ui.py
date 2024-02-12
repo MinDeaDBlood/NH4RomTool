@@ -212,7 +212,7 @@ def rmWorkDir():
 def mkWorkdir():
     inputvar = userInputWindow()
     if not os.path.exists(f'NH4_{inputvar}'):
-        os.mkdir(f'NH4_{inputvar}')
+        os.makedirs(f'NH4_{inputvar}')
     getWorkDir()
 
 
