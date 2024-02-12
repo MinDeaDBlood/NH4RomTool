@@ -272,20 +272,11 @@ def clearWorkDir():
     else:
         print("将清理: " + WorkDir)
         try:
-            removeDir_EX(os.getcwd() + os.sep + WorkDir)
+            shutil.rmtree(os.getcwd() + os.sep + WorkDir)
         except IOError:
             print("清理失败, 请检查是否有程序正在占用它...?")
         else:
             print("清理成功, 正在刷新工作目录")
-
-
-# removeButSaveCurrentDir  add by azwhikaru 20220329
-def removeDir_EX(workDirEX):
-    for root, dirs, files in os.walk(workDirEX, topdown=False):
-        for name in files:
-            os.remove(os.path.join(root, name))
-        for name in dirs:
-            os.rmdir(os.path.join(root, name))
 
 
 class cartoon:
