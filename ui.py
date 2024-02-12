@@ -137,6 +137,7 @@ def userInputWindow(title='输入文本'):
     inputWindow = tk.Toplevel()
     curWidth = 400
     curHight = 120
+    ent = tk.StringVar()
     # 获取屏幕宽度和高度
     scn_w, scn_h = root.maxsize()
     # print(scn_w, scn_h)
@@ -151,8 +152,8 @@ def userInputWindow(title='输入文本'):
     # inputWindow.geometry("300x180")
     inputWindow.resizable(False, False)  # 设置最大化窗口不可用
     inputWindow.title(title)
-    ent = ttk.Entry(inputWindow, width=50)
-    ent.pack(side=TOP, expand=YES, padx=5)
+    ent_ = ttk.Entry(inputWindow, textvariable=ent, width=50)
+    ent_.pack(side=TOP, expand=YES, padx=5)
     ttk.Button(inputWindow, text='确认', command=inputWindow.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                              expand=YES,
                                                                                                              padx=5)
