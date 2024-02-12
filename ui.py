@@ -165,8 +165,9 @@ def change_theme(var):
 def getWorkDir():
     for item in table.get_children():
         table.delete(item)
-    for item in utils.listDirHeader(LOCALDIR, 'NH4_'):
-        table.insert('', 'end', values=item)
+    for i in os.listdir(LOCALDIR):
+        if i.startswith('NH4'):
+            table.insert('', 'end', value=i)
 
 
 def clearWorkDir():

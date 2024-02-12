@@ -65,11 +65,6 @@ def mkdir(path):
         return False
 
 
-def listDirHeader(path, head):
-    for i in os.listdir(path):
-        if i.startswith(head):
-            yield i
-
 
 def unzip_file(zip_src, dst_dir):
     if zipfile.is_zipfile(zip_src):
