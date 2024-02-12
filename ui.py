@@ -120,9 +120,7 @@ def about():
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
-    ttk.Button(aframe1, text='访问工具主页', command=VisitMe, style='primiary.Outline.TButton').pack(side=LEFT,
-                                                                                                     expand=YES, padx=5)
-    ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
+    ttk.Button(aframe1, text='开源地址', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
                                                                                            padx=5)
     ttk.Label(aframe2,
               text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
