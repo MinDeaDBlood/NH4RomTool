@@ -699,28 +699,19 @@ if __name__ == '__main__':
     for item in menuItem:
         menu2.add_command(label=item, command=lambda n=item: change_theme(n))
     menuBar.add_cascade(label="主题", menu=menu2)
-
-    # define labels
     frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
     frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
     frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-
-    # Notebook
     tabControl = ttk.Notebook(frame1)
-    # tab
     tab1 = ttk.Frame(tabControl)
     tab2 = ttk.Frame(tabControl)
     tab3 = ttk.Frame(tabControl)
     tab33 = ScrolledFrame(tab3, autohide=True, width=220)
     tab4 = ttk.Frame(tabControl)
-
     tabControl.add(tab1, text="项目")
     tabControl.add(tab2, text="打包解包")
     tabControl.add(tab3, text="其他")
-
     tab33.pack(side=LEFT, expand=YES, fill=BOTH)
-
-    # Treeview  use to list work dir
     tab11 = ttk.Frame(tab1)
     table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
     table.column('Workdir', width=100, anchor='center')
@@ -728,8 +719,6 @@ if __name__ == '__main__':
     table.pack(side=TOP, fill=BOTH, expand=YES)
     table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
     getWorkDir()
-
-    # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
     ttk.Button(tab12, text='确认', width=10,
                command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
