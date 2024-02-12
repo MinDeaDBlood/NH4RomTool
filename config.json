@@ -1,9 +1,8 @@
 {
-   "AUTOMUTIIMGSIZE": true,
-   "MODIFIEDIMGSIZE": "2684254560",
-   "EXTREPACKTYPE": "ext4",
-   "EXTBLOCKSIZE": "4096",
-   "EXTFUEATURE": "^has_journal",
-   "EROFSCOMPRESSOR": "lz4hc",
-   "SPARSETOOL": "img2simg"
+   "automutiimgsize": true,
+   "modifiedimgsize": "2684254560",
+   "extrepacktype": "ext4",
+   "extblocksize": "4096",
+   "extfueature": "^has_journal",
+   "erofstype": "lz4hc"
 }

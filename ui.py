@@ -33,14 +33,40 @@ THEME = "minty"  # 设置默认主题
 LOGOICO = ".\\bin\\logo.ico"
 TEXTFONT = ['Arial', 10]
 LOCALDIR = os.getcwd()
+setfile = LOCALDIR + os.sep + "config.json"
 
-# ui config This is for repack tool to detect
-if os.access(LOCALDIR + os.sep + "config.json", os.F_OK):
-    with open("config.json", encoding='utf-8') as f:
-        UICONFIG = json.load(f)
-else:
-    print("config.json is missing")
-    sys.exit()
+
+class set_utils:
+    def __init__(self, set_file):
+        if not os.path.exists(set_file):
+            print("config.json is missing")
+            sys.exit()
+        self.set_file = set_file
+
+    def load(self):
+        with open(self.set_file, 'r') as s:
+            data = json.load(s)
+            for i in data:
+                setattr(self, i, data.get(i, ''))
+
+    def change(self, n, v):
+        with open(self.set_file) as s:
+            data = json.load(s)
+        with open(self.set_file, 'w+') as s:
+            data[n] = v
+            json.dump(s, data, indent=4)
+        self.load()
+
+    def __getattr__(self, item):
+        try:
+            return getattr(self, item)
+        except:
+            return ''
+
+
+settings = set_utils(setfile)
+settings.load()
+
 if EXECPATH:
     utils.addExecPath(EXECPATH)
 
@@ -575,17 +601,17 @@ def __repackextimage():
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "busybox ash -c \""
             MUTIIMGSIZE = 1.2 if os.path.basename(directoryname.get()).find("odm") != -1 else 1.07
-            if UICONFIG['AUTOMUTIIMGSIZE']:
+            if settings.automutiimgsize:
                 EXTIMGSIZE = int(utils.getdirsize(directoryname.get()) * MUTIIMGSIZE)
             else:
-                EXTIMGSIZE = UICONFIG['MODIFIEDIMGSIZE']
+                EXTIMGSIZE = settings.modifiedimgsize
             cmd += "MKE2FS_CONFIG=bin/mke2fs.conf E2FSPROGS_FAKE_TIME=1230768000 mke2fs.exe "
-            cmd += "-O %s " % (UICONFIG['EXTFUEATURE'])
+            cmd += "-O %s " % settings.extfueature
             cmd += "-L %s " % (os.path.basename(directoryname.get()))
             cmd += "-I 256 "
             cmd += "-M /%s -m 0 " % (os.path.basename(directoryname.get()))  # mount point
-            cmd += "-t %s " % (UICONFIG['EXTREPACKTYPE'])
-            cmd += "-b %s " % (UICONFIG['EXTBLOCKSIZE'])
+            cmd += "-t %s " % settings.extrepacktype
+            cmd += "-b %s " % settings.extblocksize
             cmd += "%s/output/%s.img " % (WorkDir, os.path.basename(directoryname.get()))
             cmd += "%s\"" % (int(EXTIMGSIZE / 4096))
             print("尝试创建目录output")
@@ -635,7 +661,7 @@ def __repackerofsimage():
             fspatch.main(directoryname.get(), fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
                 WorkDir, os.path.basename(directoryname.get()), directoryname.get().replace("\\", "/"),
-                UICONFIG['EROFSCOMPRESSOR'], os.path.basename(directoryname.get()), fsconfig_path, filecontexts_path)
+                settings.erofstype, os.path.basename(directoryname.get()), fsconfig_path, filecontexts_path)
             print(cmd)
             runcmd(cmd)
     else:
@@ -669,8 +695,7 @@ def __repackSparseImage():
         else:
             print("开始转换")
             with cartoon():
-                cmd = "%s %s %s/output/%s_sparse.img" % (
-                    UICONFIG['SPARSETOOL'], imgFilePath, WorkDir, os.path.basename(directoryname.get()))
+                cmd = "img2simg %s %s/output/%s_sparse.img" % (imgFilePath, WorkDir, os.path.basename(directoryname.get()))
                 runcmd(cmd)
                 print("转换结束")
     else:
