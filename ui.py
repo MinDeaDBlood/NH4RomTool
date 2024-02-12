@@ -403,6 +403,7 @@ def __xruncmd():
     cmd = USERCMD.get()
     if "sh" in cmd.split()[0]:
         print("这种命令会阻塞窗口， 所以终止执行")
+        return
     runcmd("busybox ash -c \"%s\"" % cmd)
     usercmd.delete(0, 'end')
 
