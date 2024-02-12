@@ -116,7 +116,6 @@ class MyThread(threading.Thread):
 
 
 def logo():
-    utils.chLocal()
     root.iconbitmap(LOGOICO)
 
 
@@ -183,7 +182,6 @@ def about():
     ttk.Label(aframe2,
               text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
         side=BOTTOM, expand=NO, pady=3)
-    utils.chLocal()
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
     root2.mainloop()
