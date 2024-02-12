@@ -120,7 +120,7 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
+              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE', font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
