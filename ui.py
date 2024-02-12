@@ -279,8 +279,7 @@ def change_theme(var):
 def getWorkDir():
     for item in table.get_children():
         table.delete(item)
-    d = utils.listDirHeader('.\\', 'NH4_')
-    for item in d:
+    for item in utils.listDirHeader('.\\', 'NH4_'):
         table.insert('', 'end', values=item)
 
 

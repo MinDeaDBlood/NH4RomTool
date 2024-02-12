@@ -71,11 +71,9 @@ def mkdir(path):
 
 
 def listDirHeader(path, head):
-    L = []
     for i in os.listdir(path):
         if i.startswith(head):
-            L.append(i)
-    return L
+            yield i
 
 
 def unzip_file(zip_src, dst_dir):
