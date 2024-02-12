@@ -380,7 +380,7 @@ def __smartUnpack():
                         print("反编译dtb完成")
                     if filetype in ["zip"]:
                         print("请使用解压功能解压zip")
-                    elif filetype == "Unknow":
+                    if filetype == "Unknow":
                         print("文件不受支持")
             else:
                 print("文件不存在")
