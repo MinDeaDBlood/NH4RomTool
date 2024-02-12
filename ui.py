@@ -753,7 +753,7 @@ def __repackSuper():
         print("请先选择工作目录")
 
 
-def main():
+if __name__ == '__main__':
     myStdout()
     # 在中心打开主窗口
     screenwidth = root.winfo_screenwidth()  # 屏幕宽度
@@ -934,6 +934,7 @@ def main():
     # table.bind('<ButtonPress-1>', print("请点击确认目录"))
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
+
     def __xruncmd():
         cmd = usercmd.get()
         if not cmd:
@@ -944,6 +945,7 @@ def main():
                 return
         runcmd("busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
+
 
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
@@ -959,10 +961,12 @@ def main():
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
+
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)  # 清空text
         text.configure(state='disabled')
+
 
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
     # Status bar
@@ -970,16 +974,14 @@ def main():
     statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
 
+
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                        "https": None}).json()
         ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
+
     cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     root.mainloop()
-
-
-if __name__ == '__main__':
-    main()
