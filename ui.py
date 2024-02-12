@@ -7,7 +7,6 @@ import subprocess
 import sys
 from threading import Thread
 import time
-import tkinter as tk
 from webbrowser import open as open_url
 from tkinter import *
 from tkinter import scrolledtext, ttk
@@ -56,8 +55,8 @@ width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
 root.title("NH4RomTool")
-LOGOIMG = tk.PhotoImage(file="bin\\logo.png")
-DEFAULTSTATUS = tk.PhotoImage(file="bin\\processdone.png")
+LOGOIMG = PhotoImage(file="bin\\logo.png")
+DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
 
@@ -96,7 +95,7 @@ def runcmd(cmd):
 
 
 def about():
-    root2 = tk.Toplevel()
+    root2 = Toplevel()
     root2.resizable(False, False)
     root2.title("关于")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
@@ -116,10 +115,10 @@ def about():
 
 
 def userInputWindow(title='输入文本'):
-    input_window = tk.Toplevel()
+    input_window = Toplevel()
     cur_width = 400
     cur_hight = 120
-    ent = tk.StringVar()
+    ent = StringVar()
     scn_w, scn_h = root.maxsize()
     cen_x = (scn_w - cur_width) / 2
     cen_y = (scn_h - cur_hight) / 2
@@ -593,12 +592,12 @@ def __repackdtb():
 
 def __repackSuper():
     if WorkDir:
-        packtype = tk.StringVar(value='VAB')
-        packsize = tk.StringVar(value="9126805504")
-        packgroup = tk.StringVar(value='main')
-        img_dir = tk.StringVar()
-        sparse = tk.IntVar()
-        w = tk.Toplevel()
+        packtype = StringVar(value='VAB')
+        packsize = StringVar(value="9126805504")
+        packgroup = StringVar(value='main')
+        img_dir = StringVar()
+        sparse = IntVar()
+        w = Toplevel()
         cur_width = 400
         cur_hight = 450
         # 获取屏幕宽度和高度
@@ -685,13 +684,13 @@ if __name__ == '__main__':
     root.geometry(
         '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))  # 大小以及位置
 
-    menuBar = tk.Menu(root)
+    menuBar = Menu(root)
     root.config(menu=menuBar)
-    menu1 = tk.Menu(menuBar, tearoff=False)
+    menu1 = Menu(menuBar, tearoff=False)
     menu1.add_command(label="关于", command=about)
     menu1.add_command(label="退出", command=sys.exit)
     menuBar.add_cascade(label="菜单", menu=menu1)
-    menu2 = tk.Menu(menuBar, tearoff=False)
+    menu2 = Menu(menuBar, tearoff=False)
     menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
                 "cyborg", "darkly", "solar", "vapor", "superhero"]
     for item in menuItem:
@@ -877,8 +876,8 @@ if __name__ == '__main__':
 
 
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info")
-    statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
+    statusbar = ttk.Label(framebotm, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
+    statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
 
     def SHOWSHIJU():
