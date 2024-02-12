@@ -4,19 +4,80 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import zipfile
 from threading import Thread
-import time
-from webbrowser import open as open_url
 from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
+from webbrowser import open as open_url
+
 from requests import get as requests_get
 from ttkbootstrap import Style
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
-from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
-from pyscripts.utils import gettype
+
+from pyscripts import ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
+
+formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
+           [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
+           [b"AVB0", "vbmeta"], [b'\xd7\xb7\xab\x1e', "dtbo"],
+           [b'\xd0\x0d\xfe\xed', "dtb"], [b"MZ", "exe"], [b".ELF", 'elf'],
+           [b"ANDROID!", "boot"], [b"VNDRBOOT", "vendor_boot"],
+           [b'AVBf', "avb_foot"], [b'BZh', "bzip2"],
+           [b'CHROMEOS', 'chrome'], [b'\x1f\x8b', "gzip"],
+           [b'\x1f\x9e', "gzip"], [b'\x02\x21\x4c\x18', "lz4_legacy"],
+           [b'\x03\x21\x4c\x18', 'lz4'], [b'\x04\x22\x4d\x18', 'lz4'],
+           [b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\x03', "zopfli"], [b'\xfd7zXZ', 'xz'],
+           [b']\x00\x00\x00\x04\xff\xff\xff\xff\xff\xff\xff\xff', 'lzma'], [b'\x02!L\x18', 'lz4_lg'],
+           [b'\x89PNG', 'png'], [b"LOGO!!!!", 'logo'])
+
+
+def gettype(file) -> str:
+    if not os.path.exists(file):
+        return "fne"
+
+    def compare(header: bytes, number: int = 0) -> int:
+        with open(file, 'rb') as f:
+            f.seek(number)
+            return f.read(len(header)) == header
+
+    def is_super(fil) -> any:
+        with open(fil, 'rb') as file_:
+            buf = bytearray(file_.read(4))
+            if len(buf) < 4:
+                return False
+            file_.seek(0, 0)
+
+            while buf[0] == 0x00:
+                buf = bytearray(file_.read(1))
+            try:
+                file_.seek(-1, 1)
+            except:
+                return False
+            buf += bytearray(file_.read(4))
+        return buf[1:] == b'\x67\x44\x6c\x61'
+
+    try:
+        if is_super(file):
+            return 'super'
+    except IndexError:
+        pass
+    for f_ in formats:
+        if len(f_) == 2:
+            if compare(f_[0]):
+                return f_[1]
+        elif len(f_) == 3:
+            if compare(f_[0], f_[2]):
+                return f_[1]
+    if '.' in file:
+        return os.path.splitext(file)[1].replace(".", '')
+    return "unknow"
+
+
+def mkdir(path):
+    os.makedirs(path) if not os.path.exists(path) else ...
+
 
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
@@ -242,13 +303,28 @@ def __unzipfile():
         print("Error : 请先选择工作目录")
 
 
+def zip_file(file, dst_dir):
+    def get_all_file_paths(directory):
+        for root, directories, files in os.walk(directory):
+            for filename in files:
+                yield os.path.join(root, filename)
+
+    path = os.getcwd()
+    os.chdir(dst_dir)
+    with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
+        # 遍历写入文件
+        for f in get_all_file_paths('.'):
+            zip.write(f)
+    os.chdir(path)
+
+
 def __zipcompressfile():
     print("输入生成的文件名")
     inputvar = userInputWindow()
     if WorkDir:
         print("正在压缩 : " + inputvar + ".zip")
         with cartoon():
-            cz(utils.zip_file, inputvar + ".zip", WorkDir + os.sep + "rom")
+            cz(zip_file, inputvar + ".zip", WorkDir + os.sep + "rom")
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
@@ -299,7 +375,7 @@ def __smartUnpack():
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
                         print("文件夹存在，正在删除")
                         shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
-                    utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
+                    mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
                         print("正在解包[ext]: " + filename)
@@ -316,7 +392,7 @@ def __smartUnpack():
                             if os.path.isdir(unpackdir):
                                 print("文件夹存在，正在删除")
                                 shutil.rmtree(unpackdir)
-                            utils.mkdir(unpackdir)
+                            mkdir(unpackdir)
                             if i == "payload":
                                 print("正在解包payload")
                                 t = Thread(target=runcmd, args=[
@@ -350,7 +426,7 @@ def __smartUnpack():
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
 
-                        utils.mkdir(WorkDir + "\\rawimg")
+                        mkdir(WorkDir + "\\rawimg")
                         runcmd("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
                         print("sparse image 转换结束")
@@ -472,7 +548,7 @@ def __repackextimage():
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
             cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
             print("尝试创建目录output")
-            utils.mkdir(WorkDir + os.sep + "output")
+            mkdir(WorkDir + os.sep + "output")
             print("开始打包EXT镜像")
             with cartoon():
                 print(cmd)
@@ -503,7 +579,7 @@ def __repackDTBO():
     if WorkDir:
         directoryname = askdirectory(title="选择dtbo文件夹")
         if not os.path.isdir(WorkDir + os.sep + "output"):
-            utils.mkdir(WorkDir + os.sep + "output")
+            mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
             cmd += "%s\\dtb.%s " % (directoryname, i)
@@ -594,7 +670,7 @@ def __repackdtb():
         filename = askopenfilename(title="选择dts文件，输出到dtb文件夹")
         if os.access(filename, os.F_OK):
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
-                utils.mkdir(WorkDir + os.sep + "dtb")
+                mkdir(WorkDir + os.sep + "dtb")
             with cartoon():
                 runcmd("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
                     filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
