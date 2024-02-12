@@ -983,5 +983,5 @@ if __name__ == '__main__':
 
     cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
-    cz(root.iconbitmap, ".\\bin\\logo.ico")
+    cz(root.iconbitmap, "bin\\logo.ico")
     root.mainloop()
