@@ -345,14 +345,10 @@ def patchvbmeta():
         print("文件不存在")
 
 
-def patchfsconfig():
-    fspatch.main(askdirectory(title="选择你要打包的目录"), askopenfilename(title="选择fs_config文件"))
-    print("修补完成")
 
 
 def cz(func, *args):
-    t = threading.Thread(target=func, args=args, daemon=True)
-    t.start()
+    threading.Thread(target=func, args=args, daemon=True).start()
 
 
 def __smartUnpack():
@@ -464,7 +460,6 @@ def __smartUnpack():
                         print("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
                     if filetype == "Unknow":
                         print("文件不受支持")
-                # os.chdir(unpackdir)
             else:
                 print("文件不存在")
         else:
@@ -576,6 +571,9 @@ def __repackerofsimage():
         if is_file_contexts:
             print("自动搜寻 file_contexts 完成" + is_file_contexts)
             filecontexts_path = is_file_contexts
+        else:
+            print("自动搜寻 fs_context 失败，请手动选择")
+            filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
         with cartoon():
             fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
@@ -632,8 +630,7 @@ def __compressToBr():
         else:
             print("开始转换")
             with cartoon():
-                th = threading.Thread(target=runcmd("brotli.exe -q 6 " + imgFilePath))
-                th.start()
+                threading.Thread(target=runcmd("brotli.exe -q 6 " + imgFilePath)).start()
             print("转换完毕，脱出到相同文件夹")
     else:
         print("请先选择工作目录")
@@ -653,6 +650,7 @@ def __repackDat():
             print("警告: 只接受大版本输入，例如 7.1.2 请直接输入 7.1！")
             userInputWindow("输入Android版本")
             inputVersion = float(inputvar.get())
+            currentVersion = 0
             if inputVersion == 5.0:  # Android 5
                 print("已选择: Android 5.0")
                 currentVersion = 1
@@ -665,8 +663,6 @@ def __repackDat():
             elif inputVersion >= 7.0:  # Android 7.0+
                 print("已选择: Android 7.X+")
                 currentVersion = 4
-            else:
-                currentVersion = 0
             # PREFIX
             inputvar.set("")
             print("提示: 输入分区名 (例如 system、vendor、odm)")
@@ -969,7 +965,7 @@ if __name__ == '__main__':
                                                                                                      expand=NO, fill=X,
                                                                                                      padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
-    ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10, command=patchfsconfig, bootstyle="link").pack(side=TOP,
+    ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10, command=lambda:cz(fspatch.main, askdirectory(title="选择你要打包的目录"), askopenfilename(title="选择fs_config文件")), bootstyle="link").pack(side=TOP,
                                                                                                           expand=NO,
                                                                                                           fill=X,
                                                                                                           padx=8)
