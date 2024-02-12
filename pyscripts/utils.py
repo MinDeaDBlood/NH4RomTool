@@ -79,8 +79,7 @@ def zip_file(file, dst_dir):
         for root, directories, files in os.walk(directory):
             for filename in files:
                 # 连接字符串形成完整的路径
-                filepath = os.path.join(root, filename)
-                yield filepath
+                yield os.path.join(root, filename)
 
         # 返回所有文件路径
 
