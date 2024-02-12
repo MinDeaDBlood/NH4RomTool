@@ -504,6 +504,7 @@ def __smartUnpack():
                             if i == "boot":
                                 print("正在解包boot")
                                 os.chdir(unpackdir)
+                                shutil.copy(filename.get(), os.path.join(unpackdir, os.path.basename(filename.get())))
                                 runcmd("magiskboot unpack -h %s" % filename.get())
                                 if os.path.exists('ramdisk.cpio'):
                                     comp = gettype("ramdisk.cpio")
