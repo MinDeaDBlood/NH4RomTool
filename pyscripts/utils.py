@@ -107,12 +107,6 @@ def mkdir(path):
         return False
 
 
-def addExecPath(addpath):
-    envpath = os.getenv('PATH')
-    execpath = os.path.abspath(addpath)
-    os.putenv('PATH', execpath + ";" + envpath)
-
-
 def get_time():  # 返回当前时间
     return time.strftime('%H:%M:%S')
 

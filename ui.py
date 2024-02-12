@@ -25,9 +25,7 @@ from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspa
 from pyscripts.utils import gettype
 
 EXECPATH = ".\\bin"  # 临时添加可执行程序目录到系统变量
-utils.addExecPath(EXECPATH)
 # Var
-WINDOWTITLE = f"NH4RomTool [版本: 20240208] [作者: affggh & ColdWindScholar]"
 LOGOICO = ".\\bin\\logo.ico"
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + "config.json"
@@ -60,9 +58,6 @@ class set_utils:
 settings = set_utils(setfile)
 settings.load()
 
-
-
-
 style = Style(theme=settings.theme)
 
 # Begin of window
@@ -73,7 +68,7 @@ height = 600
 
 root.geometry("%sx%s" % (width, height))
 # root.resizable(0,0) # 设置最大化窗口不可用
-root.title(WINDOWTITLE)
+root.title("NH4RomTool [版本: 20240208] [作者: affggh & ColdWindScholar]")
 
 # Set images
 LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
@@ -132,6 +127,8 @@ def VisitMe():
 
 
 def runcmd(cmd):
+    if not os.path.exists(cmd.split()[0]):
+        cmd = os.path.realpath(EXECPATH) + os.sep + cmd
     try:
         ret = subprocess.Popen(cmd, shell=False,
                                stdin=subprocess.PIPE,
@@ -183,7 +180,8 @@ def about():
     ttk.Button(aframe1, text='给作者打钱 ', command=VisitMe, style='success.TButton').pack(side=LEFT, expand=YES,
                                                                                            padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(side=BOTTOM, expand=NO, pady=3)
+              text='沼_Rom工具箱\nGUI Written by python tk/tcl\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE').pack(
+        side=BOTTOM, expand=NO, pady=3)
     utils.chLocal()
 
     ttk.Label(aframe2, image=LOGOIMG).pack(side=TOP, expand=YES, pady=3)
@@ -688,7 +686,8 @@ def __repackSparseImage():
         else:
             print("开始转换")
             with cartoon():
-                cmd = "img2simg %s %s/output/%s_sparse.img" % (imgFilePath, WorkDir, os.path.basename(directoryname.get()))
+                cmd = "img2simg %s %s/output/%s_sparse.img" % (
+                imgFilePath, WorkDir, os.path.basename(directoryname.get()))
                 runcmd(cmd)
                 print("转换结束")
     else:
