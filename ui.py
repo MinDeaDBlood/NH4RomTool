@@ -18,8 +18,10 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledFrame
 from pyscripts import utils, ozip_decrypt, vbpatch, imgextractor, sdat2img, fspatch, img2sdat
 from pyscripts.utils import gettype
+
 LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
+
 
 class set_utils:
     def __init__(self, path):
@@ -58,9 +60,6 @@ LOGOIMG = tk.PhotoImage(file=LOCALDIR + ".\\bin\\logo.png")
 DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
 WorkDir = ''
-
-
-USERCMD = tk.StringVar()
 
 
 class myStdout:  # 重定向类
@@ -298,18 +297,6 @@ def __zipcompressfile():
         print("Error : 请先选择工作目录")
 
 
-def __xruncmd():
-    cmd = USERCMD.get()
-    if not cmd:
-        return
-    for i in ["bash", 'ash', 'cmd']:
-        if i in cmd.split()[0]:
-            print("这种命令会阻塞窗口， 所以终止执行")
-            return
-    runcmd("busybox ash -c \"%s\"" % cmd)
-    usercmd.delete(0, 'end')
-
-
 def patchvbmeta():
     filename = askopenfilename(title="选择vbmeta文件")
     if os.access(filename, os.F_OK):
@@ -330,8 +317,6 @@ def patchvbmeta():
             print("文件并非vbmeta文件")
     else:
         print("文件不存在")
-
-
 
 
 def cz(func, *args):
@@ -841,25 +826,25 @@ if __name__ == '__main__':
     # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
     ttk.Button(tab12, text='确认', width=10, command=ConfirmWorkDir, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                                column=0,
-                                                                                                                padx=10,
-                                                                                                                pady=8)
-    ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                           column=1,
-                                                                                                           padx=10,
-                                                                                                           pady=8)
-    ttk.Button(tab12, text='新建', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                           column=0,
-                                                                                                           padx=10,
-                                                                                                           pady=8)
-    ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                            column=1,
+                                                                                                            column=0,
                                                                                                             padx=10,
                                                                                                             pady=8)
+    ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+                                                                                                       column=1,
+                                                                                                       padx=10,
+                                                                                                       pady=8)
+    ttk.Button(tab12, text='新建', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
+                                                                                                       column=0,
+                                                                                                       padx=10,
+                                                                                                       pady=8)
+    ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
+                                                                                                        column=1,
+                                                                                                        padx=10,
+                                                                                                        pady=8)
     ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
-                                                                                                              column=0,
-                                                                                                              padx=10,
-                                                                                                              pady=8)
+                                                                                                          column=0,
+                                                                                                          padx=10,
+                                                                                                          pady=8)
 
     # Pack Buttons
     tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
@@ -951,10 +936,12 @@ if __name__ == '__main__':
                                                                                                      expand=NO, fill=X,
                                                                                                      padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
-    ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10, command=lambda:cz(fspatch.main, askdirectory(title="选择你要打包的目录"), askopenfilename(title="选择fs_config文件")), bootstyle="link").pack(side=TOP,
-                                                                                                          expand=NO,
-                                                                                                          fill=X,
-                                                                                                          padx=8)
+    ttk.Button(tab33, text='修补 FS_CONFIG 文件', width=10,
+               command=lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
+                                  askopenfilename(title="选择fs_config文件")), bootstyle="link").pack(side=TOP,
+                                                                                                      expand=NO,
+                                                                                                      fill=X,
+                                                                                                      padx=8)
     ttk.Separator(tab33).pack(side=TOP, expand=NO, fill=X, padx=8)
 
     # ScrolledText
@@ -962,7 +949,21 @@ if __name__ == '__main__':
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
     # table.bind('<ButtonPress-1>', print("请点击确认目录"))
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    usercmd = ttk.Entry(frame22, textvariable=USERCMD, width=25)
+
+
+    def __xruncmd():
+        cmd = usercmd.get()
+        if not cmd:
+            return
+        for i in ["bash", 'ash', 'cmd']:
+            if i in cmd.split()[0]:
+                print("这种命令会阻塞窗口， 所以终止执行")
+                return
+        runcmd("busybox ash -c \"%s\"" % cmd)
+        usercmd.delete(0, 'end')
+
+
+    usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
     usercmd.bind('<Return>', lambda *x: __xruncmd())
     ttk.Button(frame22, text='运行', command=__xruncmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
