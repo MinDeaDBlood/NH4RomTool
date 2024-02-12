@@ -919,7 +919,7 @@ if __name__ == '__main__':
     # define labels
     frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
     frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    frame2 = ttk.LabelFrame(frame, text="信息反馈", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+    frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
     # Notebook
     tabControl = ttk.Notebook(frame1)
@@ -931,9 +931,9 @@ if __name__ == '__main__':
     tab4 = ttk.Frame(tabControl)
     # tab44 = ScrolledFrame(tab4, autohide=True, width=220)
 
-    tabControl.add(tab1, text="工作目录")
+    tabControl.add(tab1, text="项目")
     tabControl.add(tab2, text="打包解包")
-    tabControl.add(tab3, text="其他工具")
+    tabControl.add(tab3, text="其他")
     # tabControl.add(tab4, text="设置")
 
     tab33.pack(side=LEFT, expand=YES, fill=BOTH)
