@@ -293,7 +293,7 @@ def __smartUnpack():
                     print("正在解密ozip")
                     ozip_decrypt.main(filename)
                     print("解密完成")
-                if filetype == "ext" or filetype == "erofs":
+                if filetype in ["ext", "erofs"]:
                     dirname = os.path.basename(filename).split(".")[0]
 
                     print("在工作目录创建解包目录 : " + dirname)
@@ -515,7 +515,6 @@ def __repackDTBO():
 
 def __repackSparseImage():
     if WorkDir:
-        # 只将 EXT 转为 SIMG 而不是重新打包一次
         imgFilePath = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
         if not os.path.exists(imgFilePath):
             print("文件不存在: " + imgFilePath)
@@ -729,12 +728,10 @@ if __name__ == '__main__':
     tab3 = ttk.Frame(tabControl)
     tab33 = ScrolledFrame(tab3, autohide=True, width=220)
     tab4 = ttk.Frame(tabControl)
-    # tab44 = ScrolledFrame(tab4, autohide=True, width=220)
 
     tabControl.add(tab1, text="项目")
     tabControl.add(tab2, text="打包解包")
     tabControl.add(tab3, text="其他")
-    # tabControl.add(tab4, text="设置")
 
     tab33.pack(side=LEFT, expand=YES, fill=BOTH)
 
@@ -866,10 +863,8 @@ if __name__ == '__main__':
                                                                                                       fill=X,
                                                                                                       padx=8)
 
-    # ScrolledText
-    text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)  # 信息展示 文本框
+    text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
-    # table.bind('<ButtonPress-1>', print("请点击确认目录"))
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
 
