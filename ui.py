@@ -672,7 +672,7 @@ def __repackSuper():
                             os.path.basename(i).replace('.img', ''), os.path.getsize(os.path.join(superdir, i)),
                             packgroup.get(), os.path.basename(i).replace('.img', ''), os.path.join(superdir, i))
             cmd += '--out %s' % (os.path.join(WorkDir, 'super.img'))
-            print(cmd)
+            runcmd(cmd)
             if os.path.join(WorkDir, 'super.img'):
                 print("打包成功")
             else:
