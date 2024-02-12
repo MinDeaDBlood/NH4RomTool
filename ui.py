@@ -432,12 +432,15 @@ def __repackextimage():
         if is_fs_config:
             print("自动搜寻 fs_config 完成: " + is_fs_config)
             fsconfig_path = is_fs_config
+        else:
+            print("自动搜寻 fs_config 失败，请手动选择")
+            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
         if is_file_contexts:
             print("自动搜寻 file_contexts 完成" + is_file_contexts)
             filecontexts_path = is_file_contexts
         else:
-            print("自动搜寻 fs_config 失败，请手动选择")
-            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
+            print("自动搜寻 file_contexts 失败，请手动选择")
+            filecontexts_path = askopenfilename(title="选择你要打包目录的file_contexts文件")
         if os.path.isdir(directoryname):
             print("修补fs_config文件")
             fspatch.main(directoryname, fsconfig_path)
