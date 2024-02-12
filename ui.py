@@ -162,9 +162,8 @@ def userInputWindow(title='输入文本'):
 
 def change_theme(var):
     print("设置主题为 : " + var)
-    style = Style(theme=var)
+    Style(theme=var).theme_use()
     settings.change('theme', var)
-    style.theme_use()
 
 
 def getWorkDir():
@@ -240,7 +239,8 @@ def rmWorkDir():
 def mkWorkdir():
     inputvar = userInputWindow()
     print(f"用户输入: {inputvar}")
-    utils.mkdir("NH4_%s" % inputvar)
+    if not os.path.exists(f'NH4_{inputvar}'):
+        os.mkdir(f'NH4_{inputvar}')
     getWorkDir()
 
 
