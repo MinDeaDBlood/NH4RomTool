@@ -448,22 +448,16 @@ def __repackextimage():
                 EXTIMGSIZE = int(utils.getdirsize(directoryname) * MUTIIMGSIZE)
             else:
                 EXTIMGSIZE = settings.modifiedimgsize
-            cmd = "mke2fs.exe "
-            cmd += "-O %s " % settings.extfueature
-            cmd += "-L %s " % (os.path.basename(directoryname))
-            cmd += "-I 256 "
-            cmd += "-M /%s -m 0 " % (os.path.basename(directoryname))  # mount point
-            cmd += "-t %s " % settings.extrepacktype
-            cmd += "-b %s " % settings.extblocksize
-            cmd += "%s/output/%s.img " % (WorkDir, os.path.basename(directoryname))
-            cmd += "%s" % (int(EXTIMGSIZE / 4096))
+            part_name = os.path.basename(directoryname)
+            cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
+            cmd += f"-t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(EXTIMGSIZE / 4096)}"
             print("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
             print("开始打包EXT镜像")
             with cartoon():
                 print(cmd)
                 runcmd(cmd)
-                cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{os.path.basename(directoryname)} {WorkDir}/output/{os.path.basename(directoryname)}.img"
+                cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{part_name} {WorkDir}/output/{part_name}.img"
                 runcmd(cmd)
                 print("打包结束")
     else:
