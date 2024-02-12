@@ -74,8 +74,7 @@ DEFAULTSTATUS = tk.PhotoImage(file=LOCALDIR + ".\\bin\\processdone.png")
 
 WorkDir = ''
 
-# Var
-filename = tk.StringVar()
+
 directoryname = tk.StringVar()
 inputvar = tk.StringVar()
 USERCMD = tk.StringVar()
@@ -131,10 +130,6 @@ def runcmd(cmd):
             print(i)
 
 
-def selectFile():
-    filepath = askopenfilename()  # 选择打开什么文件，返回文件名
-    filename.set(filepath.replace('/', '\\'))  # 设置变量filename的值
-    print("选择文件为: %s" % (filepath.replace('/', '\\')))
 
 
 def selectDir():
@@ -189,31 +184,7 @@ def userInputWindow(title='输入文本'):
     inputWindow.wait_window()
 
 
-def fileChooseWindow(tips):
-    chooseWindow = tk.Toplevel()
-    curWidth = 500
-    curHight = 180
-    # 获取屏幕宽度和高度
-    scn_w, scn_h = root.maxsize()
-    # print(scn_w, scn_h)
-    # 计算中心坐标
-    cen_x = (scn_w - curWidth) / 2
-    cen_y = (scn_h - curHight) / 2
-    # print(cen_x, cen_y)
 
-    # 设置窗口初始大小和位置
-    size_xy = '%dx%d+%d+%d' % (curWidth, curHight, cen_x, cen_y)
-    chooseWindow.geometry(size_xy)
-    # chooseWindow.geometry("300x180")
-    chooseWindow.resizable(False, False)  # 设置最大化窗口不可用
-    chooseWindow.title(tips)
-    ent = ttk.Entry(chooseWindow, textvariable=filename, width=50)
-    ent.pack(side=TOP, expand=NO, padx=0, pady=20)
-    ttk.Button(chooseWindow, text='确认', width=15, command=chooseWindow.destroy,
-               style='primiary.Outline.TButton').pack(side=RIGHT, expand=YES, padx=5, pady=5)
-    ttk.Button(chooseWindow, text='选择文件', width=15, command=lambda: [selectFile(), chooseWindow.destroy()],
-               style='primiary.TButton').pack(side=RIGHT, expand=YES, padx=5, pady=5)
-    chooseWindow.wait_window()
 
 
 def dirChooseWindow(tips):
@@ -328,26 +299,26 @@ def mkWorkdir():
 
 
 def detectFileType():
-    fileChooseWindow("检测文件类型")
-    if os.access(filename.get(), os.F_OK):
-        print(f"文件格式为 : {gettype(filename.get())}")
+    filename = askopenfilename(title="检测文件类型")
+    if os.access(filename, os.F_OK):
+        print(f"文件格式为 : {gettype(filename)}")
     else:
         print("Error : 文件不存在")
 
 
 def ozipDecrypt():
-    fileChooseWindow("解密ozip")
-    if os.access(filename.get(), os.F_OK):
-        ozip_decrypt.main("%s" % (filename.get()))
+    filename = askopenfilename(title="解密ozip")
+    if os.access(filename, os.F_OK):
+        ozip_decrypt.main(filename)
     else:
         print("Error : 文件不存在")
 
 
 def __ozipEncrypt():
-    fileChooseWindow("加密ozip")
-    if os.access(filename.get(), os.F_OK):
+    filename = askopenfilename(title="加密ozip")
+    if os.access(filename, os.F_OK):
         with cartoon():
-            runcmd("zip2ozip " + filename.get())
+            runcmd("zip2ozip " + filename)
     else:
         print("Error : 文件不存在")
 
@@ -356,11 +327,11 @@ def __unzipfile():
     if WorkDir:
         if os.access(WorkDir + os.sep + "rom", os.F_OK):
             shutil.rmtree(WorkDir + os.sep + "rom")
-        fileChooseWindow("选择要解压的文件")
-        if os.access(filename.get(), os.F_OK):
-            print("正在解压文件: " + filename.get())
+        filename = askopenfilename(title="选择要解压的文件")
+        if os.access(filename, os.F_OK):
+            print("正在解压文件: " + filename)
             with cartoon():
-                MyThread(utils.unzip_file(filename.get(), WorkDir + os.sep + "rom"))
+                MyThread(utils.unzip_file(filename, WorkDir + os.sep + "rom"))
             print("解压完成")
         else:
             print("Error : 文件不存在")
@@ -393,19 +364,19 @@ def __xruncmd():
 
 
 def patchvbmeta():
-    fileChooseWindow("选择vbmeta文件")
-    if os.access(filename.get(), os.F_OK):
-        if vbpatch.checkMagic(filename.get()):
-            flag = vbpatch.readVerifyFlag(filename.get())
+    filename = askopenfilename(title="选择vbmeta文件")
+    if os.access(filename, os.F_OK):
+        if vbpatch.checkMagic(filename):
+            flag = vbpatch.readVerifyFlag(filename)
             if flag == 0:
                 print("检测到AVB为打开状态，正在关闭...")
-                vbpatch.disableAVB(filename.get())
+                vbpatch.disableAVB(filename)
             elif flag == 1:
                 print("检测到仅关闭了DM校验，正在关闭AVB...")
-                vbpatch.disableAVB(filename.get())
+                vbpatch.disableAVB(filename)
             elif flag == 2:
                 print("检测AVB校验已关闭，正在开启...")
-                vbpatch.restore(filename.get())
+                vbpatch.restore(filename)
             else:
                 print("未知错误")
         else:
@@ -416,8 +387,7 @@ def patchvbmeta():
 
 def patchfsconfig():
     dirChooseWindow("选择你要打包的目录")
-    fileChooseWindow("选择fs_config文件")
-    fspatch.main(directoryname.get(), filename.get())
+    fspatch.main(directoryname.get(), askopenfilename(title="选择fs_config文件"))
     print("修补完成")
 
 
@@ -428,19 +398,19 @@ def cz(func, *args):
 
 def __smartUnpack():
     with cartoon():
-        fileChooseWindow("选择要智能解包的文件")
+        filename = askopenfilename(title="选择要智能解包的文件")
         if WorkDir:
-            if os.access(filename.get(), os.F_OK):
-                filetype = gettype(filename.get())
+            if os.access(filename, os.F_OK):
+                filetype = gettype(filename)
                 print("智能识别文件类型为 :  " + filetype)
                 unpackdir = os.path.abspath(WorkDir + "/" + filetype)
                 if filetype == "ozip":
                     print("正在解密ozip")
-                    ozip_decrypt.main(filename.get())
+                    ozip_decrypt.main(filename)
                     print("解密完成")
                 # list of create new folder
                 if filetype == "ext" or filetype == "erofs":
-                    dirname = os.path.basename(filename.get()).split(".")[0]
+                    dirname = os.path.basename(filename).split(".")[0]
 
                     print("在工作目录创建解包目录 : " + dirname)
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
@@ -449,14 +419,14 @@ def __smartUnpack():
                     utils.mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包 : " + filename.get())
+                        print("正在解包 : " + filename)
                         print("使用imgextractor")
-                        imgextractor.Extractor().main(filename.get(), WorkDir + os.sep + dirname + os.sep +
-                                                      os.path.basename(filename.get()).split('.')[0])
+                        imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
+                                                      os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包 : " + filename.get())
+                        print("正在解包 : " + filename)
                         print("使用extract.erofs")
-                        runcmd(f"extract.erofs.exe -i {filename.get()} -o {WorkDir + os.sep + dirname} -x")
+                        runcmd(f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
 
@@ -470,15 +440,15 @@ def __smartUnpack():
                             if i == "payload":
                                 print("正在解包payload")
                                 t = threading.Thread(target=runcmd, args=[
-                                    "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename.get())],
+                                    "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                                      daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
                                 print("正在解包boot")
                                 os.chdir(unpackdir)
-                                shutil.copy(filename.get(), os.path.join(unpackdir, os.path.basename(filename.get())))
-                                runcmd("magiskboot unpack -h %s" % filename.get())
+                                shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
+                                runcmd("magiskboot unpack -h %s" % filename)
                                 if os.path.exists('ramdisk.cpio'):
                                     comp = gettype("ramdisk.cpio")
                                     print("Ramdisk is %s" % comp)
@@ -493,34 +463,34 @@ def __smartUnpack():
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
                                 print("使用mkdtboimg解包")
-                                runcmd("mkdtboimg.exe dump " + filename.get() + " -b " + unpackdir + "\\dtb")
+                                runcmd("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
                                 print("使用 lpunpack 解锁")
-                                runcmd("lpunpack " + filename.get() + " " + unpackdir)
+                                runcmd("lpunpack " + filename + " " + unpackdir)
                     if filetype == "sparse":
                         print("文件类型为sparse, 使用simg2img转换为raw data")
 
                         utils.mkdir(WorkDir + "\\rawimg")
-                        runcmd("simg2img " + filename.get() + " " + WorkDir + "\\rawimg\\" + os.path.basename(
-                            filename.get()))
+                        runcmd("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
+                            filename))
                         print("sparse image 转换结束")
                     if filetype == "dat":
                         print("检测到dat,使用sdat2img 且自动在文件所在目录选择transfer.list文件")
-                        pname = os.path.basename(filename.get()).split(".")[0]
+                        pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
-                            os.path.dirname(filename.get())) + os.sep + pname + ".transfer.list"
+                            os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
-                                sdat2img.main(transferpath, filename.get(), WorkDir + os.sep + pname + ".img")
+                                sdat2img.main(transferpath, filename, WorkDir + os.sep + pname + ".img")
                                 print("sdat已转换为img")
                         else:
                             print("未能在dat文件所在目录找到对应的transfer.list文件")
                     if filetype == "br":
                         print("检测到br格式，使用brotli解压")
-                        pname = os.path.basename(filename.get()).replace(".br", "")
-                        if os.access(filename.get(), os.F_OK):
+                        pname = os.path.basename(filename).replace(".br", "")
+                        if os.access(filename, os.F_OK):
                             with cartoon():
-                                runcmd("brotli -d " + filename.get() + " " + WorkDir + os.sep + pname)
+                                runcmd("brotli -d " + filename + " " + WorkDir + os.sep + pname)
                             print("已解压br文件")
                         else:
                             print("震惊，文件怎么会不存在？")
@@ -528,8 +498,8 @@ def __smartUnpack():
                         print("检测到vbmtea,此文件不支持解包打包，请前往其他工具修改")
                     if filetype == "dtb":
                         print("使用device tree compiler 转换反编译dtb --> dts")
-                        dtname = os.path.basename(filename.get())
-                        runcmd("dtc -q -I dtb -O dts " + filename.get() + " -o " + WorkDir + os.sep + dtname + ".dts")
+                        dtname = os.path.basename(filename)
+                        runcmd("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
                         print("反编译dtb完成")
                     if filetype in ["zip", '7z']:
                         print("请不要用这个工具去解包压缩文件，请使用7zip或者winrar")
@@ -587,8 +557,7 @@ def __repackextimage():
             filecontexts_path = isFileContexts
         else:
             print("自动搜寻 fs_config 失败，请手动选择")
-            fileChooseWindow("选择你要打包目录的fs_config文件")
-            fsconfig_path = filename.get()
+            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
         if os.path.isdir(directoryname.get()):
             print("修补fs_config文件")
             fspatch.main(directoryname.get(), fsconfig_path)
@@ -644,8 +613,7 @@ def __repackerofsimage():
             fsconfig_path = is_fs_config
         else:
             print("自动搜寻 fs_config 失败，请手动选择")
-            fileChooseWindow("选择你要打包目录的fs_config文件")
-            fsconfig_path = filename.get()
+            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
         if is_file_contexts:
             print("自动搜寻 file_contexts 完成" + is_file_contexts)
             filecontexts_path = is_file_contexts
@@ -677,8 +645,7 @@ def __repackDTBO():
 def __repackSparseImage():
     if WorkDir:
         # 只将 EXT 转为 SIMG 而不是重新打包一次
-        fileChooseWindow("选择要转换为 SIMG 的 IMG 文件")
-        imgFilePath = filename.get()
+        imgFilePath = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
         if not os.path.exists(imgFilePath):
             print("文件不存在: " + imgFilePath)
         elif gettype(imgFilePath) != "ext":
@@ -697,8 +664,7 @@ def __repackSparseImage():
 
 def __compressToBr():
     if WorkDir:
-        fileChooseWindow("选择要转换为 BR 的 DAT 文件")
-        imgFilePath = filename.get()
+        imgFilePath = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
         if not os.path.exists(imgFilePath):
             print("文件不存在: " + imgFilePath)
         elif gettype(imgFilePath) != "dat":
@@ -718,8 +684,7 @@ def __repackDat():
     if WorkDir:
         # TO-DO: 打包后自动定位转换好的 simg   20220331
         # TO-DO: 自动识别Android版本   20220331
-        fileChooseWindow("选择要转换为 DAT 的 IMG 文件")
-        imgFilePath = filename.get()
+        imgFilePath = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
         if not os.path.exists(imgFilePath):
             print("文件不存在: " + imgFilePath)
         elif gettype(imgFilePath) != "sparse":
@@ -766,13 +731,13 @@ def __repackDat():
 
 def __repackdtb():
     if WorkDir:
-        fileChooseWindow("选择dts文件，输出到dtb文件夹")
-        if os.access(filename.get(), os.F_OK):
+        filename = askopenfilename(title="选择dts文件，输出到dtb文件夹")
+        if os.access(filename, os.F_OK):
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
                 utils.mkdir(WorkDir + os.sep + "dtb")
             with cartoon():
                 runcmd("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
-                    filename.get(), WorkDir, os.path.basename(filename.get()).replace(".dts", ".dtb")))
+                    filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
             print("编译为dtb完成")
         else:
             print("文件不存在")
