@@ -803,7 +803,7 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx=10,
                                                       pady=8)
-    tab21.pack(side=TOP, fill=BOTH, expand=NO)
+    tab21.pack(side=TOP, fill=BOTH)
     tab22.pack(side=TOP, fill=BOTH, expand=YES)
     for t, c in {("检测文件格式", lambda: print(
             f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
