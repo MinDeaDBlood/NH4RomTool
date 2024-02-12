@@ -66,8 +66,7 @@ def mkdir(path):
 
 def unzip_file(zip_src, dst_dir):
     if zipfile.is_zipfile(zip_src):
-        fz = zipfile.ZipFile(zip_src, 'r')
-        fz.extractall(dst_dir)
+        zipfile.ZipFile(zip_src, 'r').extractall(dst_dir)
     else:
         print('This is not zip')
 
