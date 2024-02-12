@@ -1103,28 +1103,18 @@ if __name__ == '__main__':
     # bottom labels
     framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
-
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)  # 清空text
         text.configure(state='disabled')
 
-
     ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    # Status bar
-
-    statusbar = ttk.Label(framebotm, relief='flat', anchor=tk.E, bootstyle="info")
-    statusbar.pack(side=RIGHT, fill=tk.X, ipadx=12)
-    statusbar['image'] = DEFAULTSTATUS
-
-
+    ttk.Label(framebotm, relief='flat', anchor=tk.E, image=DEFAULTSTATUS, bootstyle="info").pack(side=RIGHT, fill=tk.X, ipadx=12)
     def SHOWSHIJU():
         shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                   "https": None}).json()
-        shiju_font = ('微软雅黑', 12)
-        shijuLable = ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
-                               font=shiju_font)
-        shijuLable.pack(side=LEFT, padx=8)
+        ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
+                               font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
 
     cz(SHOWSHIJU)
