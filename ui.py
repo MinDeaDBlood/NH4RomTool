@@ -15,6 +15,7 @@ from tkinter import *
 from tkinter import scrolledtext, ttk
 from tkinter.filedialog import *
 
+import requests
 # from bs4 import BeautifulSoup
 from ttkbootstrap import Style  # use ttkbootstrap theme
 from ttkbootstrap.constants import *
@@ -92,7 +93,7 @@ class myStdout:  # 重定向类
     def write(info):
         text.configure(state='normal')
         if info != '\n':
-            text.insert(END, "[%s]%s\n" % (utils.get_time(), info))
+            text.insert(END, "[%s]%s\n" % (time.strftime('%H:%M:%S'), info))
         text.update()  # 实时返回信息
         text.yview('end')
         text.configure(state='disabled')
@@ -1084,7 +1085,8 @@ if __name__ == '__main__':
 
 
     def SHOWSHIJU():
-        shiju = utils.getShiju()
+        shiju = requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
+                                                                  "https": None}).json()
         shiju_font = ('微软雅黑', 12)
         shijuLable = ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                                font=shiju_font)

@@ -1,44 +1,7 @@
 import os
 import sys
-import time
 import zipfile
 
-import requests
-
-# Import win32api
-
-'''
-
- Support :
-     chlocal 选择当前脚本所在目录
-         无参数
-     str2hex 将字符串转换为二进制
-         需要字符串参数
-     symlink 生成一个cygwin可以识别的软连接
-         第一个参数是链接目标 第二个参数是生成文件
-     mkdir   新建一个文件夹
-         需要文件夹路径
-     rmdir   递归删除一个文件夹
-         需要文件夹路径
-     hideDosConsole(title)
-         根据标题隐藏控制台
-     showDosConsole(title)
-         根据标题显示控制台
-     hideForegroundWindow
-         隐藏最顶层控制台
-     addExecPath(addpath)
-         在PATH路径增加一个目录
-     get_time()
-         返回当前时间
-     listdir(path,ext)
-         path 路径
-         ext 文件扩展名
-     runcmd(cmd)
-         运行系统中的命令，不支持中文返回
-     getShiju()
-         获取诗句
-
-'''
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
            [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
            [b"AVB0", "vbmeta"], [b'\xd7\xb7\xab\x1e', "dtbo"],
@@ -107,10 +70,6 @@ def mkdir(path):
         return False
 
 
-def get_time():  # 返回当前时间
-    return time.strftime('%H:%M:%S')
-
-
 def listDirHeader(path, head):
     L = []
     for i in os.listdir(path):
@@ -154,11 +113,6 @@ def zip_file(file, dst_dir):
         for file in file_paths:
             zip.write(file)
     os.chdir(path)
-
-
-def getShiju():
-    return requests.get("https://v1.jinrishici.com/all", proxies={"http": None,
-                                                                  "https": None}).json()
 
 
 def getdirsize(dir):
