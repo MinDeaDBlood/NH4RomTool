@@ -8,8 +8,9 @@ from pip._internal.cli.main import main as _main
 
 with open('requirements.txt', 'r', encoding='utf-8') as l:
     for i in l.read().split("\n"):
-        print(f"Installing {i}")
-        _main(['install', i])
+        if i:
+            print(f"Installing {i}")
+            _main(['install', i])
 local = os.getcwd()
 name = 'NH4RomTool-win.zip'
 
