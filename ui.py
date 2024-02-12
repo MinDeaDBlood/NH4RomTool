@@ -28,7 +28,7 @@ from pyscripts.utils import gettype
 # Var
 LOGOICO = ".\\bin\\logo.ico"
 LOCALDIR = os.getcwd()
-setfile = LOCALDIR + os.sep + "config.json"
+setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
 
 class set_utils:
