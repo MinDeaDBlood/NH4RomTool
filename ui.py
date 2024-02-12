@@ -130,9 +130,7 @@ def userInputWindow(title='输入文本'):
     ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
-                                                                                                               expand=YES,
-                                                                                                               padx=5)
+    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP, expand=YES, padx=5)
     input_window.wait_window()
     return ent.get()
 
