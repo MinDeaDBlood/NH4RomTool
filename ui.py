@@ -429,7 +429,19 @@ def find_fs_con(directoryname):
     is_file_contexts = fs_config if os.path.exists((fs_config := os.path.join(directoryname, '..', 'config',
                                                                               f'{os.path.basename(directoryname)}_file_contexts'))) else ''
     is_file_contexts = os.path.realpath(is_file_contexts)
-    return is_file_contexts, is_fs_config
+    if is_fs_config:
+        print("自动搜寻 fs_config 完成: " + is_fs_config)
+        fsconfig_path = is_fs_config
+    else:
+        print("自动搜寻 fs_config 失败，请手动选择")
+        fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
+    if is_file_contexts:
+        print("自动搜寻 file_contexts 完成" + is_file_contexts)
+        filecontexts_path = is_file_contexts
+    else:
+        print("自动搜寻 fs_context 失败，请手动选择")
+        filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
+    return filecontexts_path, fsconfig_path
 
 
 def __repackextimage():
@@ -437,19 +449,7 @@ def __repackextimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_file_contexts, is_fs_config = find_fs_con(directoryname)
-        if is_fs_config:
-            print("自动搜寻 fs_config 完成: " + is_fs_config)
-            fsconfig_path = is_fs_config
-        else:
-            print("自动搜寻 fs_config 失败，请手动选择")
-            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
-        if is_file_contexts:
-            print("自动搜寻 file_contexts 完成" + is_file_contexts)
-            filecontexts_path = is_file_contexts
-        else:
-            print("自动搜寻 file_contexts 失败，请手动选择")
-            filecontexts_path = askopenfilename(title="选择你要打包目录的file_contexts文件")
+        filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             print("修补fs_config文件")
             fspatch.main(directoryname, fsconfig_path)
@@ -479,19 +479,7 @@ def __repackerofsimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         # Audo choose fs_config
         print("自动搜寻 fs_config")
-        is_file_contexts, is_fs_config = find_fs_con(directoryname)
-        if is_fs_config:
-            print("自动搜寻 fs_config 完成: " + is_fs_config)
-            fsconfig_path = is_fs_config
-        else:
-            print("自动搜寻 fs_config 失败，请手动选择")
-            fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
-        if is_file_contexts:
-            print("自动搜寻 file_contexts 完成" + is_file_contexts)
-            filecontexts_path = is_file_contexts
-        else:
-            print("自动搜寻 fs_context 失败，请手动选择")
-            filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
+        filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
