@@ -619,13 +619,12 @@ def __repackextimage():
         if os.path.isdir(directoryname.get()):
             print("修补fs_config文件")
             fspatch.main(directoryname.get(), fsconfig_path)
-            cmd = "busybox ash -c \""
             MUTIIMGSIZE = 1.2 if os.path.basename(directoryname.get()).find("odm") != -1 else 1.07
             if settings.automutiimgsize:
                 EXTIMGSIZE = int(utils.getdirsize(directoryname.get()) * MUTIIMGSIZE)
             else:
                 EXTIMGSIZE = settings.modifiedimgsize
-            cmd += "MKE2FS_CONFIG=bin/mke2fs.conf E2FSPROGS_FAKE_TIME=1230768000 mke2fs.exe "
+            cmd = "mke2fs.exe "
             cmd += "-O %s " % settings.extfueature
             cmd += "-L %s " % (os.path.basename(directoryname.get()))
             cmd += "-I 256 "
@@ -633,7 +632,7 @@ def __repackextimage():
             cmd += "-t %s " % settings.extrepacktype
             cmd += "-b %s " % settings.extblocksize
             cmd += "%s/output/%s.img " % (WorkDir, os.path.basename(directoryname.get()))
-            cmd += "%s\"" % (int(EXTIMGSIZE / 4096))
+            cmd += "%s" % (int(EXTIMGSIZE / 4096))
             print("尝试创建目录output")
             utils.mkdir(WorkDir + os.sep + "output")
             print("开始打包EXT镜像")
