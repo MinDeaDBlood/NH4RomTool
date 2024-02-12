@@ -858,23 +858,23 @@ if __name__ == '__main__':
 
     # Buttons under Treeview
     tab12 = ttk.Frame(tab1)
-    ttk.Button(tab12, text='确认目录', width=10, command=ConfirmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+    ttk.Button(tab12, text='确认', width=10, command=ConfirmWorkDir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                                 column=0,
                                                                                                                 padx=10,
                                                                                                                 pady=8)
-    ttk.Button(tab12, text='删除目录', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+    ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                            column=1,
                                                                                                            padx=10,
                                                                                                            pady=8)
-    ttk.Button(tab12, text='新建目录', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
+    ttk.Button(tab12, text='新建', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
                                                                                                            column=0,
                                                                                                            padx=10,
                                                                                                            pady=8)
-    ttk.Button(tab12, text='刷新目录', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
+    ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
                                                                                                             column=1,
                                                                                                             padx=10,
                                                                                                             pady=8)
-    ttk.Button(tab12, text='清理目录', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
+    ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
                                                                                                               column=0,
                                                                                                               padx=10,
                                                                                                               pady=8)
