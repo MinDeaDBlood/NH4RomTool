@@ -589,10 +589,10 @@ def repackboot():
                 if os.path.exists('ramdisk.cpio'):
                     os.remove('ramdisk.cpio')
                 os.rename("ramdisk-new.cpio", "ramdisk.cpio")
-            runcmd("magiskboot repack boot.img")
+        runcmd("magiskboot repack boot.img")
         if os.path.exists('boot.img'):
             os.remove('boot.img')
-        os.rename("new-boot.img", os.path.join(WorkDir, 'boot.img'))
+        shutil.copyfile("new-boot.img", os.path.join(LOCALDIR, WorkDir, 'boot.img'))
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname.get())
     else:
