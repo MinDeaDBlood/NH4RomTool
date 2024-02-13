@@ -262,6 +262,8 @@ def clearWorkDir():
     if not WorkDir:
         print("当前未选择任何目录")
     else:
+        if not os.path.exists(WorkDir):
+            return
         print("将清理: " + WorkDir)
         try:
             for i in os.listdir(WorkDir):
