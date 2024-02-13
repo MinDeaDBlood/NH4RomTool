@@ -33,14 +33,7 @@ def readVerifyFlag(file):
         with open(file, "rb") as f:
             f.seek(123, 0)
             flag = f.read(1)
-            if flag == b'\x00':
-                return 0
-            elif flag == b'\x01':
-                return 1
-            elif flag == b'\x02':
-                return 2
-            else:
-                print("Unknow")
+            return int(flag.hex())
     else:
         print("File does not exist!")
 
