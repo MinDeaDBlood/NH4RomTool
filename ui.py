@@ -785,6 +785,54 @@ def __repackSuper():
         print("请先选择工作目录")
 
 
+def setting():
+    window = Toplevel()
+    window.title("设置")
+    screenwidth = window.winfo_screenwidth()
+    screenheight = window.winfo_screenheight()
+    window.geometry(
+        '{}x{}+{}+{}'.format(600, 400, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
+    area1 = ttk.LabelFrame(window, text="Ext4设置")
+    area1_label = ttk.Frame(area1)
+    ttk.Label(area1_label, text="自动调整大小:").pack(side=LEFT)
+    zdtzdx = BooleanVar(value=settings.automutiimgsize)
+    Checkbutton(area1_label, onvalue=True, offvalue=False, variable=zdtzdx,
+                command=lambda: settings.change("automutiimgsize", zdtzdx.get())).pack(padx=10, pady=10, side=LEFT)
+    area1_label.pack(fill=X)
+    area1_custom_size = ttk.Frame(area1)
+    ttk.Label(area1_custom_size, text="默认EXT4大小:").pack(side=LEFT)
+    num_value = StringVar(value=settings.modifiedimgsize)
+    Entry(area1_custom_size, textvariable=num_value).pack(padx=10, pady=10, side=LEFT)
+    Button(area1_custom_size, text="确定", command=lambda: settings.change('modifiedimgsize',
+                                                                           num_value.get() if num_value.get().isdigit() else settings.modifiedimgsize)).pack(
+        padx=10, pady=10, side=LEFT)
+    area1_custom_size.pack(fill=X)
+    area1_custom_type = ttk.Frame(area1)
+    type_value = StringVar(value=settings.extrepacktype)
+    ttk.Label(area1_custom_type, text="MKE2FS打包格式:").pack(side=LEFT)
+    Entry(area1_custom_type, textvariable=type_value).pack(padx=10, pady=10, side=LEFT)
+    Button(area1_custom_type, text="确定", command=lambda: settings.change('extrepacktype',type_value.get())).pack(padx=10, pady=10, side=LEFT)
+    area1_custom_type.pack(fill=X)
+    area1_block_size = ttk.Frame(area1)
+    ttk.Label(area1_block_size, text="BLOCK大小:").pack(side=LEFT)
+    block_size = StringVar(value=settings.extblocksize)
+    Entry(area1_block_size, textvariable=block_size).pack(padx=10, pady=10, side=LEFT)
+    Button(area1_block_size, text="确定", command=lambda: settings.change('extblocksize',
+                                                                           block_size.get() if block_size.get().isdigit() else settings.extblocksize)).pack(
+        padx=10, pady=10, side=LEFT)
+    area1_block_size.pack(fill=X)
+    area1.pack(fill=BOTH, padx=10, pady=10)
+    area2 = ttk.LabelFrame(window, text="EROFS设置")
+    area2_type = ttk.Frame(area2)
+    erofs_type = StringVar(value=settings.erofstype)
+    ttk.Label(area2_type, text="压缩格式:").pack(side=LEFT, padx=10, pady=10)
+    ttk.Entry(area2_type, textvariable=erofs_type).pack(side=LEFT)
+    Button(area2_type, text="确定", command=lambda: settings.change('erofstype', erofs_type.get())).pack(
+        padx=10, pady=10, side=LEFT)
+    area2_type.pack(fill=X)
+    area2.pack(fill=BOTH, padx=10, pady=10)
+
+
 if __name__ == '__main__':
     myStdout()
     screenwidth = root.winfo_screenwidth()
@@ -794,6 +842,7 @@ if __name__ == '__main__':
     menuBar = Menu(root)
     root.config(menu=menuBar)
     menu1 = Menu(menuBar, tearoff=False)
+    menu1.add_command(label="设置", command=setting)
     menu1.add_command(label="关于", command=about)
     menu1.add_command(label="退出", command=sys.exit)
     menuBar.add_cascade(label="菜单", menu=menu1)
