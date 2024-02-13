@@ -321,8 +321,7 @@ def rmWorkDir():
 
 
 def mkWorkdir():
-    inputvar = userInputWindow()
-    mkdir(f'NH4_{inputvar}')
+    mkdir(f'NH4_{userInputWindow()}')
     getWorkDir()
 
 
