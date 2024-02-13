@@ -406,7 +406,7 @@ def __smartUnpack():
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
                         print("正在解包[erofs]: " + filename)
-                        runcmd(f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
+                        cz(runcmd, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
@@ -466,10 +466,9 @@ def __smartUnpack():
                             print("未能在dat文件所在目录找到对应的transfer.list文件")
                     if filetype == "br":
                         print("检测到br格式，使用brotli解压")
-                        pname = os.path.basename(filename).replace(".br", "")
                         if os.access(filename, os.F_OK):
                             with cartoon():
-                                runcmd("brotli -d " + filename + " " + WorkDir + os.sep + pname)
+                                runcmd(f"brotli -dj {filename}")
                             print("已解压br文件")
                         else:
                             print("文件不可访问！")
@@ -588,6 +587,7 @@ def __repackerofsimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
+            mkdir(WorkDir+os.sep+'output')
             fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
                 WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
