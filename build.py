@@ -44,12 +44,11 @@ import PyInstaller.__main__
 
 PyInstaller.__main__.run(['-F', 'ui.py', '--exclude-module=numpy', '-i', 'bin/logo.ico'])
 
-if os.name == 'nt':
-    if os.path.exists(local + os.sep + "dist" + os.sep + "ui.exe"):
-        shutil.move(local + os.sep + "dist" + os.sep + "ui.exe", local)
+if os.path.exists(local + os.sep + "dist" + os.sep + "ui.exe"):
+    shutil.move(local + os.sep + "dist" + os.sep + "ui.exe", local)
 
 for i in os.listdir(local):
-    if i not in ['run', 'ui.exe', 'bin', 'LICENSE']:
+    if i not in ['ui.exe', 'bin', 'LICENSE']:
         print(f"Removing {i}")
         if os.path.isdir(local + os.sep + i):
             try:
