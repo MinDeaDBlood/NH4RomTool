@@ -54,8 +54,6 @@ def writeAvb(file, flag):
         print("File does not exist!")
 
 
-
-
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
            [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
            [b"AVB0", "vbmeta"], [b'\xd7\xb7\xab\x1e', "dtbo"],
