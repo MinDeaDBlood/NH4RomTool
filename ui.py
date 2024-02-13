@@ -406,7 +406,7 @@ def cz(func, *args):
 
 def __smartUnpack():
     with cartoon():
-        filename = askopenfilename(title="选择要智能解包的文件")
+        filename = askopenfilename(title="选择解包的文件")
         if WorkDir:
             if os.access(filename, os.F_OK):
                 filetype = gettype(filename)
