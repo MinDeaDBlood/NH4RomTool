@@ -45,7 +45,7 @@ class sdat2img:
                 for block in command[1]:
                     begin = block[0]
                     block_count = block[1] - begin
-                    print('\rCopying {} blocks into position {}...'.format(block_count, begin), end="")
+                    print('Copying {} blocks into position {}...'.format(block_count, begin))
 
                     # Position output file
                     output_img.seek(begin * block_size)
@@ -55,7 +55,7 @@ class sdat2img:
                         output_img.write(new_data_file.read(block_size))
                         block_count -= 1
             else:
-                print('\rSkipping command {}...'.format(command[0]), end="")
+                print('Skipping command {}...'.format(command[0]))
 
         # Make file larger if necessary
         if output_img.tell() < max_file_size:
@@ -63,7 +63,7 @@ class sdat2img:
 
         output_img.close()
         new_data_file.close()
-        print('\nDone! Output image: {}'.format(os.path.realpath(output_img.name)))
+        print('Done! Output image: {}'.format(os.path.realpath(output_img.name)))
 
     @staticmethod
     def rangeset(src):

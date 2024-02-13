@@ -157,7 +157,7 @@ class myStdout:
     @staticmethod
     def write(info):
         text.configure(state='normal')
-        if info != '\n':
+        if info not in ['\n', '\r\n', '']:
             text.insert(END, "[%s]%s\n" % (time.strftime('%H:%M:%S'), info))
         text.update()
         text.yview('end')
@@ -587,7 +587,7 @@ def __repackerofsimage():
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
-            mkdir(WorkDir+os.sep+'output')
+            mkdir(WorkDir + os.sep + 'output')
             fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
                 WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
@@ -811,14 +811,15 @@ def setting():
     type_value = StringVar(value=settings.extrepacktype)
     ttk.Label(area1_custom_type, text="MKE2FS打包格式:").pack(side=LEFT)
     Entry(area1_custom_type, textvariable=type_value).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_custom_type, text="确定", command=lambda: settings.change('extrepacktype',type_value.get())).pack(padx=10, pady=10, side=LEFT)
+    Button(area1_custom_type, text="确定", command=lambda: settings.change('extrepacktype', type_value.get())).pack(
+        padx=10, pady=10, side=LEFT)
     area1_custom_type.pack(fill=X)
     area1_block_size = ttk.Frame(area1)
     ttk.Label(area1_block_size, text="BLOCK大小:").pack(side=LEFT)
     block_size = StringVar(value=settings.extblocksize)
     Entry(area1_block_size, textvariable=block_size).pack(padx=10, pady=10, side=LEFT)
     Button(area1_block_size, text="确定", command=lambda: settings.change('extblocksize',
-                                                                           block_size.get() if block_size.get().isdigit() else settings.extblocksize)).pack(
+                                                                          block_size.get() if block_size.get().isdigit() else settings.extblocksize)).pack(
         padx=10, pady=10, side=LEFT)
     area1_block_size.pack(fill=X)
     area1.pack(fill=BOTH, padx=10, pady=10)
