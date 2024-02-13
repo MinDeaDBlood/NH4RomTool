@@ -22,10 +22,8 @@ from pyscripts import ozip_decrypt, imgextractor, sdat2img, fspatch, img2sdat
 
 def checkMagic(file):
     if os.access(file, os.F_OK):
-        magic = b'AVB0'
         with open(file, "rb") as f:
-            buf = f.read(4)
-            return magic == buf
+            return b'AVB0' == f.read(4)
     else:
         print("File dose not exist!")
 
@@ -47,14 +45,15 @@ def readVerifyFlag(file):
         print("File does not exist!")
 
 
-def restore(file):
+def writeAvb(file, flag):
     if os.access(file, os.F_OK):
-        flag = b'\x00'
         with open(file, "rb+") as f:
             f.seek(123, 0)
             f.write(flag)
     else:
         print("File does not exist!")
+
+
 
 
 def disableAVB(file):
@@ -386,7 +385,7 @@ def patchvbmeta():
                 disableAVB(filename)
             elif flag == 2:
                 print("检测AVB校验已关闭，正在开启...")
-                restore(filename)
+                writeAvb(filename, b'\x00')
             else:
                 print("未知错误")
         else:
@@ -854,10 +853,11 @@ if __name__ == '__main__':
                                                                                                        column=1,
                                                                                                        padx=10,
                                                                                                        pady=8)
-    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{userInputWindow()}') or getWorkDir()), style='primiary.Outline.TButton').grid(row=1,
-                                                                                                       column=0,
-                                                                                                       padx=10,
-                                                                                                       pady=8)
+    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{userInputWindow()}') or getWorkDir()),
+               style='primiary.Outline.TButton').grid(row=1,
+                                                      column=0,
+                                                      padx=10,
+                                                      pady=8)
     ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
                                                                                                         column=1,
                                                                                                         padx=10,
