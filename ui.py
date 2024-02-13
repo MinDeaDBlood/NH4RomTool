@@ -56,16 +56,6 @@ def writeAvb(file, flag):
 
 
 
-def disableAVB(file):
-    if os.access(file, os.F_OK):
-        flag = b'\x02'
-        with open(file, "rb+") as f:
-            f.seek(123, 0)
-            f.write(flag)
-    else:
-        print("File does not exist!")
-
-
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
            [b'\x3a\xff\x26\xed', "sparse"], [b'\xe2\xe1\xf5\xe0', "erofs", 1024], [b"CrAU", "payload"],
            [b"AVB0", "vbmeta"], [b'\xd7\xb7\xab\x1e', "dtbo"],
@@ -379,10 +369,10 @@ def patchvbmeta():
             flag = readVerifyFlag(filename)
             if flag == 0:
                 print("检测到AVB为打开状态，正在关闭...")
-                disableAVB(filename)
+                writeAvb(filename, b'\x02')
             elif flag == 1:
                 print("检测到仅关闭了DM校验，正在关闭AVB...")
-                disableAVB(filename)
+                writeAvb(filename, b'\x02')
             elif flag == 2:
                 print("检测AVB校验已关闭，正在开启...")
                 writeAvb(filename, b'\x00')
