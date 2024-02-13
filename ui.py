@@ -320,11 +320,6 @@ def rmWorkDir():
     getWorkDir()
 
 
-def mkWorkdir():
-    mkdir(f'NH4_{userInputWindow()}')
-    getWorkDir()
-
-
 def __ozipEncrypt():
     filename = askopenfilename(title="加密ozip")
     if os.access(filename, os.F_OK):
@@ -859,7 +854,7 @@ if __name__ == '__main__':
                                                                                                        column=1,
                                                                                                        padx=10,
                                                                                                        pady=8)
-    ttk.Button(tab12, text='新建', width=10, command=mkWorkdir, style='primiary.Outline.TButton').grid(row=1,
+    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{userInputWindow()}') or getWorkDir()), style='primiary.Outline.TButton').grid(row=1,
                                                                                                        column=0,
                                                                                                        padx=10,
                                                                                                        pady=8)
