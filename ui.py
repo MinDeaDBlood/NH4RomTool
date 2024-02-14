@@ -138,12 +138,6 @@ class SetUtils:
 settings = SetUtils(setfile)
 settings.load()
 style = Style(theme=settings.theme)
-root = style.master
-width = 1240
-height = 600
-if os.name != 'nt':
-    root.geometry("%sx%s" % (width, height))
-root.title("NH4RomTool")
 DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
@@ -190,10 +184,7 @@ def user_input_window(title='输入文本'):
     cur_width = 400
     cur_hight = 120
     ent = StringVar()
-    scn_w, scn_h = root.maxsize()
-    cen_x = (scn_w - cur_width) / 2
-    cen_y = (scn_h - cur_hight) / 2
-    size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
+    size_xy = '%dx%d' % (cur_width, cur_hight)
     input_window.geometry(size_xy)
     input_window.resizable(False, False)
     input_window.title(title)
@@ -669,10 +660,7 @@ def __repack_super():
         w = Toplevel()
         cur_width = 400
         cur_hight = 450
-        scn_w, scn_h = root.maxsize()
-        cen_x = (scn_w - cur_width) / 2
-        cen_y = (scn_h - cur_hight) / 2
-        size_xy = '%dx%d+%d+%d' % (cur_width, cur_hight, cen_x, cen_y)
+        size_xy = '%dx%d' % (cur_width, cur_hight)
         w.geometry(size_xy)
         w.resizable(False, False)
         w.title("打包Super")
@@ -746,7 +734,7 @@ def setting():
     screenwidth = window.winfo_screenwidth()
     screenheight = window.winfo_screenheight()
     window.geometry(
-        '{}x{}+{}+{}'.format(600, 400, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
+        '{}x{}+{}+{}'.format(600, 400, int(screenwidth / 2), int(screenheight / 2)))
     area1 = ttk.LabelFrame(window, text="Ext4设置")
     area1_label = ttk.Frame(area1)
     ttk.Label(area1_label, text="自动调整大小:").pack(side=LEFT)
@@ -809,8 +797,14 @@ class Mystdout:
 
 class App:
     def __init__(self):
+        root = style.master
         screenwidth = root.winfo_screenwidth()
         screenheight = root.winfo_screenheight()
+        width = 1240
+        height = 600
+        if os.name != 'nt':
+            root.geometry("%sx%s" % (width, height))
+        root.title("NH4RomTool")
         root.geometry(
             '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
         menuBar = Menu(root)
