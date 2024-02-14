@@ -627,7 +627,7 @@ def __repackSparseImage():
         print("请先选择工作目录")
 
 
-def __compressToBr():
+def __compress_to_br():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
         if not os.path.exists(img_file_path):
@@ -644,7 +644,7 @@ def __compressToBr():
         print("请先选择工作目录")
 
 
-def __repackDat():
+def __repack_dat():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
         if not os.path.exists(img_file_path):
@@ -684,7 +684,7 @@ def __repackDat():
         print("请先选择工作目录")
 
 
-def __repackdtb():
+def __repack_dtb():
     if WorkDir:
         filename = askopenfilename(title="选择dts文件，输出到dtb文件夹")
         if os.access(filename, os.F_OK):
@@ -700,7 +700,7 @@ def __repackdtb():
         print("请先选择工作目录")
 
 
-def __repackSuper():
+def __repack_super():
     if WorkDir:
         packtype = StringVar(value='VAB')
         packsize = StringVar(value="9126805504")
@@ -925,7 +925,7 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx=10,
                                                       pady=8)
-    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repackdtb), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb), style='primiary.Outline.TButton').grid(
         row=2,
         column=0,
         padx=10,
@@ -934,7 +934,7 @@ if __name__ == '__main__':
         row=2, column=1,
         padx=10,
         pady=8)
-    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repackSuper), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super), style='primiary.Outline.TButton').grid(
         row=3,
         column=0,
         padx=10,
@@ -942,12 +942,12 @@ if __name__ == '__main__':
     ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(__repackSparseImage),
                style='primiary.Outline.TButton').grid(
         row=3, column=1, padx=10, pady=8)
-    ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repackDat),
+    ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repack_dat),
                style='primiary.Outline.TButton').grid(row=4,
                                                       column=0,
                                                       padx=10,
                                                       pady=8)
-    ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compressToBr),
+    ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compress_to_br),
                style='primiary.Outline.TButton').grid(row=4,
                                                       column=1,
                                                       padx=10,
