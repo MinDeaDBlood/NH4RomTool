@@ -136,7 +136,6 @@ class SetUtils:
 
 settings = SetUtils(setfile)
 settings.load()
-style = Style(theme=settings.theme)
 DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
@@ -796,7 +795,7 @@ class Mystdout:
 
 class App:
     def __init__(self):
-        root = style.master
+        root = Style(theme=settings.theme).master
         screenwidth = root.winfo_screenwidth()
         screenheight = root.winfo_screenheight()
         width = 1240
