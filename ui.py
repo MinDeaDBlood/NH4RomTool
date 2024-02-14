@@ -43,8 +43,7 @@ def writeAvb(file, flag):
         with open(file, "rb+") as f:
             f.seek(123, 0)
             f.write(flag)
-    else:
-        print("File does not exist!")
+    return
 
 
 formats = ([b'PK', "zip"], [b'OPPOENCRYPT!', "ozip"], [b'7z', "7z"], [b'\x53\xef', 'ext', 1080],
