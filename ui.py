@@ -810,22 +810,22 @@ class App:
         menu1.add_command(label="退出", command=sys.exit)
         menu_bar.add_cascade(label="菜单", menu=menu1)
         menu2 = Menu(menu_bar, tearoff=False)
-        menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
+        menu_item = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
                     "cyborg", "darkly", "solar", "vapor", "superhero"]
-        for item in menuItem:
+        for item in menu_item:
             menu2.add_command(label=item, command=lambda n=item: change_theme(n))
         menu_bar.add_cascade(label="主题", menu=menu2)
         frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
         frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        tabControl = ttk.Notebook(frame1)
-        tab1 = ttk.Frame(tabControl)
-        tab2 = ttk.Frame(tabControl)
-        tab3 = ttk.Frame(tabControl)
+        tab_control = ttk.Notebook(frame1)
+        tab1 = ttk.Frame(tab_control)
+        tab2 = ttk.Frame(tab_control)
+        tab3 = ttk.Frame(tab_control)
         tab33 = ScrolledFrame(tab3, autohide=True, width=220)
-        tabControl.add(tab1, text="项目")
-        tabControl.add(tab2, text="打包解包")
-        tabControl.add(tab3, text="其他")
+        tab_control.add(tab1, text="项目")
+        tab_control.add(tab2, text="打包解包")
+        tab_control.add(tab3, text="其他")
         tab33.pack(side=LEFT, expand=YES, fill=BOTH)
         tab11 = ttk.Frame(tab1)
         self.table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
@@ -836,7 +836,7 @@ class App:
         self.getWorkDir()
         tab12 = ttk.Frame(tab1)
         ttk.Button(tab12, text='确认', width=10,
-                   command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
+                   command=lambda: tab_control.select(tab2) if WorkDir else print("请选择项目"),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
@@ -860,7 +860,7 @@ class App:
                                                                                                               padx=10,
                                                                                                               pady=8)
         tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
-        tabControl.pack(fill=BOTH, expand=YES)
+        tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
         tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         ttk.Button(tab21, text='解压', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
