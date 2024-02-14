@@ -329,6 +329,7 @@ def zip_file(file, dst_dir):
         for root, directories, files in os.walk(directory):
             for filename in files:
                 yield os.path.join(root, filename)
+
     os.chdir(dst_dir)
     with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
         # 遍历写入文件
@@ -830,192 +831,195 @@ def setting():
     area2.pack(fill=BOTH, padx=10, pady=10)
 
 
-def main():
-    screenwidth = root.winfo_screenwidth()
-    screenheight = root.winfo_screenheight()
-    root.geometry(
-        '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
-    menuBar = Menu(root)
-    root.config(menu=menuBar)
-    menu1 = Menu(menuBar, tearoff=False)
-    menu1.add_command(label="设置", command=setting)
-    menu1.add_command(label="关于", command=about)
-    menu1.add_command(label="退出", command=sys.exit)
-    menuBar.add_cascade(label="菜单", menu=menu1)
-    menu2 = Menu(menuBar, tearoff=False)
-    menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
-                "cyborg", "darkly", "solar", "vapor", "superhero"]
-    for item in menuItem:
-        menu2.add_command(label=item, command=lambda n=item: change_theme(n))
-    menuBar.add_cascade(label="主题", menu=menu2)
-    frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
-    frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    tabControl = ttk.Notebook(frame1)
-    tab1 = ttk.Frame(tabControl)
-    tab2 = ttk.Frame(tabControl)
-    tab3 = ttk.Frame(tabControl)
-    tab33 = ScrolledFrame(tab3, autohide=True, width=220)
-    tabControl.add(tab1, text="项目")
-    tabControl.add(tab2, text="打包解包")
-    tabControl.add(tab3, text="其他")
-    tab33.pack(side=LEFT, expand=YES, fill=BOTH)
-    tab11 = ttk.Frame(tab1)
-    global table
-    table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
-    table.column('Workdir', width=100, anchor='center')
-    table.heading('Workdir', text='项目')
-    table.pack(side=TOP, fill=BOTH, expand=YES)
-    table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
-    getWorkDir()
-    tab12 = ttk.Frame(tab1)
-    ttk.Button(tab12, text='确认', width=10,
-               command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
-               style='primiary.Outline.TButton').grid(row=0,
-                                                      column=0,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                       column=1,
-                                                                                                       padx=10,
-                                                                                                       pady=8)
-    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{user_input_window()}') or getWorkDir()),
-               style='primiary.Outline.TButton').grid(row=1,
-                                                      column=0,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                        column=1,
-                                                                                                        padx=10,
-                                                                                                        pady=8)
-    ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
-                                                                                                          column=0,
-                                                                                                          padx=10,
-                                                                                                          pady=8)
-    tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
-    tabControl.pack(fill=BOTH, expand=YES)
-    tab11.pack(side=TOP, fill=BOTH, expand=YES)
-    tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab21, text='解压', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
-        row=0, column=0,
-        padx=10,
-        pady=8)
-    ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smart_unpack),
-               style='primiary.Outline.TButton').grid(row=0,
-                                                      column=1,
-                                                      padx=10,
-                                                      pady=8)
-    tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(zip_compress),
-               style='primiary.Outline.TButton').grid(row=0,
-                                                      column=0,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0, column=1,
-                                                                                                        padx=10,
-                                                                                                        pady=8)
-    ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(repack_ext),
-               style='primiary.Outline.TButton').grid(row=1,
-                                                      column=0,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(repack_erofs),
-               style='primiary.Outline.TButton').grid(row=1,
-                                                      column=1,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb),
-               style='primiary.Outline.TButton').grid(
-        row=2,
-        column=0,
-        padx=10,
-        pady=8)
-    ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(repack_dtbo), style='primiary.Outline.TButton').grid(
-        row=2, column=1,
-        padx=10,
-        pady=8)
-    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super),
-               style='primiary.Outline.TButton').grid(
-        row=3,
-        column=0,
-        padx=10,
-        pady=8)
-    ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(repack_sparse_image),
-               style='primiary.Outline.TButton').grid(
-        row=3, column=1, padx=10, pady=8)
-    ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repack_dat),
-               style='primiary.Outline.TButton').grid(row=4,
-                                                      column=0,
-                                                      padx=10,
-                                                      pady=8)
-    ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compress_to_br),
-               style='primiary.Outline.TButton').grid(row=4,
-                                                      column=1,
-                                                      padx=10,
-                                                      pady=8)
-    tab21.pack(side=TOP, fill=BOTH)
-    tab22.pack(side=TOP, fill=BOTH, expand=YES)
-    for t, c in (("检测文件格式", lambda: print(
-            f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
-                                                             os.F_OK) else "Error : 文件不存在")), ('OZIP 解密',
-                                                                                                    lambda: ozip_decrypt.main(
-                                                                                                        filename) if os.access(
-                                                                                                        (
-                                                                                                                filename := askopenfilename(
-                                                                                                                    title="解密ozip")),
-                                                                                                        os.F_OK) else print(
-                                                                                                        "Error : 文件不存在")),
-                 ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
-                 ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                                    askopenfilename(title="选择fs_config文件")))):
-        ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
-            side=TOP, expand=NO,
-            fill=X, padx=8)
-    global text
-    text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
-    text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
-    Mystdout()
-    frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+class App:
+    def __init__(self):
+        screenwidth = root.winfo_screenwidth()
+        screenheight = root.winfo_screenheight()
+        root.geometry(
+            '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
+        menuBar = Menu(root)
+        root.config(menu=menuBar)
+        menu1 = Menu(menuBar, tearoff=False)
+        menu1.add_command(label="设置", command=setting)
+        menu1.add_command(label="关于", command=about)
+        menu1.add_command(label="退出", command=sys.exit)
+        menuBar.add_cascade(label="菜单", menu=menu1)
+        menu2 = Menu(menuBar, tearoff=False)
+        menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
+                    "cyborg", "darkly", "solar", "vapor", "superhero"]
+        for item in menuItem:
+            menu2.add_command(label=item, command=lambda n=item: change_theme(n))
+        menuBar.add_cascade(label="主题", menu=menu2)
+        frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
+        frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        tabControl = ttk.Notebook(frame1)
+        tab1 = ttk.Frame(tabControl)
+        tab2 = ttk.Frame(tabControl)
+        tab3 = ttk.Frame(tabControl)
+        tab33 = ScrolledFrame(tab3, autohide=True, width=220)
+        tabControl.add(tab1, text="项目")
+        tabControl.add(tab2, text="打包解包")
+        tabControl.add(tab3, text="其他")
+        tab33.pack(side=LEFT, expand=YES, fill=BOTH)
+        tab11 = ttk.Frame(tab1)
+        global table
+        table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
+        table.column('Workdir', width=100, anchor='center')
+        table.heading('Workdir', text='项目')
+        table.pack(side=TOP, fill=BOTH, expand=YES)
+        table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
+        getWorkDir()
+        tab12 = ttk.Frame(tab1)
+        ttk.Button(tab12, text='确认', width=10,
+                   command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
+                   style='primiary.Outline.TButton').grid(row=0,
+                                                          column=0,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+                                                                                                           column=1,
+                                                                                                           padx=10,
+                                                                                                           pady=8)
+        ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{user_input_window()}') or getWorkDir()),
+                   style='primiary.Outline.TButton').grid(row=1,
+                                                          column=0,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
+                                                                                                            column=1,
+                                                                                                            padx=10,
+                                                                                                            pady=8)
+        ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
+                                                                                                              column=0,
+                                                                                                              padx=10,
+                                                                                                              pady=8)
+        tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
+        tabControl.pack(fill=BOTH, expand=YES)
+        tab11.pack(side=TOP, fill=BOTH, expand=YES)
+        tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        ttk.Button(tab21, text='解压', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
+            row=0, column=0,
+            padx=10,
+            pady=8)
+        ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smart_unpack),
+                   style='primiary.Outline.TButton').grid(row=0,
+                                                          column=1,
+                                                          padx=10,
+                                                          pady=8)
+        tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(zip_compress),
+                   style='primiary.Outline.TButton').grid(row=0,
+                                                          column=0,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0,
+                                                                                                            column=1,
+                                                                                                            padx=10,
+                                                                                                            pady=8)
+        ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(repack_ext),
+                   style='primiary.Outline.TButton').grid(row=1,
+                                                          column=0,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(repack_erofs),
+                   style='primiary.Outline.TButton').grid(row=1,
+                                                          column=1,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb),
+                   style='primiary.Outline.TButton').grid(
+            row=2,
+            column=0,
+            padx=10,
+            pady=8)
+        ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(repack_dtbo),
+                   style='primiary.Outline.TButton').grid(
+            row=2, column=1,
+            padx=10,
+            pady=8)
+        ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super),
+                   style='primiary.Outline.TButton').grid(
+            row=3,
+            column=0,
+            padx=10,
+            pady=8)
+        ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(repack_sparse_image),
+                   style='primiary.Outline.TButton').grid(
+            row=3, column=1, padx=10, pady=8)
+        ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repack_dat),
+                   style='primiary.Outline.TButton').grid(row=4,
+                                                          column=0,
+                                                          padx=10,
+                                                          pady=8)
+        ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compress_to_br),
+                   style='primiary.Outline.TButton').grid(row=4,
+                                                          column=1,
+                                                          padx=10,
+                                                          pady=8)
+        tab21.pack(side=TOP, fill=BOTH)
+        tab22.pack(side=TOP, fill=BOTH, expand=YES)
+        for t, c in (("检测文件格式", lambda: print(
+                f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
+                                                                 os.F_OK) else "Error : 文件不存在")), ('OZIP 解密',
+                                                                                                        lambda: ozip_decrypt.main(
+                                                                                                            filename) if os.access(
+                                                                                                            (
+                                                                                                                    filename := askopenfilename(
+                                                                                                                        title="解密ozip")),
+                                                                                                            os.F_OK) else print(
+                                                                                                            "Error : 文件不存在")),
+                     ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
+                     ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
+                                                        askopenfilename(title="选择fs_config文件")))):
+            ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
+                side=TOP, expand=NO,
+                fill=X, padx=8)
+        global text
+        text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
+        text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
+        Mystdout()
+        frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
-    def run_cmd():
-        cmd = usercmd.get()
-        if cmd:
-            cz(run_command, "busybox ash -c \"%s\"" % cmd)
-        usercmd.delete(0, 'end')
+        def run_cmd():
+            cmd = usercmd.get()
+            if cmd:
+                cz(run_command, "busybox ash -c \"%s\"" % cmd)
+            usercmd.delete(0, 'end')
 
-    usercmd = ttk.Entry(frame22, width=25)
-    usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
-    usercmd.bind('<Return>', lambda *x: run_cmd())
-    ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
-                                                                                            fill=X, padx=2,
-                                                                                            pady=2)
-    frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
-    frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
-    frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
-    frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
-    frame_bottom = ttk.Frame(root, relief=FLAT, borderwidth=0)
+        usercmd = ttk.Entry(frame22, width=25)
+        usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
+        usercmd.bind('<Return>', lambda *x: run_cmd())
+        ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+                                                                                                fill=X, padx=2,
+                                                                                                pady=2)
+        frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
+        frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
+        frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
+        frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
+        frame_bottom = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
-    def clean():
-        text.configure(state='normal')
-        text.delete(1.0, END)
-        text.configure(state='disabled')
+        def clean():
+            text.configure(state='normal')
+            text.delete(1.0, END)
+            text.configure(state='disabled')
 
-    ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    global statusbar
-    statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
-    statusbar.pack(side=RIGHT, fill=X, ipadx=12)
+        ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
+        global statusbar
+        statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
+        statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
-    def show_poem():
-        shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
-                                                                       "https": None}).json()
-        ttk.Label(frame_bottom, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
-                  font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
+        def show_poem():
+            shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
+                                                                           "https": None}).json()
+            ttk.Label(frame_bottom, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
+                      font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
-    cz(show_poem)
-    frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
-    cz(root.iconbitmap, "bin\\logo.ico")
-    root.mainloop()
+        cz(show_poem)
+        frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
+        cz(root.iconbitmap, "bin\\logo.ico")
+        root.mainloop()
 
 
 if __name__ == '__main__':
-    main()
+    App()
