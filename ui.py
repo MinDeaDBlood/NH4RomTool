@@ -936,7 +936,7 @@ class App:
                                                                                                             "Error : 文件不存在")),
                      ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
                      ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                                        askopenfilename(title="选择fs_config文件")))):
+                                                        askopenfilename(title="选择fs_config文件"))), ):
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
                 side=TOP, expand=NO,
                 fill=X, padx=8)
