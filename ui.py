@@ -263,8 +263,8 @@ class cartoon:
 
     def __enter__(self):
         self.state = False
-        self.statusthread = Thread(target=self.__run)
-        self.statusthread.start()
+        self.status_thread = Thread(target=self.__run)
+        self.status_thread.start()
 
     def __run(self):
         while True:
@@ -277,7 +277,7 @@ class cartoon:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.state = True
-        self.statusthread.join()
+        self.status_thread.join()
         statusbar['image'] = DEFAULTSTATUS
 
 
