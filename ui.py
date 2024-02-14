@@ -441,16 +441,15 @@ def __smartUnpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg解包")
+                                print("使用mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack 解锁")
-                                run_command("lpunpack " + filename + " " + unpackdir)
+                                print("使用 lpunpack")
+                                run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
-
-                        mkdir(WorkDir + "\\rawimg")
-                        run_command("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
+                        mkdir(WorkDir + os.sep +"rawimg")
+                        run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
                         print("sparse image 转换结束")
                     if filetype == "dat":
