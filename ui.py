@@ -157,8 +157,8 @@ class myStdout:
     @staticmethod
     def write(info):
         text.configure(state='normal')
-        if info not in ['\n', '\r\n', '\r'] and info:
-            text.insert(END, "[%s]%s\n" % (time.strftime('%H:%M:%S'), info))
+        if info.strip():
+            text.insert(END, f"[{time.strftime('%H:%M:%S')}]{info}\n")
         text.update()
         text.yview('end')
         text.configure(state='disabled')
