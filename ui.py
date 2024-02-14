@@ -1007,13 +1007,13 @@ def main():
     statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
-    def SHOWSHIJU():
+    def showshiju():
         shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                        "https": None}).json()
         ttk.Label(frame_bottom, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
-    cz(SHOWSHIJU)
+    cz(showshiju)
     frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     cz(root.iconbitmap, "bin\\logo.ico")
     root.mainloop()
