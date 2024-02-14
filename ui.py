@@ -282,9 +282,9 @@ class cartoon:
 
 
 def SelectWorkDir():
-    item_text = ['']
-    for item_ in table.selection():
-        item_text = table.item(item_, "values")
+    if not table.selection():
+        return
+    item_text = table.item(table.selection()[0], "values")
     if item_text[0]:
         global WorkDir
         WorkDir = item_text[0]
