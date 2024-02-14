@@ -24,8 +24,7 @@ def checkMagic(file):
     if os.access(file, os.F_OK):
         with open(file, "rb") as f:
             return b'AVB0' == f.read(4)
-    else:
-        print("File dose not exist!")
+    return
 
 
 def readVerifyFlag(file):
@@ -34,8 +33,7 @@ def readVerifyFlag(file):
             f.seek(123, 0)
             flag = f.read(1)
             return int(flag.hex())
-    else:
-        print("File does not exist!")
+    return
 
 
 def writeAvb(file, flag):
