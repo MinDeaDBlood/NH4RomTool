@@ -111,7 +111,7 @@ LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
 
-class set_utils:
+class SetUtils:
     def __init__(self, path):
         self.path = path
 
@@ -135,7 +135,7 @@ class set_utils:
             return ''
 
 
-settings = set_utils(setfile)
+settings = SetUtils(setfile)
 settings.load()
 style = Style(theme=settings.theme)
 root = style.master
