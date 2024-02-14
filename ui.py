@@ -81,7 +81,7 @@ def gettype(file) -> str:
                 buf = bytearray(file_.read(1))
             try:
                 file_.seek(-1, 1)
-            except:
+            except (Exception, BaseException):
                 return False
             buf += bytearray(file_.read(4))
         return buf[1:] == b'\x67\x44\x6c\x61'
