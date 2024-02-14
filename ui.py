@@ -995,7 +995,7 @@ if __name__ == '__main__':
     frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
     frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
-    framebotm = ttk.Frame(root, relief=FLAT, borderwidth=0)
+    frame_bottom = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
 
     def clean():
@@ -1004,19 +1004,19 @@ if __name__ == '__main__':
         text.configure(state='disabled')
 
 
-    ttk.Button(framebotm, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
-    statusbar = ttk.Label(framebotm, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
+    ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
+    statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
 
     def SHOWSHIJU():
         shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
                                                                        "https": None}).json()
-        ttk.Label(framebotm, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
+        ttk.Label(frame_bottom, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
 
     cz(SHOWSHIJU)
-    framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
+    frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     cz(root.iconbitmap, "bin\\logo.ico")
     root.mainloop()
