@@ -19,6 +19,9 @@ from ttkbootstrap.scrolled import ScrolledFrame
 
 from pyscripts import ozip_decrypt, imgextractor, sdat2img, fspatch, img2sdat
 
+LOCALDIR = os.getcwd()
+setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
+
 
 def checkMagic(file):
     if os.access(file, os.F_OK):
@@ -102,10 +105,6 @@ def gettype(file) -> str:
 
 def mkdir(path):
     os.makedirs(path) if not os.path.exists(path) else ...
-
-
-LOCALDIR = os.getcwd()
-setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
 
 class SetUtils:
