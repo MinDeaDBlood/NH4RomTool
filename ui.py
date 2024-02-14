@@ -149,24 +149,6 @@ DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 WorkDir = ''
 
 
-class Mystdout:
-    def __init__(self):
-        sys.stdout = self
-        sys.stderr = self
-
-    @staticmethod
-    def write(info):
-        text.configure(state='normal')
-        if info not in ['\r', '\n', '\r\n']:
-            text.insert(END, f"[{time.strftime('%H:%M:%S')}]{info}\n")
-        text.update()
-        text.yview('end')
-        text.configure(state='disabled')
-
-    def flush(self):
-        ...
-
-
 def run_command(cmd):
     if not os.path.exists(cmd.split()[0]):
         cmd = os.path.join(LOCALDIR, 'bin') + os.sep + cmd
@@ -807,6 +789,24 @@ def setting():
     area2.pack(fill=BOTH, padx=10, pady=10)
 
 
+class Mystdout:
+    def __init__(self, master):
+        sys.stdout = self
+        sys.stderr = self
+        self.master = master
+
+    def write(self, info):
+        self.master.configure(state='normal')
+        if info not in ['\r', '\n', '\r\n']:
+            self.master.insert(END, f"[{time.strftime('%H:%M:%S')}]{info}\n")
+        self.master.update()
+        self.master.yview('end')
+        self.master.configure(state='disabled')
+
+    def flush(self):
+        ...
+
+
 class App:
     def __init__(self):
         screenwidth = root.winfo_screenwidth()
@@ -951,10 +951,9 @@ class App:
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
                 side=TOP, expand=NO,
                 fill=X, padx=8)
-        global text
-        text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
-        text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
-        Mystdout()
+        self.text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
+        self.text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
+        Mystdout(self.text)
         frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
         def run_cmd():
@@ -976,9 +975,9 @@ class App:
         frame_bottom = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
         def clean():
-            text.configure(state='normal')
-            text.delete(1.0, END)
-            text.configure(state='disabled')
+            self.text.configure(state='normal')
+            self.text.delete(1.0, END)
+            self.text.configure(state='disabled')
 
         ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
         global statusbar
@@ -999,8 +998,8 @@ class App:
     def getWorkDir(self):
         [self.table.delete(i) for i in self.table.get_children()]
         [self.table.insert('', 'end', value=i) for i in
-                                                                      os.listdir(LOCALDIR)
-                                                                      if i.startswith('NH4')]
+         os.listdir(LOCALDIR)
+         if i.startswith('NH4')]
 
     def SelectWorkDir(self):
         if not self.table.selection():
