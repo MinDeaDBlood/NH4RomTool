@@ -133,7 +133,7 @@ class SetUtils:
 
 settings = SetUtils(setfile)
 settings.load()
-DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
+
 
 WorkDir = ''
 
@@ -239,10 +239,10 @@ class cartoon:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.state = True
         self.status_thread.join()
-        statusbar['image'] = DEFAULTSTATUS
+        statusbar['image'] = PhotoImage(file="bin\\processdone.png")
 
 
-def __ozipEncrypt():
+def ozipEncrypt():
     filename = askopenfilename(title="加密ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
@@ -320,7 +320,7 @@ def cz(func, *args):
     Thread(target=func, args=args, daemon=True).start()
 
 
-def __smart_unpack():
+def smart_unpack():
     with cartoon():
         filename = askopenfilename(title="选择解包的文件")
         if WorkDir:
@@ -572,7 +572,7 @@ def repack_sparse_image():
         print("请先选择工作目录")
 
 
-def __compress_to_br():
+def compress_to_br():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
         if not os.path.exists(img_file_path):
@@ -589,7 +589,7 @@ def __compress_to_br():
         print("请先选择工作目录")
 
 
-def __repack_dat():
+def repack_dat():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
         if not os.path.exists(img_file_path):
@@ -629,7 +629,7 @@ def __repack_dat():
         print("请先选择工作目录")
 
 
-def __repack_dtb():
+def repack_dtb():
     if WorkDir:
         filename = askopenfilename(title="选择dts文件，输出到dtb文件夹")
         if os.access(filename, os.F_OK):
@@ -645,7 +645,7 @@ def __repack_dtb():
         print("请先选择工作目录")
 
 
-def __repack_super():
+def repack_super():
     if WorkDir:
         packtype = StringVar(value='VAB')
         packsize = StringVar(value="9126805504")
@@ -867,7 +867,7 @@ class App:
             row=0, column=0,
             padx=10,
             pady=8)
-        ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smart_unpack),
+        ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(smart_unpack),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=1,
                                                           padx=10,
@@ -892,7 +892,7 @@ class App:
                                                           column=1,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb),
+        ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(repack_dtb),
                    style='primiary.Outline.TButton').grid(
             row=2,
             column=0,
@@ -903,7 +903,7 @@ class App:
             row=2, column=1,
             padx=10,
             pady=8)
-        ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super),
+        ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(repack_super),
                    style='primiary.Outline.TButton').grid(
             row=3,
             column=0,
@@ -912,12 +912,12 @@ class App:
         ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(repack_sparse_image),
                    style='primiary.Outline.TButton').grid(
             row=3, column=1, padx=10, pady=8)
-        ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repack_dat),
+        ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(repack_dat),
                    style='primiary.Outline.TButton').grid(row=4,
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(__compress_to_br),
+        ttk.Button(tab22, text='DAT->BR', width=10, command=lambda: cz(compress_to_br),
                    style='primiary.Outline.TButton').grid(row=4,
                                                           column=1,
                                                           padx=10,
@@ -934,7 +934,7 @@ class App:
                                                                                                                         title="解密ozip")),
                                                                                                             os.F_OK) else print(
                                                                                                             "Error : 文件不存在")),
-                     ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
+                     ('OZIP 加密', lambda: cz(ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
                      ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
                                                         askopenfilename(title="选择fs_config文件"))), ):
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
@@ -970,7 +970,7 @@ class App:
 
         ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
         global statusbar
-        statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
+        statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=PhotoImage(file="bin\\processdone.png"), bootstyle="info")
         statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
         def show_poem():
