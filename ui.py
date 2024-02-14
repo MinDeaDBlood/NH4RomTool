@@ -377,7 +377,7 @@ def cz(func, *args):
     Thread(target=func, args=args, daemon=True).start()
 
 
-def __smartUnpack():
+def __smart_unpack():
     with cartoon():
         filename = askopenfilename(title="选择解包的文件")
         if WorkDir:
@@ -902,7 +902,7 @@ def main():
         row=0, column=0,
         padx=10,
         pady=8)
-    ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smartUnpack),
+    ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(__smart_unpack),
                style='primiary.Outline.TButton').grid(row=0,
                                                       column=1,
                                                       padx=10,
