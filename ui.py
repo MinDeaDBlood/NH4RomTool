@@ -981,9 +981,8 @@ if __name__ == '__main__':
 
     def run_cmd():
         cmd = usercmd.get()
-        if not cmd:
-            return
-        cz(runcmd, "busybox ash -c \"%s\"" % cmd)
+        if cmd:
+            cz(runcmd, "busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
 
 
