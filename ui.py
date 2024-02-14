@@ -157,7 +157,7 @@ class Mystdout:
     @staticmethod
     def write(info):
         text.configure(state='normal')
-        if info.strip():
+        if info not in ['\r', '\n', '\r\n']:
             text.insert(END, f"[{time.strftime('%H:%M:%S')}]{info}\n")
         text.update()
         text.yview('end')
