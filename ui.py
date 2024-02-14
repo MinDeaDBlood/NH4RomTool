@@ -176,7 +176,10 @@ def run_command(cmd):
                                stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT)
         for i in iter(ret.stdout.readline, b""):
-            print(i.decode("utf-8", "ignore").strip())
+            try:
+                print(i.decode("utf-8").strip())
+            except (BaseException, Exception):
+                print(i.decode("gbk", 'ignore').strip())
     except subprocess.CalledProcessError as e:
         for i in iter(e.stdout.readline, b""):
             print(i)
