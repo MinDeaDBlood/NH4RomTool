@@ -275,10 +275,10 @@ def zip_file(file, dst_dir):
                 yield os.path.join(root, filename)
 
     os.chdir(dst_dir)
-    with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
+    with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip__:
         # 遍历写入文件
         for f in get_all_file_paths('.'):
-            zip.write(f)
+            zip__.write(f)
     os.chdir(LOCALDIR)
 
 
