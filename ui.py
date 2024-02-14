@@ -232,7 +232,8 @@ def change_theme(var):
 
 
 def getWorkDir():
-    [table.delete(i) for i in table.get_children()] or [table.insert('', 'end', value=i) for i in os.listdir(LOCALDIR) if i.startswith('NH4')]
+    [table.delete(i) for i in table.get_children()] or [table.insert('', 'end', value=i) for i in os.listdir(LOCALDIR)
+                                                        if i.startswith('NH4')]
 
 
 def clearWorkDir():
@@ -445,7 +446,7 @@ def __smartUnpack():
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
-                        mkdir(WorkDir + os.sep +"rawimg")
+                        mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
                         print("sparse image 转换结束")
@@ -489,8 +490,9 @@ def repackboot():
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
             os.chdir('ramdisk')
-            run_command("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
-                LOCALDIR + '/bin/cpio.exe').replace('\\', '/'))
+            run_command(
+                "busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
+                    LOCALDIR + '/bin/cpio.exe').replace('\\', '/'))
             os.chdir(directoryname)
             with open("comp", "r", encoding='utf-8') as compf:
                 comp = compf.read()
@@ -830,8 +832,7 @@ def setting():
     area2.pack(fill=BOTH, padx=10, pady=10)
 
 
-if __name__ == '__main__':
-    Mystdout()
+def main():
     screenwidth = root.winfo_screenwidth()
     screenheight = root.winfo_screenheight()
     root.geometry(
@@ -857,12 +858,12 @@ if __name__ == '__main__':
     tab2 = ttk.Frame(tabControl)
     tab3 = ttk.Frame(tabControl)
     tab33 = ScrolledFrame(tab3, autohide=True, width=220)
-    tab4 = ttk.Frame(tabControl)
     tabControl.add(tab1, text="项目")
     tabControl.add(tab2, text="打包解包")
     tabControl.add(tab3, text="其他")
     tab33.pack(side=LEFT, expand=YES, fill=BOTH)
     tab11 = ttk.Frame(tab1)
+    global table
     table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
     table.column('Workdir', width=100, anchor='center')
     table.heading('Workdir', text='项目')
@@ -925,7 +926,8 @@ if __name__ == '__main__':
                                                       column=1,
                                                       padx=10,
                                                       pady=8)
-    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='DTS2DTB', width=10, command=lambda: cz(__repack_dtb),
+               style='primiary.Outline.TButton').grid(
         row=2,
         column=0,
         padx=10,
@@ -934,7 +936,8 @@ if __name__ == '__main__':
         row=2, column=1,
         padx=10,
         pady=8)
-    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='SUPER', width=10, command=lambda: cz(__repack_super),
+               style='primiary.Outline.TButton').grid(
         row=3,
         column=0,
         padx=10,
@@ -970,17 +973,17 @@ if __name__ == '__main__':
         ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
             side=TOP, expand=NO,
             fill=X, padx=8)
+    global text
     text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
     text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
+    Mystdout()
     frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-
 
     def run_cmd():
         cmd = usercmd.get()
         if cmd:
             cz(run_command, "busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
-
 
     usercmd = ttk.Entry(frame22, width=25)
     usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
@@ -994,17 +997,15 @@ if __name__ == '__main__':
     frame22.pack(side=TOP, expand=NO, fill=BOTH, padx=5, pady=2)
     frame_bottom = ttk.Frame(root, relief=FLAT, borderwidth=0)
 
-
     def clean():
         text.configure(state='normal')
         text.delete(1.0, END)
         text.configure(state='disabled')
 
-
     ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
+    global statusbar
     statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=DEFAULTSTATUS, bootstyle="info")
     statusbar.pack(side=RIGHT, fill=X, ipadx=12)
-
 
     def SHOWSHIJU():
         shiju = requests_get("https://v1.jinrishici.com/all", proxies={"http": None,
@@ -1012,8 +1013,11 @@ if __name__ == '__main__':
         ttk.Label(frame_bottom, text="%s —— %s  《%s》" % (shiju['content'], shiju['author'], shiju['origin']),
                   font=('微软雅黑', 12)).pack(side=LEFT, padx=8)
 
-
     cz(SHOWSHIJU)
     frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
     cz(root.iconbitmap, "bin\\logo.ico")
     root.mainloop()
+
+
+if __name__ == '__main__':
+    main()
