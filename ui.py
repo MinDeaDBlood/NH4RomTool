@@ -807,19 +807,19 @@ class App:
         root.title("NH4RomTool")
         root.geometry(
             '{}x{}+{}+{}'.format(width, height, int((screenwidth - width) / 2), int((screenheight - height) / 2)))
-        menuBar = Menu(root)
-        root.config(menu=menuBar)
-        menu1 = Menu(menuBar, tearoff=False)
+        menu_bar = Menu(root)
+        root.config(menu=menu_bar)
+        menu1 = Menu(menu_bar, tearoff=False)
         menu1.add_command(label="设置", command=setting)
         menu1.add_command(label="关于", command=about)
         menu1.add_command(label="退出", command=sys.exit)
-        menuBar.add_cascade(label="菜单", menu=menu1)
-        menu2 = Menu(menuBar, tearoff=False)
+        menu_bar.add_cascade(label="菜单", menu=menu1)
+        menu2 = Menu(menu_bar, tearoff=False)
         menuItem = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
                     "cyborg", "darkly", "solar", "vapor", "superhero"]
         for item in menuItem:
             menu2.add_command(label=item, command=lambda n=item: change_theme(n))
-        menuBar.add_cascade(label="主题", menu=menu2)
+        menu_bar.add_cascade(label="主题", menu=menu2)
         frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
         frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
