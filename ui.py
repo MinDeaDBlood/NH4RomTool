@@ -266,7 +266,7 @@ class cartoon:
     def __run(self):
         while True:
             for i in range(33):
-                photo = PhotoImage(file=LOCALDIR + '\\bin\\processing.gif', format='gif -index %i' % i)
+                photo = PhotoImage(file='bin\\processing.gif', format='gif -index %i' % i)
                 statusbar['image'] = photo
                 time.sleep(1 / 18)
             if self.state:
