@@ -217,7 +217,6 @@ def clearWorkDir():
         else:
             print("清理成功, 正在刷新工作目录")
 
-
 class cartoon:
     def __init__(self):
         ...
@@ -239,7 +238,7 @@ class cartoon:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.state = True
         self.status_thread.join()
-        statusbar['image'] = PhotoImage(file="bin\\processdone.png")
+        statusbar['image'] = D
 
 
 def ozipEncrypt():
@@ -793,6 +792,8 @@ class Mystdout:
 class App:
     def __init__(self):
         root = Style(theme=settings.theme).master
+        global D
+        D = PhotoImage(file="bin\\processdone.png")
         screenwidth = root.winfo_screenwidth()
         screenheight = root.winfo_screenheight()
         width = 1240
@@ -970,7 +971,7 @@ class App:
 
         ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
         global statusbar
-        statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=PhotoImage(file="bin\\processdone.png"), bootstyle="info")
+        statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=D, bootstyle="info")
         statusbar.pack(side=RIGHT, fill=X, ipadx=12)
 
         def show_poem():
