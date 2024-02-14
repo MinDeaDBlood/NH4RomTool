@@ -246,7 +246,7 @@ def clearWorkDir():
         try:
             for i in os.listdir(WorkDir):
                 if os.path.isdir(os.path.join(WorkDir, i)):
-                    shutil.rmtree(os.getcwd() + os.sep + WorkDir)
+                    shutil.rmtree(LOCALDIR + os.sep + WorkDir)
                 if os.path.isfile(os.path.join(WorkDir, i)):
                     os.remove(os.path.join(WorkDir, i))
         except IOError:
@@ -329,14 +329,12 @@ def zip_file(file, dst_dir):
         for root, directories, files in os.walk(directory):
             for filename in files:
                 yield os.path.join(root, filename)
-
-    path = os.getcwd()
     os.chdir(dst_dir)
     with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip:
         # 遍历写入文件
         for f in get_all_file_paths('.'):
             zip.write(f)
-    os.chdir(path)
+    os.chdir(LOCALDIR)
 
 
 def zip_compress():
