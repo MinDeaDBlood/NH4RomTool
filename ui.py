@@ -547,7 +547,7 @@ def getdirsize(dir_):
     return size
 
 
-def __repackextimage():
+def repack_ext():
     if WorkDir:
         directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
@@ -580,7 +580,7 @@ def __repackextimage():
         print("请先选择工作目录")
 
 
-def __repackerofsimage():
+def repack_erofs():
     if WorkDir:
         directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
@@ -596,7 +596,7 @@ def __repackerofsimage():
         print("请先选择工作目录")
 
 
-def __repackDTBO():
+def repack_dtbo():
     if WorkDir:
         directoryname = askdirectory(title="选择dtbo文件夹")
         if not os.path.isdir(WorkDir + os.sep + "output"):
@@ -610,7 +610,7 @@ def __repackDTBO():
         print("请先选择工作目录")
 
 
-def __repackSparseImage():
+def repack_sparse_image():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
         if not os.path.exists(img_file_path):
@@ -916,12 +916,12 @@ def main():
     ttk.Button(tab22, text='BOOT', width=10, command=repackboot, style='primiary.Outline.TButton').grid(row=0, column=1,
                                                                                                         padx=10,
                                                                                                         pady=8)
-    ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(__repackextimage),
+    ttk.Button(tab22, text='EXT', width=10, command=lambda: cz(repack_ext),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=0,
                                                       padx=10,
                                                       pady=8)
-    ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(__repackerofsimage),
+    ttk.Button(tab22, text='EROFS', width=10, command=lambda: cz(repack_erofs),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=1,
                                                       padx=10,
@@ -932,7 +932,7 @@ def main():
         column=0,
         padx=10,
         pady=8)
-    ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(__repackDTBO), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab22, text='DTBO', width=10, command=lambda: cz(repack_dtbo), style='primiary.Outline.TButton').grid(
         row=2, column=1,
         padx=10,
         pady=8)
@@ -942,7 +942,7 @@ def main():
         column=0,
         padx=10,
         pady=8)
-    ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(__repackSparseImage),
+    ttk.Button(tab22, text='EXT->SIMG', width=10, command=lambda: cz(repack_sparse_image),
                style='primiary.Outline.TButton').grid(
         row=3, column=1, padx=10, pady=8)
     ttk.Button(tab22, text='IMG->DAT', width=10, command=lambda: cz(__repack_dat),
