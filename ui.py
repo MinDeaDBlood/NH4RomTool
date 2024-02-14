@@ -231,11 +231,6 @@ def change_theme(var):
     settings.change('theme', var)
 
 
-def getWorkDir():
-    [table.delete(i) for i in table.get_children()] or [table.insert('', 'end', value=i) for i in os.listdir(LOCALDIR)
-                                                        if i.startswith('NH4')]
-
-
 def clearWorkDir():
     if not WorkDir:
         print("当前未选择任何目录")
@@ -277,25 +272,6 @@ class cartoon:
         self.state = True
         self.status_thread.join()
         statusbar['image'] = DEFAULTSTATUS
-
-
-def SelectWorkDir():
-    if not table.selection():
-        return
-    item_text = table.item(table.selection()[0], "values")
-    if item_text[0]:
-        global WorkDir
-        WorkDir = item_text[0]
-        print("选择工作目录为: %s" % WorkDir)
-
-
-def rmWorkDir():
-    if WorkDir:
-        print("删除目录: %s" % WorkDir)
-        shutil.rmtree(WorkDir)
-    else:
-        print("Error : 要删除的文件夹不存在")
-    getWorkDir()
 
 
 def __ozipEncrypt():
@@ -863,13 +839,12 @@ class App:
         tabControl.add(tab3, text="其他")
         tab33.pack(side=LEFT, expand=YES, fill=BOTH)
         tab11 = ttk.Frame(tab1)
-        global table
-        table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
-        table.column('Workdir', width=100, anchor='center')
-        table.heading('Workdir', text='项目')
-        table.pack(side=TOP, fill=BOTH, expand=YES)
-        table.bind('<ButtonRelease-1>', lambda *x_: SelectWorkDir())
-        getWorkDir()
+        self.table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
+        self.table.column('Workdir', width=100, anchor='center')
+        self.table.heading('Workdir', text='项目')
+        self.table.pack(side=TOP, fill=BOTH, expand=YES)
+        self.table.bind('<ButtonRelease-1>', lambda *x_: self.SelectWorkDir())
+        self.getWorkDir()
         tab12 = ttk.Frame(tab1)
         ttk.Button(tab12, text='确认', width=10,
                    command=lambda: tabControl.select(tab2) if WorkDir else print("请选择项目"),
@@ -877,19 +852,20 @@ class App:
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='删除', width=10, command=rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                           column=1,
-                                                                                                           padx=10,
-                                                                                                           pady=8)
-        ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{user_input_window()}') or getWorkDir()),
+        ttk.Button(tab12, text='删除', width=10, command=self.rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
+                                                                                                                column=1,
+                                                                                                                padx=10,
+                                                                                                                pady=8)
+        ttk.Button(tab12, text='新建', width=10,
+                   command=lambda: (mkdir(f'NH4_{user_input_window()}') or self.getWorkDir()),
                    style='primiary.Outline.TButton').grid(row=1,
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='刷新', width=10, command=getWorkDir, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                            column=1,
-                                                                                                            padx=10,
-                                                                                                            pady=8)
+        ttk.Button(tab12, text='刷新', width=10, command=self.getWorkDir, style='primiary.Outline.TButton').grid(row=1,
+                                                                                                                 column=1,
+                                                                                                                 padx=10,
+                                                                                                                 pady=8)
         ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
                                                                                                               column=0,
                                                                                                               padx=10,
@@ -1019,6 +995,29 @@ class App:
         frame_bottom.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
         cz(root.iconbitmap, "bin\\logo.ico")
         root.mainloop()
+
+    def getWorkDir(self):
+        [self.table.delete(i) for i in self.table.get_children()]
+        [self.table.insert('', 'end', value=i) for i in
+                                                                      os.listdir(LOCALDIR)
+                                                                      if i.startswith('NH4')]
+
+    def SelectWorkDir(self):
+        if not self.table.selection():
+            return
+        item_text = self.table.item(self.table.selection()[0], "values")
+        if item_text[0]:
+            global WorkDir
+            WorkDir = item_text[0]
+            print("选择工作目录为: %s" % WorkDir)
+
+    def rmWorkDir(self):
+        if WorkDir:
+            print("删除目录: %s" % WorkDir)
+            shutil.rmtree(WorkDir)
+        else:
+            print("Error : 要删除的文件夹不存在")
+        self.getWorkDir()
 
 
 if __name__ == '__main__':
