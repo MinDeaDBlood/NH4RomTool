@@ -231,7 +231,7 @@ class cartoon:
             for i in range(33):
                 photo = PhotoImage(file='bin\\processing.gif', format='gif -index %i' % i)
                 statusbar['image'] = photo
-                time.sleep(1 / 18)
+                time.sleep(0.055)
             if self.state:
                 break
 
