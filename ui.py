@@ -229,8 +229,7 @@ def change_theme(var):
 
 
 def getWorkDir():
-    [table.delete(i) for i in table.get_children()]
-    [table.insert('', 'end', value=i) for i in os.listdir(LOCALDIR) if i.startswith('NH4')]
+    [table.delete(i) for i in table.get_children()] or [table.insert('', 'end', value=i) for i in os.listdir(LOCALDIR) if i.startswith('NH4')]
 
 
 def clearWorkDir():
