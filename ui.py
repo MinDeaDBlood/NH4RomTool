@@ -149,7 +149,7 @@ DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 WorkDir = ''
 
 
-class myStdout:
+class Mystdout:
     def __init__(self):
         sys.stdout = self
         sys.stderr = self
@@ -167,7 +167,7 @@ class myStdout:
         ...
 
 
-def runcmd(cmd):
+def run_command(cmd):
     if not os.path.exists(cmd.split()[0]):
         cmd = os.path.join(LOCALDIR, 'bin') + os.sep + cmd
     try:
@@ -194,7 +194,7 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindSolachar Copyright(R) Apache 2.0 LICENSE',
+              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindScholar Copyright(R) Apache 2.0 LICENSE',
               font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
 
@@ -202,7 +202,7 @@ def about():
     root2.mainloop()
 
 
-def userInputWindow(title='输入文本'):
+def user_input_window(title='输入文本'):
     input_window = Toplevel()
     cur_width = 400
     cur_hight = 120
@@ -304,12 +304,12 @@ def __ozipEncrypt():
     filename = askopenfilename(title="加密ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
-            runcmd("zip2ozip " + filename)
+            run_command("zip2ozip " + filename)
     else:
         print("Error : 文件不存在")
 
 
-def __unzipfile():
+def unzip():
     if WorkDir:
         if os.access(WorkDir + os.sep + "rom", os.F_OK):
             shutil.rmtree(WorkDir + os.sep + "rom")
@@ -341,19 +341,19 @@ def zip_file(file, dst_dir):
     os.chdir(path)
 
 
-def __zipcompressfile():
+def zip_compress():
     print("输入生成的文件名")
-    inputvar = userInputWindow()
+    input_var = user_input_window()
     if WorkDir:
-        print("正在压缩 : " + inputvar + ".zip")
+        print("正在压缩 : " + input_var + ".zip")
         with cartoon():
-            cz(zip_file, inputvar + ".zip", WorkDir + os.sep + "rom")
+            cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
         print("压缩完成")
     else:
         print("Error : 请先选择工作目录")
 
 
-def patchvbmeta():
+def patch_vbmeta():
     filename = askopenfilename(title="选择vbmeta文件")
     if os.access(filename, os.F_OK):
         if checkMagic(filename):
@@ -406,7 +406,7 @@ def __smartUnpack():
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
                         print("正在解包[erofs]: " + filename)
-                        cz(runcmd, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
+                        cz(run_command, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
@@ -418,7 +418,7 @@ def __smartUnpack():
                             mkdir(unpackdir)
                             if i == "payload":
                                 print("正在解包payload")
-                                t = Thread(target=runcmd, args=[
+                                t = Thread(target=run_command, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
@@ -427,30 +427,30 @@ def __smartUnpack():
                                 print("正在解包boot")
                                 os.chdir(unpackdir)
                                 shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
-                                runcmd("magiskboot unpack -h %s" % filename)
+                                run_command("magiskboot unpack -h %s" % filename)
                                 if os.path.exists('ramdisk.cpio'):
                                     comp = gettype("ramdisk.cpio")
                                     print("Ramdisk is %s" % comp)
                                     with open("comp", "w") as f:
                                         f.write(comp)
                                     if comp != "unknow" and comp != 'cpio':
-                                        runcmd("magiskboot decompress ramdisk.cpio ramdisk.raw")
+                                        run_command("magiskboot decompress ramdisk.cpio ramdisk.raw")
                                         os.remove('ramdisk.cpio')
                                         os.rename('ramdisk.raw', 'ramdisk.cpio')
                                     os.makedirs('ramdisk')
-                                    runcmd("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
+                                    run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
                                 print("使用mkdtboimg解包")
-                                runcmd("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
+                                run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
                                 print("使用 lpunpack 解锁")
-                                runcmd("lpunpack " + filename + " " + unpackdir)
+                                run_command("lpunpack " + filename + " " + unpackdir)
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
 
                         mkdir(WorkDir + "\\rawimg")
-                        runcmd("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
+                        run_command("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
                         print("sparse image 转换结束")
                     if filetype == "dat":
@@ -468,14 +468,14 @@ def __smartUnpack():
                         print("检测到br格式，使用brotli解压")
                         if os.access(filename, os.F_OK):
                             with cartoon():
-                                runcmd(f"brotli -dj {filename}")
+                                run_command(f"brotli -dj {filename}")
                             print("已解压br文件")
                         else:
                             print("文件不可访问！")
                     if filetype == "dtb":
                         print("使用device tree compiler 转换反编译dtb --> dts")
                         dtname = os.path.basename(filename)
-                        runcmd("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
+                        run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
                         print("反编译dtb完成")
                     if filetype in ["zip"]:
                         print("请使用解压功能解压zip")
@@ -493,14 +493,14 @@ def repackboot():
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
             os.chdir('ramdisk')
-            runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
+            run_command("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
                 LOCALDIR + '/bin/cpio.exe').replace('\\', '/'))
             os.chdir(directoryname)
             with open("comp", "r", encoding='utf-8') as compf:
                 comp = compf.read()
             print("Compressing:%s" % comp)
             if comp != 'cpio':
-                runcmd("magiskboot compress=%s ramdisk-new.cpio" % comp)
+                run_command("magiskboot compress=%s ramdisk-new.cpio" % comp)
                 if os.path.exists('ramdisk.cpio'):
                     os.remove('ramdisk.cpio')
                 os.rename("ramdisk-new.cpio.%s" % comp.split('_')[0], "ramdisk.cpio")
@@ -508,7 +508,7 @@ def repackboot():
                 if os.path.exists('ramdisk.cpio'):
                     os.remove('ramdisk.cpio')
                 os.rename("ramdisk-new.cpio", "ramdisk.cpio")
-        runcmd("magiskboot repack boot.img")
+        run_command("magiskboot repack boot.img")
         if os.path.exists('boot.img'):
             os.remove('boot.img')
         shutil.copyfile("new-boot.img", os.path.join(LOCALDIR, WorkDir, 'boot.img'))
@@ -574,9 +574,9 @@ def __repackextimage():
             print("开始打包EXT镜像")
             with cartoon():
                 print(cmd)
-                runcmd(cmd)
+                run_command(cmd)
                 cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{part_name} {WorkDir}/output/{part_name}.img"
-                runcmd(cmd)
+                run_command(cmd)
                 print("打包结束")
     else:
         print("请先选择工作目录")
@@ -593,7 +593,7 @@ def __repackerofsimage():
                 WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
                 settings.erofstype, os.path.basename(directoryname), fsconfig_path, filecontexts_path)
             print(cmd)
-            runcmd(cmd)
+            run_command(cmd)
     else:
         print("请先选择工作目录")
 
@@ -606,7 +606,7 @@ def __repackDTBO():
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
             cmd += "%s\\dtb.%s " % (directoryname, i)
-        runcmd(cmd)
+        run_command(cmd)
         print("打包结束")
     else:
         print("请先选择工作目录")
@@ -625,7 +625,7 @@ def __repackSparseImage():
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
                     img_file_path, WorkDir, os.path.basename(img_file_path.replace('.img', '')))
-                runcmd(cmd)
+                run_command(cmd)
                 print("转换结束")
     else:
         print("请先选择工作目录")
@@ -642,7 +642,7 @@ def __compressToBr():
         else:
             print("开始转换")
             with cartoon():
-                cz(runcmd, "brotli.exe -q 6 " + img_file_path)
+                cz(run_command, "brotli.exe -q 6 " + img_file_path)
             print("转换完毕，脱出到相同文件夹")
     else:
         print("请先选择工作目录")
@@ -658,7 +658,7 @@ def __repackDat():
             return
         else:
             print("警告: 只接受大版本输入，例如 7.1.2 请直接输入 7.1！")
-            input_version = float(userInputWindow("输入Android版本"))
+            input_version = float(user_input_window("输入Android版本"))
             current_version = 0
             if input_version == 5.0:  # Android 5
                 print("已选择: Android 5.0")
@@ -673,7 +673,7 @@ def __repackDat():
                 print("已选择: Android 7.X+")
                 current_version = 4
             print("提示: 输入分区名 (例如 system、vendor、odm)")
-            partition_name = userInputWindow("输入分区名")
+            partition_name = user_input_window("输入分区名")
             if current_version == 0:
                 print("Android 版本输入错误，请查看提示重新输入！")
                 return
@@ -695,7 +695,7 @@ def __repackdtb():
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
                 mkdir(WorkDir + os.sep + "dtb")
             with cartoon():
-                runcmd("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
+                run_command("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
                     filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
             print("编译为dtb完成")
         else:
@@ -778,7 +778,7 @@ def __repackSuper():
                             os.path.basename(i).replace('.img', ''), os.path.getsize(os.path.join(superdir, i)),
                             packgroup.get(), os.path.basename(i).replace('.img', ''), os.path.join(superdir, i))
             cmd += '--out %s' % (os.path.join(WorkDir, 'super.img'))
-            runcmd(cmd)
+            run_command(cmd)
             print("打包成功") if os.path.join(WorkDir, 'super.img') else print("打包失败")
 
     else:
@@ -835,7 +835,7 @@ def setting():
 
 
 if __name__ == '__main__':
-    myStdout()
+    Mystdout()
     screenwidth = root.winfo_screenwidth()
     screenheight = root.winfo_screenheight()
     root.geometry(
@@ -884,7 +884,7 @@ if __name__ == '__main__':
                                                                                                        column=1,
                                                                                                        padx=10,
                                                                                                        pady=8)
-    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{userInputWindow()}') or getWorkDir()),
+    ttk.Button(tab12, text='新建', width=10, command=lambda: (mkdir(f'NH4_{user_input_window()}') or getWorkDir()),
                style='primiary.Outline.TButton').grid(row=1,
                                                       column=0,
                                                       padx=10,
@@ -901,7 +901,7 @@ if __name__ == '__main__':
     tabControl.pack(fill=BOTH, expand=YES)
     tab11.pack(side=TOP, fill=BOTH, expand=YES)
     tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab21, text='解压', width=10, command=lambda: cz(__unzipfile), style='primiary.Outline.TButton').grid(
+    ttk.Button(tab21, text='解压', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
         row=0, column=0,
         padx=10,
         pady=8)
@@ -911,7 +911,7 @@ if __name__ == '__main__':
                                                       padx=10,
                                                       pady=8)
     tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-    ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(__zipcompressfile),
+    ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(zip_compress),
                style='primiary.Outline.TButton').grid(row=0,
                                                       column=0,
                                                       padx=10,
@@ -968,7 +968,7 @@ if __name__ == '__main__':
                                                                                                                     title="解密ozip")),
                                                                                                         os.F_OK) else print(
                                                                                                         "Error : 文件不存在")),
-                 ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patchvbmeta),
+                 ('OZIP 加密', lambda: cz(__ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
                  ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
                                                     askopenfilename(title="选择fs_config文件")))):
         ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
@@ -982,7 +982,7 @@ if __name__ == '__main__':
     def run_cmd():
         cmd = usercmd.get()
         if cmd:
-            cz(runcmd, "busybox ash -c \"%s\"" % cmd)
+            cz(run_command, "busybox ash -c \"%s\"" % cmd)
         usercmd.delete(0, 'end')
 
 
