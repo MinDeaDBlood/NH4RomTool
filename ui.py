@@ -141,7 +141,8 @@ style = Style(theme=settings.theme)
 root = style.master
 width = 1240
 height = 600
-root.geometry("%sx%s" % (width, height))
+if os.name != 'nt':
+    root.geometry("%sx%s" % (width, height))
 root.title("NH4RomTool")
 DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
