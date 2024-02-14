@@ -143,7 +143,6 @@ width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
 root.title("NH4RomTool")
-LOGOIMG = PhotoImage(file="bin\\logo.png")
 DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
