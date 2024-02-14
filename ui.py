@@ -143,8 +143,8 @@ width = 1240
 height = 600
 root.geometry("%sx%s" % (width, height))
 root.title("NH4RomTool")
-LOGOIMG = PhotoImage(file="bin/logo.png")
-DEFAULTSTATUS = PhotoImage(file="bin/processdone.png")
+LOGOIMG = PhotoImage(file="bin\\logo.png")
+DEFAULTSTATUS = PhotoImage(file="bin\\processdone.png")
 
 WorkDir = ''
 
@@ -269,7 +269,7 @@ class cartoon:
     def __run(self):
         while True:
             for i in range(33):  # 33是图片帧数
-                photo = PhotoImage(file=LOCALDIR + '/bin/processing.gif', format='gif -index %i' % i)
+                photo = PhotoImage(file=LOCALDIR + '\\bin\\processing.gif', format='gif -index %i' % i)
                 statusbar['image'] = photo
                 time.sleep(1 / 18)
             if self.state:
@@ -419,7 +419,7 @@ def __smartUnpack():
                             if i == "payload":
                                 print("正在解包payload")
                                 t = Thread(target=runcmd, args=[
-                                    "payload-dumper-go.exe -o %s/payload %s" % (WorkDir, filename)],
+                                    "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
                                 t.join()
@@ -442,15 +442,15 @@ def __smartUnpack():
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
                                 print("使用mkdtboimg解包")
-                                runcmd("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "/dtb")
+                                runcmd("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
                                 print("使用 lpunpack 解锁")
                                 runcmd("lpunpack " + filename + " " + unpackdir)
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
 
-                        mkdir(WorkDir + "/rawimg")
-                        runcmd("simg2img " + filename + " " + WorkDir + "/rawimg/" + os.path.basename(
+                        mkdir(WorkDir + "\\rawimg")
+                        runcmd("simg2img " + filename + " " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
                         print("sparse image 转换结束")
                     if filetype == "dat":
@@ -494,7 +494,7 @@ def repackboot():
         if os.path.exists('ramdisk'):
             os.chdir('ramdisk')
             runcmd("busybox ash -c \"find | sed 1d | %s -H newc -R 0:0 -o -F ../ramdisk-new.cpio\"" % os.path.realpath(
-                LOCALDIR + '/bin/cpio.exe').replace('/', '/'))
+                LOCALDIR + '/bin/cpio.exe').replace('\\', '/'))
             os.chdir(directoryname)
             with open("comp", "r", encoding='utf-8') as compf:
                 comp = compf.read()
@@ -551,7 +551,7 @@ def getdirsize(dir_):
 
 def __repackextimage():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如:./NH4_t/vendor/vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
@@ -584,13 +584,13 @@ def __repackextimage():
 
 def __repackerofsimage():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如 : ./NH4_test/vendor/vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             mkdir(WorkDir + os.sep + 'output')
             fspatch.main(directoryname, fsconfig_path)
             cmd = "mkfs.erofs.exe %s/output/%s.img %s -z\"%s\" -T\"1230768000\" --mount-point=/%s --fs-config-file=%s --file-contexts=%s" % (
-                WorkDir, os.path.basename(directoryname), directoryname.replace("/", "/"),
+                WorkDir, os.path.basename(directoryname), directoryname.replace("\\", "/"),
                 settings.erofstype, os.path.basename(directoryname), fsconfig_path, filecontexts_path)
             print(cmd)
             runcmd(cmd)
@@ -603,9 +603,9 @@ def __repackDTBO():
         directoryname = askdirectory(title="选择dtbo文件夹")
         if not os.path.isdir(WorkDir + os.sep + "output"):
             mkdir(WorkDir + os.sep + "output")
-        cmd = "mkdtboimg.exe create %s/output/dtbo.img " % WorkDir
+        cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
-            cmd += "%s/dtb.%s " % (directoryname, i)
+            cmd += "%s\\dtb.%s " % (directoryname, i)
         runcmd(cmd)
         print("打包结束")
     else:
@@ -695,7 +695,7 @@ def __repackdtb():
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
                 mkdir(WorkDir + os.sep + "dtb")
             with cartoon():
-                runcmd("dtc -I dts -O dtb %s -o %s/dtb/%s.dtb" % (
+                runcmd("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
                     filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
             print("编译为dtb完成")
         else:
@@ -1019,5 +1019,5 @@ if __name__ == '__main__':
 
     cz(SHOWSHIJU)
     framebotm.pack(side=BOTTOM, expand=NO, fill=X, padx=8, pady=12)
-    cz(root.iconbitmap, "bin/logo.ico")
+    cz(root.iconbitmap, "bin\\logo.ico")
     root.mainloop()
