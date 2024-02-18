@@ -23,14 +23,14 @@ LOCALDIR = os.getcwd()
 setfile = LOCALDIR + os.sep + 'bin' + os.sep + "config.json"
 
 
-def checkMagic(file):
+def check_magic(file):
     if os.access(file, os.F_OK):
         with open(file, "rb") as f:
             return b'AVB0' == f.read(4)
     return
 
 
-def readVerifyFlag(file):
+def read_verify_flag(file):
     if os.access(file, os.F_OK):
         with open(file, "rb") as f:
             f.seek(123, 0)
@@ -39,7 +39,7 @@ def readVerifyFlag(file):
     return
 
 
-def writeAvb(file, flag):
+def write_avb(file, flag):
     if os.access(file, os.F_OK):
         with open(file, "rb+") as f:
             f.seek(123, 0)
@@ -134,7 +134,6 @@ class SetUtils:
 settings = SetUtils(setfile)
 settings.load()
 
-
 WorkDir = ''
 
 
@@ -199,7 +198,7 @@ def change_theme(var):
     settings.change('theme', var)
 
 
-def clearWorkDir():
+def clear_work_dir():
     if not WorkDir:
         print("当前未选择任何目录")
     else:
@@ -216,6 +215,7 @@ def clearWorkDir():
             print("清理失败, 请检查是否有程序正在占用它...?")
         else:
             print("清理成功, 正在刷新工作目录")
+
 
 class cartoon:
     def __init__(self):
@@ -241,7 +241,7 @@ class cartoon:
         statusbar['image'] = D
 
 
-def ozipEncrypt():
+def ozip_encrypt():
     filename = askopenfilename(title="加密ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
@@ -277,7 +277,7 @@ def zip_file(file, dst_dir):
     with zipfile.ZipFile(os.path.abspath(file), 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zip__:
         # 遍历写入文件
         for f in get_all_file_paths('.'):
-            zip__.write(f)
+            zip__.write(str(f))
     os.chdir(LOCALDIR)
 
 
@@ -296,17 +296,17 @@ def zip_compress():
 def patch_vbmeta():
     filename = askopenfilename(title="选择vbmeta文件")
     if os.access(filename, os.F_OK):
-        if checkMagic(filename):
-            flag = readVerifyFlag(filename)
+        if check_magic(filename):
+            flag = read_verify_flag(filename)
             if flag == 0:
                 print("检测到AVB为打开状态，正在关闭...")
-                writeAvb(filename, b'\x02')
+                write_avb(filename, b'\x02')
             elif flag == 1:
                 print("检测到仅关闭了DM校验，正在关闭AVB...")
-                writeAvb(filename, b'\x02')
+                write_avb(filename, b'\x02')
             elif flag == 2:
                 print("检测AVB校验已关闭，正在开启...")
-                writeAvb(filename, b'\x00')
+                write_avb(filename, b'\x00')
             else:
                 print("未知错误")
         else:
@@ -812,7 +812,7 @@ class App:
         menu_bar.add_cascade(label="菜单", menu=menu1)
         menu2 = Menu(menu_bar, tearoff=False)
         menu_item = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
-                    "cyborg", "darkly", "solar", "vapor", "superhero"]
+                     "cyborg", "darkly", "solar", "vapor", "superhero"]
         for item in menu_item:
             menu2.add_command(label=item, command=lambda n=item: change_theme(n))
         menu_bar.add_cascade(label="主题", menu=menu2)
@@ -833,8 +833,8 @@ class App:
         self.table.column('Workdir', width=100, anchor='center')
         self.table.heading('Workdir', text='项目')
         self.table.pack(side=TOP, fill=BOTH, expand=YES)
-        self.table.bind('<ButtonRelease-1>', lambda *x_: self.SelectWorkDir())
-        self.getWorkDir()
+        self.table.bind('<ButtonRelease-1>', lambda *x_: self.select_work_dir())
+        self.get_work_dir()
         tab12 = ttk.Frame(tab1)
         ttk.Button(tab12, text='确认', width=10,
                    command=lambda: tab_control.select(tab2) if WorkDir else print("请选择项目"),
@@ -842,24 +842,24 @@ class App:
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='删除', width=10, command=self.rmWorkDir, style='primiary.Outline.TButton').grid(row=0,
-                                                                                                                column=1,
-                                                                                                                padx=10,
-                                                                                                                pady=8)
+        ttk.Button(tab12, text='删除', width=10, command=self.rm_work_dir, style='primiary.Outline.TButton').grid(row=0,
+                                                                                                                  column=1,
+                                                                                                                  padx=10,
+                                                                                                                  pady=8)
         ttk.Button(tab12, text='新建', width=10,
-                   command=lambda: (mkdir(f'NH4_{user_input_window()}') or self.getWorkDir()),
+                   command=lambda: (mkdir(f'NH4_{user_input_window()}') or self.get_work_dir()),
                    style='primiary.Outline.TButton').grid(row=1,
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='刷新', width=10, command=self.getWorkDir, style='primiary.Outline.TButton').grid(row=1,
-                                                                                                                 column=1,
-                                                                                                                 padx=10,
-                                                                                                                 pady=8)
-        ttk.Button(tab12, text='清理', width=10, command=clearWorkDir, style='primiary.Outline.TButton').grid(row=2,
-                                                                                                              column=0,
-                                                                                                              padx=10,
-                                                                                                              pady=8)
+        ttk.Button(tab12, text='刷新', width=10, command=self.get_work_dir, style='primiary.Outline.TButton').grid(row=1,
+                                                                                                                   column=1,
+                                                                                                                   padx=10,
+                                                                                                                   pady=8)
+        ttk.Button(tab12, text='清理', width=10, command=clear_work_dir, style='primiary.Outline.TButton').grid(row=2,
+                                                                                                                column=0,
+                                                                                                                padx=10,
+                                                                                                                pady=8)
         tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
         tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
@@ -935,9 +935,9 @@ class App:
                                                                                                                         title="解密ozip")),
                                                                                                             os.F_OK) else print(
                                                                                                             "Error : 文件不存在")),
-                     ('OZIP 加密', lambda: cz(ozipEncrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
+                     ('OZIP 加密', lambda: cz(ozip_encrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
                      ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                                        askopenfilename(title="选择fs_config文件"))), ):
+                                                        askopenfilename(title="选择fs_config文件"))),):
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
                 side=TOP, expand=NO,
                 fill=X, padx=8)
@@ -985,13 +985,13 @@ class App:
         cz(root.iconbitmap, "bin\\logo.ico")
         root.mainloop()
 
-    def getWorkDir(self):
+    def get_work_dir(self):
         [self.table.delete(i) for i in self.table.get_children()]
         [self.table.insert('', 'end', value=i) for i in
          os.listdir(LOCALDIR)
          if i.startswith('NH4')]
 
-    def SelectWorkDir(self):
+    def select_work_dir(self):
         if not self.table.selection():
             return
         item_text = self.table.item(self.table.selection()[0], "values")
@@ -1000,13 +1000,13 @@ class App:
             WorkDir = item_text[0]
             print("选择工作目录为: %s" % WorkDir)
 
-    def rmWorkDir(self):
+    def rm_work_dir(self):
         if WorkDir:
             print("删除目录: %s" % WorkDir)
             shutil.rmtree(WorkDir)
         else:
             print("Error : 要删除的文件夹不存在")
-        self.getWorkDir()
+        self.get_work_dir()
 
 
 if __name__ == '__main__':
