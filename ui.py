@@ -998,11 +998,11 @@ class App:
         if item_text[0]:
             global WorkDir
             WorkDir = item_text[0]
-            print("选择工作目录为: %s" % WorkDir)
+            print(f"选择工作目录为: {WorkDir}")
 
     def rm_work_dir(self):
         if WorkDir:
-            print("删除目录: %s" % WorkDir)
+            print(f"删除目录: {WorkDir}")
             shutil.rmtree(WorkDir)
         else:
             print("Error : 要删除的文件夹不存在")
