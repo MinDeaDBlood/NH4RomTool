@@ -245,7 +245,7 @@ def ozip_encrypt():
     filename = askopenfilename(title="加密ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
-            run_command("zip2ozip " + filename)
+            run_command(f"zip2ozip {filename}")
     else:
         print("Error : 文件不存在")
 
@@ -950,7 +950,7 @@ class App:
         def run_cmd():
             cmd = usercmd.get()
             if cmd:
-                cz(run_command, "busybox ash -c \"%s\"" % cmd)
+                cz(run_command, f'busybox ash -c "{cmd}"')
             usercmd.delete(0, 'end')
 
         usercmd = ttk.Entry(frame22, width=25)
