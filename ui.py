@@ -193,7 +193,7 @@ def user_input_window(title='输入文本'):
 
 
 def change_theme(var):
-    print("设置主题为 : " + var)
+    print(f"设置主题为 : {var}")
     Style(theme=var).theme_use()
     settings.change('theme', var)
 
@@ -956,7 +956,8 @@ class App:
         usercmd = ttk.Entry(frame22, width=25)
         usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
         usercmd.bind('<Return>', lambda *x: run_cmd())
-        ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO, fill=X, padx=2, pady=2)
+        ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+                                                                                                fill=X, padx=2, pady=2)
         frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
         frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
         frame2.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
