@@ -7,14 +7,14 @@ import sys
 import time
 import zipfile
 from threading import Thread
-from tkinter import *
+from tkinter import PhotoImage, Menu, Toplevel, StringVar, BooleanVar, IntVar
+from tkinter.ttk import Button, Entry, Frame, Checkbutton
 from tkinter import scrolledtext, ttk
-from tkinter.filedialog import *
+from tkinter.filedialog import askopenfilename, askdirectory
 from webbrowser import open as open_url
-
 from requests import get as requests_get
 from ttkbootstrap import Style
-from ttkbootstrap.constants import *
+from ttkbootstrap.constants import GROOVE, SUNKEN, BOTTOM, FLAT, NO, TOP, YES, LEFT, X, BOTH, END,E,SOLID, CENTER, RIGHT
 from ttkbootstrap.scrolled import ScrolledFrame
 
 from pyscripts import ozip_decrypt, imgextractor, sdat2img, fspatch, img2sdat
