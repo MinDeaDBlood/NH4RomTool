@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import subprocess
-import sys
+import sys            
 import time
 import zipfile
 from threading import Thread
@@ -259,7 +259,7 @@ def unzip():
             print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
-                    filename) else print('Это не zip')
+                    filename) else print('This is not zip')
             print("Извлечение завершено")
         else:
             print("Error : Файл не существует")
@@ -312,7 +312,7 @@ def patch_vbmeta():
         else:
             print("文件并非vbmeta文件")
     else:
-        print("文件不存在")
+        print("Файл не существует")
 
 
 def cz(func, *args):
@@ -421,13 +421,13 @@ def smart_unpack():
                     if filetype == "Unknow":
                         print("文件不受支持")
             else:
-                print("文件不存在")
+                print("Файл не существует")
         else:
             print("请先选择工作目录")
 
 
 def repackboot():
-    directoryname = askdirectory(title="选择你要打包的目录")
+    directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать")
     if os.path.isdir(directoryname):
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
@@ -491,7 +491,7 @@ def getdirsize(dir_):
 
 def repack_ext():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
+        directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
@@ -524,7 +524,7 @@ def repack_ext():
 
 def repack_erofs():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             mkdir(WorkDir + os.sep + 'output')
@@ -556,7 +556,7 @@ def repack_sparse_image():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
         if not os.path.exists(img_file_path):
-            print("文件不存在: " + img_file_path)
+            print("Файл не существует: " + img_file_path)
         elif gettype(img_file_path) != "ext":
             print("选中的文件并非 EXT 镜像，请先转换")
             return
@@ -575,7 +575,7 @@ def compress_to_br():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
         if not os.path.exists(img_file_path):
-            print("文件不存在: " + img_file_path)
+            print("Файл не существует: " + img_file_path)
         elif gettype(img_file_path) != "dat":
             print("选中的文件并非 DAT，请先转换")
             return
@@ -592,7 +592,7 @@ def repack_dat():
     if WorkDir:
         img_file_path = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
         if not os.path.exists(img_file_path):
-            print("文件不存在: " + img_file_path)
+            print("Файл не существует: " + img_file_path)
         elif gettype(img_file_path) != "sparse":
             print("选中的文件并非 SPARSE，请先转换")
             return
@@ -639,7 +639,7 @@ def repack_dtb():
                     filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
             print("编译为dtb完成")
         else:
-            print("文件不存在")
+            print("Файл не существует")
     else:
         print("请先选择工作目录")
 
@@ -724,48 +724,48 @@ def repack_super():
 
 def setting():
     window = Toplevel()
-    window.title("设置")
+    window.title("Настройки")
     screenwidth = window.winfo_screenwidth()
     screenheight = window.winfo_screenheight()
     window.geometry(
         '{}x{}+{}+{}'.format(600, 400, int(screenwidth / 2), int(screenheight / 2)))
-    area1 = ttk.LabelFrame(window, text="Ext4设置")
+    area1 = ttk.LabelFrame(window, text="Настройки Ext4")
     area1_label = ttk.Frame(area1)
-    ttk.Label(area1_label, text="自动调整大小:").pack(side=LEFT)
+    ttk.Label(area1_label, text="Автоматическое изменение размера:").pack(side=LEFT)
     zdtzdx = BooleanVar(value=settings.automutiimgsize)
     Checkbutton(area1_label, onvalue=True, offvalue=False, variable=zdtzdx,
                 command=lambda: settings.change("automutiimgsize", zdtzdx.get())).pack(padx=10, pady=10, side=LEFT)
     area1_label.pack(fill=X)
     area1_custom_size = ttk.Frame(area1)
-    ttk.Label(area1_custom_size, text="默认EXT4大小:").pack(side=LEFT)
+    ttk.Label(area1_custom_size, text="Размер EXT4 по умолчанию:").pack(side=LEFT)
     num_value = StringVar(value=settings.modifiedimgsize)
     Entry(area1_custom_size, textvariable=num_value).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_custom_size, text="确定", command=lambda: settings.change('modifiedimgsize',
+    Button(area1_custom_size, text="Принять", command=lambda: settings.change('modifiedimgsize',
                                                                            num_value.get() if num_value.get().isdigit() else settings.modifiedimgsize)).pack(
         padx=10, pady=10, side=LEFT)
     area1_custom_size.pack(fill=X)
     area1_custom_type = ttk.Frame(area1)
     type_value = StringVar(value=settings.extrepacktype)
-    ttk.Label(area1_custom_type, text="MKE2FS打包格式:").pack(side=LEFT)
+    ttk.Label(area1_custom_type, text="Способ упаковки MKE2FS:").pack(side=LEFT)
     Entry(area1_custom_type, textvariable=type_value).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_custom_type, text="确定", command=lambda: settings.change('extrepacktype', type_value.get())).pack(
+    Button(area1_custom_type, text="Принять", command=lambda: settings.change('extrepacktype', type_value.get())).pack(
         padx=10, pady=10, side=LEFT)
     area1_custom_type.pack(fill=X)
     area1_block_size = ttk.Frame(area1)
-    ttk.Label(area1_block_size, text="BLOCK大小:").pack(side=LEFT)
+    ttk.Label(area1_block_size, text="Размер блока:").pack(side=LEFT)
     block_size = StringVar(value=settings.extblocksize)
     Entry(area1_block_size, textvariable=block_size).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_block_size, text="确定", command=lambda: settings.change('extblocksize',
+    Button(area1_block_size, text="Принять", command=lambda: settings.change('extblocksize',
                                                                           block_size.get() if block_size.get().isdigit() else settings.extblocksize)).pack(
         padx=10, pady=10, side=LEFT)
     area1_block_size.pack(fill=X)
     area1.pack(fill=BOTH, padx=10, pady=10)
-    area2 = ttk.LabelFrame(window, text="EROFS设置")
+    area2 = ttk.LabelFrame(window, text="Настройки EROFS")
     area2_type = ttk.Frame(area2)
     erofs_type = StringVar(value=settings.erofstype)
-    ttk.Label(area2_type, text="压缩格式:").pack(side=LEFT, padx=10, pady=10)
+    ttk.Label(area2_type, text="Тип сжатия:").pack(side=LEFT, padx=10, pady=10)
     ttk.Entry(area2_type, textvariable=erofs_type).pack(side=LEFT)
-    Button(area2_type, text="确定", command=lambda: settings.change('erofstype', erofs_type.get())).pack(
+    Button(area2_type, text="Принять", command=lambda: settings.change('erofstype', erofs_type.get())).pack(
         padx=10, pady=10, side=LEFT)
     area2_type.pack(fill=X)
     area2.pack(fill=BOTH, padx=10, pady=10)
@@ -806,76 +806,76 @@ class App:
         menu_bar = Menu(root)
         root.config(menu=menu_bar)
         menu1 = Menu(menu_bar, tearoff=False)
-        menu1.add_command(label="设置", command=setting)
-        menu1.add_command(label="关于", command=about)
-        menu1.add_command(label="退出", command=sys.exit)
-        menu_bar.add_cascade(label="菜单", menu=menu1)
+        menu1.add_command(label="Настройки", command=setting)
+        menu1.add_command(label="О программе", command=about)
+        menu1.add_command(label="Выход", command=sys.exit)
+        menu_bar.add_cascade(label="Меню", menu=menu1)
         menu2 = Menu(menu_bar, tearoff=False)
         menu_item = ["cosmo", "flatly", "journal", "literal", "lumen", "minty", "pulse", "sandstone", "united", "yeti",
                      "cyborg", "darkly", "solar", "vapor", "superhero"]
         for item in menu_item:
             menu2.add_command(label=item, command=lambda n=item: change_theme(n))
-        menu_bar.add_cascade(label="主题", menu=menu2)
+        menu_bar.add_cascade(label="Тема", menu=menu2)
         frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
-        frame1 = ttk.LabelFrame(frame, text="功能区", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        frame2 = ttk.LabelFrame(frame, text="日志", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame1 = ttk.LabelFrame(frame, text="Функциональная зона", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame2 = ttk.LabelFrame(frame, text="журнал", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         tab_control = ttk.Notebook(frame1)
         tab1 = ttk.Frame(tab_control)
         tab2 = ttk.Frame(tab_control)
         tab3 = ttk.Frame(tab_control)
         tab33 = ScrolledFrame(tab3, autohide=True, width=220)
-        tab_control.add(tab1, text="项目")
-        tab_control.add(tab2, text="打包解包")
-        tab_control.add(tab3, text="其他")
+        tab_control.add(tab1, text="Проект")
+        tab_control.add(tab2, text="Упаковка и распаковка")
+        tab_control.add(tab3, text="Другое")
         tab33.pack(side=LEFT, expand=YES, fill=BOTH)
         tab11 = ttk.Frame(tab1)
         self.table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
         self.table.column('Workdir', width=100, anchor='center')
-        self.table.heading('Workdir', text='项目')
+        self.table.heading('Workdir', text='Проект')
         self.table.pack(side=TOP, fill=BOTH, expand=YES)
         self.table.bind('<ButtonRelease-1>', lambda *x_: self.select_work_dir())
         self.get_work_dir()
         tab12 = ttk.Frame(tab1)
-        ttk.Button(tab12, text='确认', width=10,
-                   command=lambda: tab_control.select(tab2) if WorkDir else print("请选择项目"),
+        ttk.Button(tab12, text='Принять', width=10,
+                   command=lambda: tab_control.select(tab2) if WorkDir else print("Пожалуйста, выберите файл"),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='删除', width=10, command=self.rm_work_dir, style='primiary.Outline.TButton').grid(row=0,
+        ttk.Button(tab12, text='Удалить', width=10, command=self.rm_work_dir, style='primiary.Outline.TButton').grid(row=0,
                                                                                                                   column=1,
                                                                                                                   padx=10,
                                                                                                                   pady=8)
-        ttk.Button(tab12, text='新建', width=10,
+        ttk.Button(tab12, text='Создать', width=10,
                    command=lambda: (mkdir(f'NH4_{user_input_window()}') or self.get_work_dir()),
                    style='primiary.Outline.TButton').grid(row=1,
                                                           column=0,
                                                           padx=10,
                                                           pady=8)
-        ttk.Button(tab12, text='刷新', width=10, command=self.get_work_dir, style='primiary.Outline.TButton').grid(
+        ttk.Button(tab12, text='Обновить', width=10, command=self.get_work_dir, style='primiary.Outline.TButton').grid(
             row=1,
             column=1,
             padx=10,
             pady=8)
-        ttk.Button(tab12, text='清理', width=10, command=clear_work_dir, style='primiary.Outline.TButton').grid(row=2,
+        ttk.Button(tab12, text='Очистить', width=10, command=clear_work_dir, style='primiary.Outline.TButton').grid(row=2,
                                                                                                                 column=0,
                                                                                                                 padx=10,
                                                                                                                 pady=8)
         tab12.pack(side=BOTTOM, fill=BOTH, expand=YES, anchor=CENTER)
         tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
-        tab21 = ttk.LabelFrame(tab2, text="解包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab21, text='解压', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
+        tab21 = ttk.LabelFrame(tab2, text="Распаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        ttk.Button(tab21, text='Извлечь', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
             row=0, column=0,
             padx=10,
             pady=8)
-        ttk.Button(tab21, text='万能解包', width=10, command=lambda: cz(smart_unpack),
+        ttk.Button(tab21, text='Умная распаковка', width=10, command=lambda: cz(smart_unpack),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=1,
                                                           padx=10,
                                                           pady=8)
-        tab22 = ttk.LabelFrame(tab2, text="打包", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab22, text='压缩', width=10, command=lambda: cz(zip_compress),
+        tab22 = ttk.LabelFrame(tab2, text="Собрать", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        ttk.Button(tab22, text='Сжатие', width=10, command=lambda: cz(zip_compress),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
@@ -926,26 +926,26 @@ class App:
                                                           pady=8)
         tab21.pack(side=TOP, fill=BOTH)
         tab22.pack(side=TOP, fill=BOTH, expand=YES)
-        for t, c in (("检测文件格式", lambda: print(
-                f"文件格式为 : {gettype(filename)}" if os.access((filename := askopenfilename(title="检测文件类型")),
-                                                                 os.F_OK) else "Error : 文件不存在")), ('OZIP 解密',
+        for t, c in (("Определение формата файла", lambda: print(
+                f"Формат файла : {gettype(filename)}" if os.access((filename := askopenfilename(title="Определение типа файла")),
+                                                                 os.F_OK) else "Error : Файл не существует")), ('Расшифровка OZIP',
                                                                                                         lambda: ozip_decrypt.main(
                                                                                                             filename) if os.access(
                                                                                                             (
                                                                                                                     filename := askopenfilename(
                                                                                                                         title="解密ozip")),
                                                                                                             os.F_OK) else print(
-                                                                                                            "Error : 文件不存在")),
-                     ('OZIP 加密', lambda: cz(ozip_encrypt)), ('关闭 VBMETA 校验', patch_vbmeta),
-                     ('修补 FS_CONFIG 文件', lambda: cz(fspatch.main, askdirectory(title="选择你要打包的目录"),
-                                                        askopenfilename(title="选择fs_config文件"))),):
+                                                                                                            "Error : Файл не существует")),
+                     ('Шифрование OZIP', lambda: cz(ozip_encrypt)), ('Отключить проверку VBMETA', patch_vbmeta),
+                     ('Исправление файла FS_CONFIG', lambda: cz(fspatch.main, askdirectory(title="Выберите раздел (папку), который хотите собрать"),
+                                                        askopenfilename(title="Выберите файл fs_config"))),):
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
                 side=TOP, expand=NO,
                 fill=X, padx=8)
         self.text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
         self.text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
         Mystdout(self.text)
-        frame22 = ttk.LabelFrame(frame2, text="输入自定义命令", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame22 = ttk.LabelFrame(frame2, text="Введите пользовательскую команду", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
         def run_cmd():
             cmd = usercmd.get()
@@ -956,7 +956,7 @@ class App:
         usercmd = ttk.Entry(frame22, width=25)
         usercmd.pack(side=LEFT, expand=YES, fill=X, padx=2, pady=2)
         usercmd.bind('<Return>', lambda *x: run_cmd())
-        ttk.Button(frame22, text='运行', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
+        ttk.Button(frame22, text='Старт', command=run_cmd, style='primary.Outline.TButton').pack(side=LEFT, expand=NO,
                                                                                                 fill=X, padx=2, pady=2)
         frame.pack(side=TOP, expand=YES, fill=BOTH, padx=2, pady=2)
         frame1.pack(side=LEFT, expand=YES, fill=BOTH, padx=5, pady=2)
@@ -969,7 +969,7 @@ class App:
             self.text.delete(1.0, END)
             self.text.configure(state='disabled')
 
-        ttk.Button(frame_bottom, text='清空', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
+        ttk.Button(frame_bottom, text='Очистить', command=clean, style='secondary.TButton').pack(side=RIGHT, padx=5, pady=0)
         global statusbar
         statusbar = ttk.Label(frame_bottom, relief='flat', anchor=E, image=D, bootstyle="info")
         statusbar.pack(side=RIGHT, fill=X, ipadx=12)
@@ -998,16 +998,16 @@ class App:
         if item_text[0]:
             global WorkDir
             WorkDir = item_text[0]
-            print(f"选择工作目录为: {WorkDir}")
+            print(f"Выберите рабочую папку: {WorkDir}")
 
     def rm_work_dir(self):
         if WorkDir:
-            print(f"删除目录: {WorkDir}")
+            print(f"Удаление папки: {WorkDir}")
             shutil.rmtree(WorkDir)
         else:
-            print("Error : 要删除的文件夹不存在")
+            print("Error : Папка, которую вы хотите удалить, не существует")
         self.get_work_dir()
 
 
 if __name__ == '__main__':
-    App()
+    App()         
