@@ -158,12 +158,12 @@ def run_command(cmd):
 def about():
     root2 = Toplevel()
     root2.resizable(False, False)
-    root2.title("关于")
+    root2.title("О программе")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
-    ttk.Button(aframe1, text='开源地址', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
+    ttk.Button(aframe1, text='Ссылка на программу', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
@@ -173,7 +173,7 @@ def about():
     root2.mainloop()
 
 
-def user_input_window(title='输入文本'):
+def user_input_window(title='Введите текст'):
     input_window = Toplevel()
     cur_width = 400
     cur_hight = 120
@@ -185,7 +185,7 @@ def user_input_window(title='输入文本'):
     ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
+    ttk.Button(input_window, text='Принять', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                                expand=YES,
                                                                                                                padx=5)
     input_window.wait_window()
@@ -193,18 +193,18 @@ def user_input_window(title='输入文本'):
 
 
 def change_theme(var):
-    print(f"设置主题为 : {var}")
+    print(f"Сменить тему на : {var}")
     Style(theme=var).theme_use()
     settings.change('theme', var)
 
 
 def clear_work_dir():
     if not WorkDir:
-        print("当前未选择任何目录")
+        print("Папка не выбрана")
     else:
         if not os.path.exists(WorkDir):
             return
-        print("将清理: " + WorkDir)
+        print("Будет очищена: " + WorkDir)
         try:
             for i in os.listdir(WorkDir):
                 if os.path.isdir(os.path.join(WorkDir, i)):
@@ -212,9 +212,9 @@ def clear_work_dir():
                 if os.path.isfile(os.path.join(WorkDir, i)):
                     os.remove(os.path.join(WorkDir, i))
         except IOError:
-            print("清理失败, 请检查是否有程序正在占用它...?")
+            print("Очистка не удалась, пожалуйста, проверьте, не занята ли она какой-либо программой...?")
         else:
-            print("清理成功, 正在刷新工作目录")
+            print("Очистка успешно завершена, рабочая папка обновляется")
 
 
 class cartoon:
@@ -242,25 +242,25 @@ class cartoon:
 
 
 def ozip_encrypt():
-    filename = askopenfilename(title="加密ozip")
+    filename = askopenfilename(title="Зашифрованный ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
             run_command(f"zip2ozip {filename}")
     else:
-        print("Error : 文件不存在")
+        print("Error : Файл не существует")
 
 
 def unzip():
     if WorkDir:
         if os.access(WorkDir + os.sep + "rom", os.F_OK):
             shutil.rmtree(WorkDir + os.sep + "rom")
-        filename = askopenfilename(title="选择要解压的文件")
+        filename = askopenfilename(title="Выберите файл для распаковки")
         if os.access(filename, os.F_OK):
-            print("正在解压文件: " + filename)
+            print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
                     filename) else print('This is not zip')
-            print("解压完成")
+            print("Извлечение завершено")
         else:
             print("Error : 文件不存在")
     else:
@@ -400,34 +400,34 @@ def smart_unpack():
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat был преобразован в img")
+                                print("sdat已转换为img")
                         else:
-                            print("Файл transfer.list не удалось найти в папке, в которой находится файл dat")
+                            print("未能在dat文件所在目录找到对应的transfer.list文件")
                     if filetype == "br":
-                        print("Обнаружен файл формата br, для распаковки будет использован brotli")
+                        print("检测到br格式，使用brotli解压")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("Файл BR успешно распакован")
+                            print("已解压br文件")
                         else:
-                            print("Файл недоступен！")
+                            print("文件不可访问！")
                     if filetype == "dtb":
-                        print("Использовать компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
+                        print("使用device tree compiler 转换反编译dtb --> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("Декомпиляция dtb, успешно завершена")
+                        print("反编译dtb完成")
                     if filetype in ["zip"]:
-                        print("Пожалуйста, используйте функцию "распаковать", чтобы распаковать zip-файл")
+                        print("请使用解压功能解压zip")
                     if filetype == "Unknow":
-                        print("Файл не поддерживается")
+                        print("文件不受支持")
             else:
-                print("Файл не существует")
+                print("文件不存在")
         else:
-            print("Пожалуйста, выберите рабочую папку")
+            print("请先选择工作目录")
 
 
 def repackboot():
-    directoryname = askdirectory(title="Выберите папку, которую вы хотите собрать")
+    directoryname = askdirectory(title="选择你要打包的目录")
     if os.path.isdir(directoryname):
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
@@ -455,7 +455,7 @@ def repackboot():
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname)
     else:
-        print("Папка не существует")
+        print("文件夹不存在")
 
 
 def find_fs_con(directoryname):
@@ -466,18 +466,18 @@ def find_fs_con(directoryname):
                                                                               f'{os.path.basename(directoryname)}_file_contexts'))) else ''
     is_file_contexts = os.path.realpath(is_file_contexts)
     if is_fs_config and not os.path.isdir(is_fs_config):
-        print("Автоматический поиск file_contexts завершен: " + is_fs_config)
+        print("自动搜寻 fs_config 完成: " + is_fs_config)
         fsconfig_path = is_fs_config
     else:
-        print("Автоматический поиск fs_config не удался, пожалуйста, выберите его вручную")
-        fsconfig_path = askopenfilename(title="Выберите файл fs_config в папке, которую вы хотите собрать")
+        print("自动搜寻 fs_config 失败，请手动选择")
+        fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
     if is_file_contexts and not os.path.isdir(is_file_contexts):
-        print("Автоматический поиск file_contexts завершен" + is_file_contexts)
+        print("自动搜寻 file_contexts 完成" + is_file_contexts)
         filecontexts_path = is_file_contexts
     else:
-        print("Автоматический поиск fs_context не удался, пожалуйста, выберите его вручную")
+        print("自动搜寻 fs_context 失败，请手动选择")
         filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
-    print("Исправление файла fs_config")
+    print("修补fs_config文件")
     fspatch.main(directoryname, fsconfig_path)
     return filecontexts_path, fsconfig_path
 
@@ -491,7 +491,7 @@ def getdirsize(dir_):
 
 def repack_ext():
     if WorkDir:
-        directoryname = askdirectory(title=Выберите папку, которую вы хотите собрать, например:.\\NH4_t\\vendor\\vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
@@ -509,22 +509,22 @@ def repack_ext():
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
             cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
-            print("Создайте папку для сохранения файлов")
+            print("尝试创建目录output")
             mkdir(WorkDir + os.sep + "output")
-            print("Начать сборку EXT-образа")
+            print("开始打包EXT镜像")
             with cartoon():
                 print(cmd)
                 run_command(cmd)
                 cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{part_name} {WorkDir}/output/{part_name}.img"
                 run_command(cmd)
-                print("Образ успено собран")
+                print("打包结束")
     else:
-        print("Пожалуйста, выберите рабочую папку")
+        print("请先选择工作目录")
 
 
 def repack_erofs():
     if WorkDir:
-        directoryname = askdirectory(title="Выберите папку, которую вы хотите собрать, например : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             mkdir(WorkDir + os.sep + 'output')
@@ -535,57 +535,57 @@ def repack_erofs():
             print(cmd)
             run_command(cmd)
     else:
-        print("Пожалуйста, выберите рабочую папку")
+        print("请先选择工作目录")
 
 
 def repack_dtbo():
     if WorkDir:
-        directoryname = askdirectory(title="Выберите папку dtbo")
+        directoryname = askdirectory(title="选择dtbo文件夹")
         if not os.path.isdir(WorkDir + os.sep + "output"):
             mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
             cmd += "%s\\dtb.%s " % (directoryname, i)
         run_command(cmd)
-        print("Образ успешно собран")
+        print("打包结束")
     else:
-        print("Пожалуйста, выберите рабочую папку")
+        print("请先选择工作目录")
 
 
 def repack_sparse_image():
     if WorkDir:
-        img_file_path = askopenfilename(title="Выберите файл IMG для преобразования в SIMG")
+        img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
         if not os.path.exists(img_file_path):
-            print("Файл не существует: " + img_file_path)
+            print("文件不存在: " + img_file_path)
         elif gettype(img_file_path) != "ext":
-            print("Выбранный файл не является образом EXT, сначала преобразуйте его")
+            print("选中的文件并非 EXT 镜像，请先转换")
             return
         else:
-            print("Начать преобразование")
+            print("开始转换")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
                     img_file_path, WorkDir, os.path.basename(img_file_path.replace('.img', '')))
                 run_command(cmd)
-                print("Преобразование успешно завершено")
+                print("转换结束")
     else:
-        print("Пожалуйста, выберите рабочую папку")
+        print("请先选择工作目录")
 
 
 def compress_to_br():
     if WorkDir:
-        img_file_path = askopenfilename(title="Выберите файл DAT, который вы хотите преобразовать в BR")
+        img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
         if not os.path.exists(img_file_path):
-            print("Файл не существует: " + img_file_path)
+            print("文件不存在: " + img_file_path)
         elif gettype(img_file_path) != "dat":
-            print("Выбранный файл не является DAT, пожалуйста, сначала преобразуйте его")
+            print("选中的文件并非 DAT，请先转换")
             return
         else:
-            print("Начать преобразование")
+            print("开始转换")
             with cartoon():
                 cz(run_command, "brotli.exe -q 6 " + img_file_path)
-            print("Преобразование успешно завершено")
+            print("转换完毕，脱出到相同文件夹")
     else:
-        print("Пожалуйста, выберите рабочую папку")
+        print("请先选择工作目录")
 
 
 def repack_dat():
