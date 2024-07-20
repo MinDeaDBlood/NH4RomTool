@@ -158,12 +158,12 @@ def run_command(cmd):
 def about():
     root2 = Toplevel()
     root2.resizable(False, False)
-    root2.title("关于")
+    root2.title("О программе")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
-    ttk.Button(aframe1, text='开源地址', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
+    ttk.Button(aframe1, text='Ссылка на программу', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
@@ -173,7 +173,7 @@ def about():
     root2.mainloop()
 
 
-def user_input_window(title='输入文本'):
+def user_input_window(title='Введите текст'):
     input_window = Toplevel()
     cur_width = 400
     cur_hight = 120
@@ -185,7 +185,7 @@ def user_input_window(title='输入文本'):
     ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
+    ttk.Button(input_window, text='Принять', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                                expand=YES,
                                                                                                                padx=5)
     input_window.wait_window()
@@ -193,18 +193,18 @@ def user_input_window(title='输入文本'):
 
 
 def change_theme(var):
-    print(f"设置主题为 : {var}")
+    print(f"Сменить тему на : {var}")
     Style(theme=var).theme_use()
     settings.change('theme', var)
 
 
 def clear_work_dir():
     if not WorkDir:
-        print("当前未选择任何目录")
+        print("Папка не выбрана")
     else:
         if not os.path.exists(WorkDir):
             return
-        print("将清理: " + WorkDir)
+        print("Будет очищена: " + WorkDir)
         try:
             for i in os.listdir(WorkDir):
                 if os.path.isdir(os.path.join(WorkDir, i)):
@@ -212,9 +212,9 @@ def clear_work_dir():
                 if os.path.isfile(os.path.join(WorkDir, i)):
                     os.remove(os.path.join(WorkDir, i))
         except IOError:
-            print("清理失败, 请检查是否有程序正在占用它...?")
+            print("Очистка не удалась, пожалуйста, проверьте, не занята ли она какой-либо программой...?")
         else:
-            print("清理成功, 正在刷新工作目录")
+            print("Очистка успешно завершена, рабочая папка обновляется")
 
 
 class cartoon:
