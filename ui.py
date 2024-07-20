@@ -264,7 +264,7 @@ def unzip():
         else:
             print("Error : 文件不存在")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста, выберите рабочую папку")
 
 
 def zip_file(file, dst_dir):
@@ -282,37 +282,37 @@ def zip_file(file, dst_dir):
 
 
 def zip_compress():
-    print("输入生成的文件名")
+    print("Введите название файла")
     input_var = user_input_window()
     if WorkDir:
-        print("正在压缩 : " + input_var + ".zip")
+        print("Сжать в : " + input_var + ".zip")
         with cartoon():
             cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
-        print("压缩完成")
+        print("Сжатие завершено")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста, выберите рабочую папку")
 
 
 def patch_vbmeta():
-    filename = askopenfilename(title="选择vbmeta文件")
+    filename = askopenfilename(title="Выберите файл vbmeta")
     if os.access(filename, os.F_OK):
         if check_magic(filename):
             flag = read_verify_flag(filename)
             if flag == 0:
-                print("检测到AVB为打开状态，正在关闭...")
+                print("AVB включен, отключение...")
                 write_avb(filename, b'\x02')
             elif flag == 1:
-                print("检测到仅关闭了DM校验，正在关闭AVB...")
+                print("Обнаружено, что отключена только проверка DM, отключение AVB...")
                 write_avb(filename, b'\x02')
             elif flag == 2:
-                print("检测AVB校验已关闭，正在开启...")
+                print("AVB проверка отключена - включение...")
                 write_avb(filename, b'\x00')
             else:
-                print("未知错误")
+                print("Неизвестная ошибка")
         else:
-            print("文件并非vbmeta文件")
+            print("Этот файл не является файлом vbmeta")
     else:
-        print("文件不存在")
+        print("Файл не существует")
 
 
 def cz(func, *args):
@@ -321,50 +321,50 @@ def cz(func, *args):
 
 def smart_unpack():
     with cartoon():
-        filename = askopenfilename(title="选择解包的文件")
+        filename = askopenfilename(title="Выберите распакованный файл")
         if WorkDir:
             if os.access(filename, os.F_OK):
                 filetype = gettype(filename)
-                print("智能识别文件类型为 :  " + filetype)
+                print("Автоматическое определение типа файла :  " + filetype)
                 unpackdir = os.path.abspath(WorkDir + "/" + filetype)
                 if filetype == "ozip":
-                    print("正在解密ozip")
+                    print("Расшифровка ozip")
                     ozip_decrypt.main(filename)
-                    print("解密完成")
+                    print("Расшифровка завершена")
                 if filetype in ["ext", "erofs"]:
                     dirname = os.path.basename(filename).split(".")[0]
 
-                    print("在工作目录创建解包目录 : " + dirname)
+                    print("Создайте папку для распаковки в рабочей папке : " + dirname)
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
-                        print("文件夹存在，正在删除")
+                        print("Папка уже существует и будет удалена")
                         shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
                     mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包[ext]: " + filename)
+                        print("Разобрать [ext]: " + filename)
                         imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包[erofs]: " + filename)
+                        print("Разобрать [erofs]: " + filename)
                         cz(run_command, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
                         if filetype == i:
-                            print("在工作目录创建解包目录 :  " + i)
+                            print("Создайте папку для распаковки в рабочей папке :  " + i)
                             if os.path.isdir(unpackdir):
-                                print("文件夹存在，正在删除")
+                                print("Папка уже существует и будет удалена")
                                 shutil.rmtree(unpackdir)
                             mkdir(unpackdir)
                             if i == "payload":
-                                print("正在解包payload")
+                                print("Разобрать payload")
                                 t = Thread(target=run_command, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
-                                print("正在解包boot")
+                                print("Разобрать boot")
                                 os.chdir(unpackdir)
                                 shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
                                 run_command("magiskboot unpack -h %s" % filename)
@@ -381,53 +381,53 @@ def smart_unpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg")
+                                print("Распаковка mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack")
+                                print("Распаковка lpunpack")
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
-                        print("正在转换Sparse-->Raw")
+                        print("Преобразовать Sparse-->Raw")
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image 转换结束")
+                        print("Преобразование sparse образа, успешно завершено")
                     if filetype == "dat":
-                        print("正在解包Dat")
+                        print("Распаковать Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat已转换为img")
+                                print("dat был преобразован в img")
                         else:
-                            print("未能在dat文件所在目录找到对应的transfer.list文件")
+                            print("Файл transfer.list не удалось найти в папке, в которой находится файл dat")
                     if filetype == "br":
-                        print("检测到br格式，使用brotli解压")
+                        print("Обнаружен файл формата br, для распаковки будет использован brotli")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("已解压br文件")
+                            print("Файл BR успешно распакован")
                         else:
-                            print("文件不可访问！")
+                            print("Файл недоступен！")
                     if filetype == "dtb":
-                        print("使用device tree compiler 转换反编译dtb --> dts")
+                        print("Использовать компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("反编译dtb完成")
+                        print("Декомпиляция dtb, успешно завершена")
                     if filetype in ["zip"]:
-                        print("请使用解压功能解压zip")
+                        print("Пожалуйста, используйте функцию "распаковать", чтобы распаковать zip-файл")
                     if filetype == "Unknow":
-                        print("文件不受支持")
+                        print("Файл не поддерживается")
             else:
-                print("文件不存在")
+                print("Файл не существует")
         else:
-            print("请先选择工作目录")
+            print("Пожалуйста, выберите рабочую папку")
 
 
 def repackboot():
-    directoryname = askdirectory(title="选择你要打包的目录")
+    directoryname = askdirectory(title="Выберите папку, которую вы хотите собрать")
     if os.path.isdir(directoryname):
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
@@ -455,7 +455,7 @@ def repackboot():
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname)
     else:
-        print("文件夹不存在")
+        print("Папка не существует")
 
 
 def find_fs_con(directoryname):
@@ -466,18 +466,18 @@ def find_fs_con(directoryname):
                                                                               f'{os.path.basename(directoryname)}_file_contexts'))) else ''
     is_file_contexts = os.path.realpath(is_file_contexts)
     if is_fs_config and not os.path.isdir(is_fs_config):
-        print("自动搜寻 fs_config 完成: " + is_fs_config)
+        print("Автоматический поиск file_contexts завершен: " + is_fs_config)
         fsconfig_path = is_fs_config
     else:
-        print("自动搜寻 fs_config 失败，请手动选择")
-        fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
+        print("Автоматический поиск fs_config не удался, пожалуйста, выберите его вручную")
+        fsconfig_path = askopenfilename(title="Выберите файл fs_config в папке, которую вы хотите собрать")
     if is_file_contexts and not os.path.isdir(is_file_contexts):
-        print("自动搜寻 file_contexts 完成" + is_file_contexts)
+        print("Автоматический поиск file_contexts завершен" + is_file_contexts)
         filecontexts_path = is_file_contexts
     else:
-        print("自动搜寻 fs_context 失败，请手动选择")
-        filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
-    print("修补fs_config文件")
+        print("Автоматический поиск fs_context не удался, пожалуйста, выберите его вручную")
+        filecontexts_path = askopenfilename(title="Выберите файл fs_context из папки, которую вы хотите собрать")
+    print("Исправление файла fs_config")
     fspatch.main(directoryname, fsconfig_path)
     return filecontexts_path, fsconfig_path
 
@@ -491,7 +491,7 @@ def getdirsize(dir_):
 
 def repack_ext():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如:.\\NH4_t\\vendor\\vendor")
+        directoryname = askdirectory(title=Выберите папку, которую вы хотите собрать, например:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
@@ -509,22 +509,22 @@ def repack_ext():
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
             cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
-            print("尝试创建目录output")
+            print("Создайте папку для сохранения файлов")
             mkdir(WorkDir + os.sep + "output")
-            print("开始打包EXT镜像")
+            print("Начать сборку EXT-образа")
             with cartoon():
                 print(cmd)
                 run_command(cmd)
                 cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{part_name} {WorkDir}/output/{part_name}.img"
                 run_command(cmd)
-                print("打包结束")
+                print("Образ успено собран")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def repack_erofs():
     if WorkDir:
-        directoryname = askdirectory(title="选择你要打包的目录 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="Выберите папку, которую вы хотите собрать, например : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             mkdir(WorkDir + os.sep + 'output')
@@ -535,57 +535,57 @@ def repack_erofs():
             print(cmd)
             run_command(cmd)
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def repack_dtbo():
     if WorkDir:
-        directoryname = askdirectory(title="选择dtbo文件夹")
+        directoryname = askdirectory(title="Выберите папку dtbo")
         if not os.path.isdir(WorkDir + os.sep + "output"):
             mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
             cmd += "%s\\dtb.%s " % (directoryname, i)
         run_command(cmd)
-        print("打包结束")
+        print("Образ успешно собран")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def repack_sparse_image():
     if WorkDir:
-        img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
+        img_file_path = askopenfilename(title="Выберите файл IMG для преобразования в SIMG")
         if not os.path.exists(img_file_path):
-            print("文件不存在: " + img_file_path)
+            print("Файл не существует: " + img_file_path)
         elif gettype(img_file_path) != "ext":
-            print("选中的文件并非 EXT 镜像，请先转换")
+            print("Выбранный файл не является образом EXT, сначала преобразуйте его")
             return
         else:
-            print("开始转换")
+            print("Начать преобразование")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
                     img_file_path, WorkDir, os.path.basename(img_file_path.replace('.img', '')))
                 run_command(cmd)
-                print("转换结束")
+                print("Преобразование успешно завершено")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def compress_to_br():
     if WorkDir:
-        img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
+        img_file_path = askopenfilename(title="Выберите файл DAT, который вы хотите преобразовать в BR")
         if not os.path.exists(img_file_path):
-            print("文件不存在: " + img_file_path)
+            print("Файл не существует: " + img_file_path)
         elif gettype(img_file_path) != "dat":
-            print("选中的文件并非 DAT，请先转换")
+            print("Выбранный файл не является DAT, пожалуйста, сначала преобразуйте его")
             return
         else:
-            print("开始转换")
+            print("Начать преобразование")
             with cartoon():
                 cz(run_command, "brotli.exe -q 6 " + img_file_path)
-            print("转换完毕，脱出到相同文件夹")
+            print("Преобразование успешно завершено")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def repack_dat():
