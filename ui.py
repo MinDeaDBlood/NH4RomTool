@@ -158,7 +158,7 @@ def run_command(cmd):
 def about():
     root2 = Toplevel()
     root2.resizable(False, False)
-    root2.title("关于")
+    root2.title("О программе")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
