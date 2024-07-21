@@ -158,12 +158,12 @@ def run_command(cmd):
 def about():
     root2 = Toplevel()
     root2.resizable(False, False)
-    root2.title("关于")
+    root2.title("О программе")
     aframe1 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe2 = Frame(root2, relief=FLAT, borderwidth=1)
     aframe1.pack(side=BOTTOM, pady=3)
     aframe2.pack(side=BOTTOM, pady=3)
-    ttk.Button(aframe1, text='开源地址', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
+    ttk.Button(aframe1, text='Ссылка на программу', command=lambda: open_url("https://github.com/ColdWindScholar/NH4RomTool"),
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
@@ -173,7 +173,7 @@ def about():
     root2.mainloop()
 
 
-def user_input_window(title='输入文本'):
+def user_input_window(title='Введите текст'):
     input_window = Toplevel()
     cur_width = 400
     cur_hight = 120
@@ -185,7 +185,7 @@ def user_input_window(title='输入文本'):
     ent_ = ttk.Entry(input_window, textvariable=ent, width=50)
     ent_.bind("<Return>", lambda *x: input_window.destroy())
     ent_.pack(side=TOP, expand=YES, padx=5)
-    ttk.Button(input_window, text='确认', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
+    ttk.Button(input_window, text='Принять', command=input_window.destroy, style='primiary.Outline.TButton').pack(side=TOP,
                                                                                                                expand=YES,
                                                                                                                padx=5)
     input_window.wait_window()
@@ -193,18 +193,18 @@ def user_input_window(title='输入文本'):
 
 
 def change_theme(var):
-    print(f"设置主题为 : {var}")
+    print(f"Сменить тему на : {var}")
     Style(theme=var).theme_use()
     settings.change('theme', var)
 
 
 def clear_work_dir():
     if not WorkDir:
-        print("当前未选择任何目录")
+        print("Папка не выбрана")
     else:
         if not os.path.exists(WorkDir):
             return
-        print("将清理: " + WorkDir)
+        print("Будет очищена: " + WorkDir)
         try:
             for i in os.listdir(WorkDir):
                 if os.path.isdir(os.path.join(WorkDir, i)):
@@ -212,9 +212,9 @@ def clear_work_dir():
                 if os.path.isfile(os.path.join(WorkDir, i)):
                     os.remove(os.path.join(WorkDir, i))
         except IOError:
-            print("清理失败, 请检查是否有程序正在占用它...?")
+            print("Очистка не удалась, пожалуйста, проверьте, не занята ли она какой-либо программой...?")
         else:
-            print("清理成功, 正在刷新工作目录")
+            print("Очистка успешно завершена, рабочая папка обновляется")
 
 
 class cartoon:
@@ -242,29 +242,29 @@ class cartoon:
 
 
 def ozip_encrypt():
-    filename = askopenfilename(title="加密ozip")
+    filename = askopenfilename(title="Зашифрованный ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
             run_command(f"zip2ozip {filename}")
     else:
-        print("Error : 文件不存在")
+        print("Error : Файл не найден")
 
 
 def unzip():
     if WorkDir:
         if os.access(WorkDir + os.sep + "rom", os.F_OK):
             shutil.rmtree(WorkDir + os.sep + "rom")
-        filename = askopenfilename(title="选择要解压的文件")
+        filename = askopenfilename(title="Выберите файл для распаковки")
         if os.access(filename, os.F_OK):
-            print("正在解压文件: " + filename)
+            print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
                     filename) else print('This is not zip')
-            print("解压完成")
+            print("Извлечение завершено")
         else:
-            print("Error : 文件不存在")
+            print("Error : Файл не найден")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста, выберите рабочую  папку")
 
 
 def zip_file(file, dst_dir):
@@ -282,37 +282,37 @@ def zip_file(file, dst_dir):
 
 
 def zip_compress():
-    print("输入生成的文件名")
+    print("Введите название прошивки")
     input_var = user_input_window()
     if WorkDir:
-        print("正在压缩 : " + input_var + ".zip")
+        print("Сжатие : " + input_var + ".zip")
         with cartoon():
             cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
-        print("压缩完成")
+        print("zip архив успешно сформирован")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста, выберите рабочую  папку")
 
 
 def patch_vbmeta():
-    filename = askopenfilename(title="选择vbmeta文件")
+    filename = askopenfilename(title="Выберите файл vbmeta")
     if os.access(filename, os.F_OK):
         if check_magic(filename):
             flag = read_verify_flag(filename)
             if flag == 0:
-                print("检测到AVB为打开状态，正在关闭...")
+                print("Обнаружена проверка AVB, отключение проверки...")
                 write_avb(filename, b'\x02')
             elif flag == 1:
-                print("检测到仅关闭了DM校验，正在关闭AVB...")
+                print("Обнаружено, что отключена только проверка DM, отключение проверки AVB...")
                 write_avb(filename, b'\x02')
             elif flag == 2:
-                print("检测AVB校验已关闭，正在开启...")
+                print("Проверка AVB выключена, включение...")
                 write_avb(filename, b'\x00')
             else:
-                print("未知错误")
+                print("Неизвестная ошибка")
         else:
-            print("文件并非vbmeta文件")
+            print("Файл не является файлом vbmeta.")
     else:
-        print("文件不存在")
+        print("Файл не найден")
 
 
 def cz(func, *args):
