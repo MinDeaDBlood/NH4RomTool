@@ -381,49 +381,49 @@ def smart_unpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg")
+                                print("Используется mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack")
+                                print("Используется lpunpack")
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
-                        print("正在转换Sparse-->Raw")
+                        print("Преобразование Sparse-->Raw")
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image 转换结束")
+                        print("Преобразование sparse образа завершено")
                     if filetype == "dat":
-                        print("正在解包Dat")
+                        print("Распаковка Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat已转换为img")
+                                print("sdat был преобразован в img")
                         else:
-                            print("未能在dat文件所在目录找到对应的transfer.list文件")
+                            print("Не удалось найти transfer.list в папке, где находится файл dat")
                     if filetype == "br":
-                        print("检测到br格式，使用brotli解压")
+                        print("Обнаружен формат br, для распаковки используется brotli")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("已解压br文件")
+                            print("Файл BR успешно разобран")
                         else:
-                            print("文件不可访问！")
+                            print("Файл недоступен!")
                     if filetype == "dtb":
-                        print("使用device tree compiler 转换反编译dtb --> dts")
+                        print("Используется компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("反编译dtb完成")
+                        print("Декомпиляция dtb завершена")
                     if filetype in ["zip"]:
-                        print("请使用解压功能解压zip")
+                        print("Пожалуйста, используйте функцию "распаковать", чтобы распаковать zip-файл")
                     if filetype == "Unknow":
-                        print("文件不受支持")
+                        print("Файл не поддерживается")
             else:
-                print("文件不存在")
+                print("Файл не найден")
         else:
-            print("请先选择工作目录")
+            print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repackboot():
