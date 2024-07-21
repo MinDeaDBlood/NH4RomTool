@@ -321,50 +321,50 @@ def cz(func, *args):
 
 def smart_unpack():
     with cartoon():
-        filename = askopenfilename(title="选择解包的文件")
+        filename = askopenfilename(title="Выберите распакованный файл")
         if WorkDir:
             if os.access(filename, os.F_OK):
                 filetype = gettype(filename)
-                print("智能识别文件类型为 :  " + filetype)
+                print("Автоматическое определение типа файла :  " + filetype)
                 unpackdir = os.path.abspath(WorkDir + "/" + filetype)
                 if filetype == "ozip":
-                    print("正在解密ozip")
+                    print("Расшифровка ozip")
                     ozip_decrypt.main(filename)
-                    print("解密完成")
+                    print("Расшифровка завершена")
                 if filetype in ["ext", "erofs"]:
                     dirname = os.path.basename(filename).split(".")[0]
 
-                    print("在工作目录创建解包目录 : " + dirname)
+                    print("Создание папки для распаковки в рабочей папке : " + dirname)
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
-                        print("文件夹存在，正在删除")
+                        print("Папка уже существует и будет удалена")
                         shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
                     mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包[ext]: " + filename)
+                        print("Разобрать [ext]: " + filename)
                         imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包[erofs]: " + filename)
+                        print("Разобрать [erofs]: " + filename)
                         cz(run_command, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
                         if filetype == i:
-                            print("在工作目录创建解包目录 :  " + i)
+                            print("Создание папки для распаковки в рабочей папке :  " + i)
                             if os.path.isdir(unpackdir):
-                                print("文件夹存在，正在删除")
+                                print("Папка уже существует и будет удалена")
                                 shutil.rmtree(unpackdir)
                             mkdir(unpackdir)
                             if i == "payload":
-                                print("正在解包payload")
+                                print("Распаковка payload")
                                 t = Thread(target=run_command, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
-                                print("正在解包boot")
+                                print("Распаковка boot")
                                 os.chdir(unpackdir)
                                 shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
                                 run_command("magiskboot unpack -h %s" % filename)
@@ -381,53 +381,53 @@ def smart_unpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg")
+                                print("Используется mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack")
+                                print("Используется lpunpack")
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
-                        print("正在转换Sparse-->Raw")
+                        print("Преобразование Sparse-->Raw")
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image 转换结束")
+                        print("Преобразование sparse образа завершено")
                     if filetype == "dat":
-                        print("正在解包Dat")
+                        print("Распаковка Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat已转换为img")
+                                print("sdat был преобразован в img")
                         else:
-                            print("未能在dat文件所在目录找到对应的transfer.list文件")
+                            print("Не удалось найти transfer.list в папке, где находится файл dat")
                     if filetype == "br":
-                        print("检测到br格式，使用brotli解压")
+                        print("Обнаружен формат br, для распаковки используется brotli")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("已解压br文件")
+                            print("Файл BR успешно разобран")
                         else:
-                            print("文件不可访问！")
+                            print("Файл недоступен!")
                     if filetype == "dtb":
-                        print("使用device tree compiler 转换反编译dtb --> dts")
+                        print("Используется компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("反编译dtb完成")
+                        print("Декомпиляция dtb завершена")
                     if filetype in ["zip"]:
-                        print("请使用解压功能解压zip")
+                        print("Пожалуйста, используйте функцию "распаковать", чтобы распаковать zip-файл")
                     if filetype == "Unknow":
-                        print("文件不受支持")
+                        print("Файл не поддерживается")
             else:
-                print("文件不存在")
+                print("Файл не найден")
         else:
-            print("请先选择工作目录")
+            print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repackboot():
-    directoryname = askdirectory(title="选择你要打包的目录")
+    directoryname = askdirectory(title="Выберите раздел, который хотите собрать")
     if os.path.isdir(directoryname):
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
@@ -455,7 +455,7 @@ def repackboot():
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname)
     else:
-        print("文件夹不存在")
+        print("Папка не существует")
 
 
 def find_fs_con(directoryname):
