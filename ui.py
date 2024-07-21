@@ -259,12 +259,12 @@ def unzip():
             print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
-                    filename) else print('This is not zip')
+                    filename) else print('Это не zip файл')
             print("Извлечение завершено")
         else:
             print("Error : Файл не найден")
     else:
-        print("Error : Пожалуйста,  выберите рабочую  папку")
+        print("Error : Пожалуйста, выберите рабочую  папку")
 
 
 def zip_file(file, dst_dir):
@@ -282,35 +282,35 @@ def zip_file(file, dst_dir):
 
 
 def zip_compress():
-    print("输入生成的文件名")
+    print("Введите название прошивки")
     input_var = user_input_window()
     if WorkDir:
-        print("正在压缩 : " + input_var + ".zip")
+        print("Сжатие : " + input_var + ".zip")
         with cartoon():
             cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
-        print("压缩完成")
+        print("zip архив успешно сформирован")
     else:
-        print("Error : Пожалуйста,  выберите рабочую  папку")
+        print("Error : Пожалуйста, выберите рабочую  папку")
 
 
 def patch_vbmeta():
-    filename = askopenfilename(title="选择vbmeta文件")
+    filename = askopenfilename(title="Выберите файл vbmeta")
     if os.access(filename, os.F_OK):
         if check_magic(filename):
             flag = read_verify_flag(filename)
             if flag == 0:
-                print("检测到AVB为打开状态，正在关闭...")
+                print("Обнаружена проверка AVB, отключение проверки...")
                 write_avb(filename, b'\x02')
             elif flag == 1:
-                print("检测到仅关闭了DM校验，正在关闭AVB...")
+                print("Обнаружено, что отключена только проверка DM, отключение проверки AVB...")
                 write_avb(filename, b'\x02')
             elif flag == 2:
-                print("检测AVB校验已关闭，正在开启...")
+                print("Проверка AVB выключена, включение...")
                 write_avb(filename, b'\x00')
             else:
-                print("未知错误")
+                print("Неизвестная ошибка")
         else:
-            print("文件并非vbmeta文件")
+            print("Файл не является файлом vbmeta.")
     else:
         print("Файл не найден")
 
@@ -321,50 +321,50 @@ def cz(func, *args):
 
 def smart_unpack():
     with cartoon():
-        filename = askopenfilename(title="选择解包的文件")
+        filename = askopenfilename(title="Выберите распакованный файл")
         if WorkDir:
             if os.access(filename, os.F_OK):
                 filetype = gettype(filename)
-                print("智能识别文件类型为 :  " + filetype)
+                print("Автоматическое определение типа файла :  " + filetype)
                 unpackdir = os.path.abspath(WorkDir + "/" + filetype)
                 if filetype == "ozip":
-                    print("正在解密ozip")
+                    print("Расшифровка ozip")
                     ozip_decrypt.main(filename)
-                    print("解密完成")
+                    print("Расшифровка завершена")
                 if filetype in ["ext", "erofs"]:
                     dirname = os.path.basename(filename).split(".")[0]
 
-                    print("在工作目录创建解包目录 : " + dirname)
+                    print("Создание папки для распаковки в рабочей папке : " + dirname)
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
-                        print("文件夹存在，正在删除")
+                        print("Папка уже существует и будет удалена")
                         shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
                     mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包[ext]: " + filename)
+                        print("Разобрать [ext]: " + filename)
                         imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包[erofs]: " + filename)
+                        print("Разобрать [erofs]: " + filename)
                         cz(run_command, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
                         if filetype == i:
-                            print("在工作目录创建解包目录 :  " + i)
+                            print("Создание папки для распаковки в рабочей папке :  " + i)
                             if os.path.isdir(unpackdir):
-                                print("文件夹存在，正在删除")
+                                print("Папка уже существует и будет удалена")
                                 shutil.rmtree(unpackdir)
                             mkdir(unpackdir)
                             if i == "payload":
-                                print("正在解包payload")
+                                print("Распаковка payload")
                                 t = Thread(target=run_command, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
-                                print("正在解包boot")
+                                print("Распаковка boot")
                                 os.chdir(unpackdir)
                                 shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
                                 run_command("magiskboot unpack -h %s" % filename)
@@ -381,45 +381,45 @@ def smart_unpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg")
+                                print("Используется mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack")
+                                print("Используется lpunpack")
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
                         print("正在转换Sparse-->Raw")
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image Преобразование завершено")
+                        print("Преобразование sparse образа завершено")
                     if filetype == "dat":
-                        print("正在解包Dat")
+                        print("Распаковка Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat已转换为img")
+                                print("sdat был преобразован в img")
                         else:
-                            print("未能在dat文件所在目录找到对应的transfer.list文件")
+                            print("Не удалось найти transfer.list в папке, где находится файл dat")
                     if filetype == "br":
-                        print("检测到br格式，使用brotli解压")
+                        print("Обнаружен формат br, для распаковки используется brotli")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("已解压br文件")
+                            print("Файл BR успешно разобран")
                         else:
-                            print("文件不可访问！")
+                            print("Файл недоступен!")
                     if filetype == "dtb":
-                        print("使用device tree compiler 转换反编译dtb --> dts")
+                        print("Используется компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("反编译dtb完成")
+                        print("Декомпиляция dtb завершена")
                     if filetype in ["zip"]:
-                        print("请使用解压功能解压zip")
+                        print("Пожалуйста, используйте функцию "распаковать", чтобы распаковать zip-файл")
                     if filetype == "Unknow":
-                        print("文件不受支持")
+                        print("Файл не поддерживается")
             else:
                 print("Файл не найден")
         else:
@@ -427,7 +427,7 @@ def smart_unpack():
 
 
 def repackboot():
-    directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать")
+    directoryname = askdirectory(title="Выберите раздел, который хотите собрать")
     if os.path.isdir(directoryname):
         os.chdir(directoryname)
         if os.path.exists('ramdisk'):
@@ -455,7 +455,7 @@ def repackboot():
         os.chdir(LOCALDIR)
         shutil.rmtree(directoryname)
     else:
-        print("文件夹不存在")
+        print("Папка не существует")
 
 
 def find_fs_con(directoryname):
@@ -466,18 +466,18 @@ def find_fs_con(directoryname):
                                                                               f'{os.path.basename(directoryname)}_file_contexts'))) else ''
     is_file_contexts = os.path.realpath(is_file_contexts)
     if is_fs_config and not os.path.isdir(is_fs_config):
-        print("自动搜寻 fs_config 完成: " + is_fs_config)
+        print("Автоматический поиск fs_config завершен: " + is_fs_config)
         fsconfig_path = is_fs_config
     else:
-        print("自动搜寻 fs_config 失败，请手动选择")
-        fsconfig_path = askopenfilename(title="选择你要打包目录的fs_config文件")
+        print("Автоматический поиск fs_config не удался, пожалуйста, выберите его вручную")
+        fsconfig_path = askopenfilename(title="Выберите файл fs_config в папке, которую вы хотите собрать")
     if is_file_contexts and not os.path.isdir(is_file_contexts):
-        print("自动搜寻 file_contexts 完成" + is_file_contexts)
+        print("Автоматический поиск file_contexts завершен" + is_file_contexts)
         filecontexts_path = is_file_contexts
     else:
-        print("自动搜寻 fs_context 失败，请手动选择")
-        filecontexts_path = askopenfilename(title="选择你要打包目录的fs_context文件")
-    print("修补fs_config文件")
+        print("Автоматический поиск fs_context не удался, пожалуйста, выберите его вручную")
+        filecontexts_path = askopenfilename(title="Выберите файл fs_context из папки, которую вы хотите собрать")
+    print("Исправление fs_config")
     fspatch.main(directoryname, fsconfig_path)
     return filecontexts_path, fsconfig_path
 
@@ -519,7 +519,7 @@ def repack_ext():
                 run_command(cmd)
                 print("Сборка завершена")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите рабочую  папку")
 
 
 def repack_erofs():
@@ -865,7 +865,7 @@ class App:
         tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
         tab21 = ttk.LabelFrame(tab2, text="Распаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab21, text='Извлечь zip', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
+        ttk.Button(tab21, text='ИзвлечьZip', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
             row=0, column=0,
             padx=10,
             pady=8)
@@ -875,7 +875,7 @@ class App:
                                                           padx=10,
                                                           pady=8)
         tab22 = ttk.LabelFrame(tab2, text="Упаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab22, text='Собрать zip', width=10, command=lambda: cz(zip_compress),
+        ttk.Button(tab22, text='СобратьZip', width=10, command=lambda: cz(zip_compress),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
