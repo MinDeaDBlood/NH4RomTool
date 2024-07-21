@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import subprocess
-import sys            
+import sys
 import time
 import zipfile
 from threading import Thread
@@ -247,7 +247,7 @@ def ozip_encrypt():
         with cartoon():
             run_command(f"zip2ozip {filename}")
     else:
-        print("Error : Файл не существует")
+        print("Error : Файл не найден")
 
 
 def unzip():
@@ -262,9 +262,9 @@ def unzip():
                     filename) else print('This is not zip')
             print("Извлечение завершено")
         else:
-            print("Error : Файл не существует")
+            print("Error : Файл не найден")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста,  выберите рабочую  папку")
 
 
 def zip_file(file, dst_dir):
@@ -290,7 +290,7 @@ def zip_compress():
             cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
         print("压缩完成")
     else:
-        print("Error : 请先选择工作目录")
+        print("Error : Пожалуйста,  выберите рабочую  папку")
 
 
 def patch_vbmeta():
@@ -312,7 +312,7 @@ def patch_vbmeta():
         else:
             print("文件并非vbmeta文件")
     else:
-        print("Файл не существует")
+        print("Файл не найден")
 
 
 def cz(func, *args):
@@ -391,7 +391,7 @@ def smart_unpack():
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image 转换结束")
+                        print("sparse image Преобразование завершено")
                     if filetype == "dat":
                         print("正在解包Dat")
                         pname = os.path.basename(filename).split(".")[0]
@@ -421,9 +421,9 @@ def smart_unpack():
                     if filetype == "Unknow":
                         print("文件不受支持")
             else:
-                print("Файл не существует")
+                print("Файл не найден")
         else:
-            print("请先选择工作目录")
+            print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repackboot():
@@ -491,7 +491,7 @@ def getdirsize(dir_):
 
 def repack_ext():
     if WorkDir:
-        directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать 例如:.\\NH4_t\\vendor\\vendor")
+        directoryname = askdirectory(title="Выберите раздел, который хотите собрать, например:.\\NH4_t\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         if os.path.isdir(directoryname):
             mutiimgsize = 1.2 if os.path.basename(directoryname).find("odm") != -1 else 1.07
@@ -509,22 +509,22 @@ def repack_ext():
             part_name = os.path.basename(directoryname)
             cmd = f"mke2fs.exe -O {settings.extfueature} -L {part_name} -I 256 -M /{part_name} -m 0"
             cmd += f" -t {settings.extrepacktype} -b {settings.extblocksize} {WorkDir}/output/{part_name}.img {int(extimgsize / 4096)}"
-            print("尝试创建目录output")
+            print("Укажите путь к папке для сохранения образа")
             mkdir(WorkDir + os.sep + "output")
-            print("开始打包EXT镜像")
+            print("Сборка EXT-образа")
             with cartoon():
                 print(cmd)
                 run_command(cmd)
                 cmd = f"e2fsdroid.exe -e -T 1230768000 -C {fsconfig_path} -S {filecontexts_path} -f {directoryname} -a /{part_name} {WorkDir}/output/{part_name}.img"
                 run_command(cmd)
-                print("打包结束")
+                print("Сборка завершена")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repack_erofs():
     if WorkDir:
-        directoryname = askdirectory(title="Выберите раздел (папку), который хотите собрать 例如 : .\\NH4_test\\vendor\\vendor")
+        directoryname = askdirectory(title="Выберите раздел, который хотите собрать, например : .\\NH4_test\\vendor\\vendor")
         filecontexts_path, fsconfig_path = find_fs_con(directoryname)
         with cartoon():
             mkdir(WorkDir + os.sep + 'output')
@@ -535,113 +535,113 @@ def repack_erofs():
             print(cmd)
             run_command(cmd)
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста, выберите рабочую  папку")
 
 
 def repack_dtbo():
     if WorkDir:
-        directoryname = askdirectory(title="选择dtbo文件夹")
+        directoryname = askdirectory(title="Выберите папку dtbo")
         if not os.path.isdir(WorkDir + os.sep + "output"):
             mkdir(WorkDir + os.sep + "output")
         cmd = "mkdtboimg.exe create %s\\output\\dtbo.img " % WorkDir
         for i in range(len([i for i in os.listdir(directoryname)])):
             cmd += "%s\\dtb.%s " % (directoryname, i)
         run_command(cmd)
-        print("打包结束")
+        print("Сборка завершена")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repack_sparse_image():
     if WorkDir:
-        img_file_path = askopenfilename(title="选择要转换为 SIMG 的 IMG 文件")
+        img_file_path = askopenfilename(title="Выберите файл IMG для преобразования в SIMG.")
         if not os.path.exists(img_file_path):
-            print("Файл не существует: " + img_file_path)
+            print("Файл не найден: " + img_file_path)
         elif gettype(img_file_path) != "ext":
-            print("选中的文件并非 EXT 镜像，请先转换")
+            print("Выбранный файл не является образом EXT, сначала преобразуйте его")
             return
         else:
-            print("开始转换")
+            print("Преобразование")
             with cartoon():
                 cmd = "img2simg %s %s/output/%s_sparse.img" % (
                     img_file_path, WorkDir, os.path.basename(img_file_path.replace('.img', '')))
                 run_command(cmd)
-                print("转换结束")
+                print("Преобразование завершено")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def compress_to_br():
     if WorkDir:
-        img_file_path = askopenfilename(title="选择要转换为 BR 的 DAT 文件")
+        img_file_path = askopenfilename(title="Выберите файл DAT, который вы хотите преобразовать в BR")
         if not os.path.exists(img_file_path):
-            print("Файл не существует: " + img_file_path)
+            print("Файл не найден: " + img_file_path)
         elif gettype(img_file_path) != "dat":
-            print("选中的文件并非 DAT，请先转换")
+            print("Выбранный файл не является DAT, пожалуйста, сначала преобразуйте его")
             return
         else:
-            print("开始转换")
+            print("Преобразование")
             with cartoon():
                 cz(run_command, "brotli.exe -q 6 " + img_file_path)
-            print("转换完毕，脱出到相同文件夹")
+            print("После завершения преобразования перейдите рабочую  папку")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repack_dat():
     if WorkDir:
-        img_file_path = askopenfilename(title="选择要转换为 DAT 的 IMG 文件")
+        img_file_path = askopenfilename(title="Выберите файл IMG для преобразования в формат DAT")
         if not os.path.exists(img_file_path):
-            print("Файл не существует: " + img_file_path)
+            print("Файл не найден: " + img_file_path)
         elif gettype(img_file_path) != "sparse":
-            print("选中的文件并非 SPARSE，请先转换")
+            print("Выбранный файл не является SPARSE, пожалуйста, сначала преобразуйте его")
             return
         else:
-            print("警告: 只接受大版本输入，例如 7.1.2 请直接输入 7.1！")
-            input_version = float(user_input_window("输入Android版本"))
+            print("Предупреждение: Принимается ввод только основной версии, например, 7.1.2 Пожалуйста, введите 7.1!")
+            input_version = float(user_input_window("Введите версию Android"))
             current_version = 0
             if input_version == 5.0:  # Android 5
-                print("已选择: Android 5.0")
+                print("Выбрать: Android 5.0")
                 current_version = 1
             elif input_version == 5.1:  # Android 5.1
-                print("已选择: Android 5.1")
+                print("Выбрать: Android 5.1")
                 current_version = 2
             elif 6.0 <= input_version < 7.0:  # Android 6.X
-                print("已选择: Android 6.X")
+                print("Выбрать: Android 6.X")
                 current_version = 3
             elif input_version >= 7.0:  # Android 7.0+
-                print("已选择: Android 7.X+")
+                print("Выбрать: Android 7.X+")
                 current_version = 4
-            print("提示: 输入分区名 (例如 system、vendor、odm)")
-            partition_name = user_input_window("输入分区名")
+            print("Совет: Введите название раздела (например,system、vendor、odm)")
+            partition_name = user_input_window("Введите название раздела")
             if current_version == 0:
-                print("Android 版本输入错误，请查看提示重新输入！")
+                print("Версия Android введена неправильно, пожалуйста, проверьте подсказки для повторного ввода!")
                 return
             elif partition_name == 0 or not partition_name:
-                print("分区名输入错误，请查看提示重新输入！")
+                print("Название раздела введено неверно, проверьте подсказки и введите заново!")
                 return
-            print("开始转换")
+            print("Начать преобразование")
             with cartoon():
                 cz(img2sdat.main, img_file_path, WorkDir + "/output/", current_version, partition_name)
-            print("转换完毕，脱出到工作目录下 output 文件夹")
+            print("После завершения преобразования, перейдите в папку сохранения файла в рабочей папке")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repack_dtb():
     if WorkDir:
-        filename = askopenfilename(title="选择dts文件，输出到dtb文件夹")
+        filename = askopenfilename(title="Выберите файл dts и поместите его в папку dtb.")
         if os.access(filename, os.F_OK):
             if not os.path.isdir(WorkDir + os.sep + "dtb"):
                 mkdir(WorkDir + os.sep + "dtb")
             with cartoon():
                 run_command("dtc -I dts -O dtb %s -o %s\\dtb\\%s.dtb" % (
                     filename, WorkDir, os.path.basename(filename).replace(".dts", ".dtb")))
-            print("编译为dtb完成")
+            print("Преобразование в dtb завершено")
         else:
-            print("Файл не существует")
+            print("Файл не найден")
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def repack_super():
@@ -657,36 +657,36 @@ def repack_super():
         size_xy = '%dx%d' % (cur_width, cur_hight)
         w.geometry(size_xy)
         w.resizable(False, False)
-        w.title("打包Super")
-        l1 = ttk.LabelFrame(w, text="分区类型", labelanchor="nw", relief=GROOVE, borderwidth=1)
+        w.title("Собрать Super")
+        l1 = ttk.LabelFrame(w, text="Тип раздела", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Radiobutton(l1, variable=packtype, value='VAB', text='VAB').pack(side=LEFT, expand=YES, padx=5)
         ttk.Radiobutton(l1, variable=packtype, value='AB', text='AB').pack(side=LEFT, expand=YES, padx=5)
         ttk.Radiobutton(l1, variable=packtype, value='A-only', text='A-only').pack(side=LEFT, expand=YES, padx=5)
         l1.pack(side=TOP, ipadx=10, ipady=10)
-        ttk.Label(w, text="super分区大小(字节 常见9126805504)").pack(side=TOP)
+        ttk.Label(w, text="Размер супер раздела (в байтах) 9126805504)").pack(side=TOP)
         ttk.Entry(w, textvariable=packsize, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
-        ttk.Label(w, text="super分区簇名").pack()
+        ttk.Label(w, text="Название разделов super образа").pack()
         ttk.Entry(w, textvariable=packgroup, width=50).pack(side=TOP, padx=10, pady=10, expand=YES, fill=BOTH)
-        l2 = ttk.Labelframe(w, text="镜像文件夹:", labelanchor="nw", relief=GROOVE, borderwidth=1)
+        l2 = ttk.Labelframe(w, text="Папка с образом:", labelanchor="nw", relief=GROOVE, borderwidth=1)
         ttk.Entry(l2, textvariable=img_dir, width=50).pack(padx=10, pady=10, fill=X)
-        ttk.Button(l2, text="浏览",
-                   command=lambda: img_dir.set(askdirectory(title="选择super分区镜像文件所在目录"))).pack()
+        ttk.Button(l2, text="Обзор",
+                   command=lambda: img_dir.set(askdirectory(title="Выберите папку, в которой находится файл образа супер раздела"))).pack()
         l2.pack(ipadx=10, ipady=10)
         Checkbutton(w, text="Sparse", variable=sparse).pack(side=TOP, padx=10, pady=10)
-        Button(w, text="打包", command=w.destroy, width=20, height=20).pack(padx=10, pady=10)
+        Button(w, text="Собрать", command=w.destroy, width=20, height=20).pack(padx=10, pady=10)
         w.wait_window()
         if not packtype.get():
             print("没有获取到选项")
         else:
             superdir = img_dir.get()
             if not superdir or not os.path.join(superdir):
-                print("目录不存在")
+                print("Папка не существует")
                 return
-            print("super分区镜像所在目录：" + superdir)
+            print("Папка, в которой находится super образ：" + superdir)
             if sparse.get():
-                print("启用sparse参数")
+                print("Преобразование в sparse образ")
             cmd = "lpmake "
-            print("打包类型 ： " + packtype.get())
+            print("Тип упаковки ： " + packtype.get())
             cmd += "--metadata-size 65536 --super-name super "
             if packtype.get() == 'VAB':
                 cmd += "--virtual-ab "
@@ -716,10 +716,10 @@ def repack_super():
                             packgroup.get(), os.path.basename(i).replace('.img', ''), os.path.join(superdir, i))
             cmd += '--out %s' % (os.path.join(WorkDir, 'super.img'))
             run_command(cmd)
-            print("打包成功") if os.path.join(WorkDir, 'super.img') else print("打包失败")
+            print("Super собран успешно") if os.path.join(WorkDir, 'super.img') else print("Сборка super образа завершилась неудачей")
 
     else:
-        print("请先选择工作目录")
+        print("Пожалуйста,  выберите рабочую  папку")
 
 
 def setting():
@@ -740,7 +740,7 @@ def setting():
     ttk.Label(area1_custom_size, text="Размер EXT4 по умолчанию:").pack(side=LEFT)
     num_value = StringVar(value=settings.modifiedimgsize)
     Entry(area1_custom_size, textvariable=num_value).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_custom_size, text="Принять", command=lambda: settings.change('modifiedimgsize',
+    Button(area1_custom_size, text="Применить", command=lambda: settings.change('modifiedimgsize',
                                                                            num_value.get() if num_value.get().isdigit() else settings.modifiedimgsize)).pack(
         padx=10, pady=10, side=LEFT)
     area1_custom_size.pack(fill=X)
@@ -748,14 +748,14 @@ def setting():
     type_value = StringVar(value=settings.extrepacktype)
     ttk.Label(area1_custom_type, text="Способ упаковки MKE2FS:").pack(side=LEFT)
     Entry(area1_custom_type, textvariable=type_value).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_custom_type, text="Принять", command=lambda: settings.change('extrepacktype', type_value.get())).pack(
+    Button(area1_custom_type, text="Применить", command=lambda: settings.change('extrepacktype', type_value.get())).pack(
         padx=10, pady=10, side=LEFT)
     area1_custom_type.pack(fill=X)
     area1_block_size = ttk.Frame(area1)
     ttk.Label(area1_block_size, text="Размер блока:").pack(side=LEFT)
     block_size = StringVar(value=settings.extblocksize)
     Entry(area1_block_size, textvariable=block_size).pack(padx=10, pady=10, side=LEFT)
-    Button(area1_block_size, text="Принять", command=lambda: settings.change('extblocksize',
+    Button(area1_block_size, text="Применить", command=lambda: settings.change('extblocksize',
                                                                           block_size.get() if block_size.get().isdigit() else settings.extblocksize)).pack(
         padx=10, pady=10, side=LEFT)
     area1_block_size.pack(fill=X)
@@ -765,7 +765,7 @@ def setting():
     erofs_type = StringVar(value=settings.erofstype)
     ttk.Label(area2_type, text="Тип сжатия:").pack(side=LEFT, padx=10, pady=10)
     ttk.Entry(area2_type, textvariable=erofs_type).pack(side=LEFT)
-    Button(area2_type, text="Принять", command=lambda: settings.change('erofstype', erofs_type.get())).pack(
+    Button(area2_type, text="Применить", command=lambda: settings.change('erofstype', erofs_type.get())).pack(
         padx=10, pady=10, side=LEFT)
     area2_type.pack(fill=X)
     area2.pack(fill=BOTH, padx=10, pady=10)
@@ -818,25 +818,25 @@ class App:
         menu_bar.add_cascade(label="Тема", menu=menu2)
         frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
         frame1 = ttk.LabelFrame(frame, text="Функциональная зона", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        frame2 = ttk.LabelFrame(frame, text="журнал", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame2 = ttk.LabelFrame(frame, text="Логи", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         tab_control = ttk.Notebook(frame1)
         tab1 = ttk.Frame(tab_control)
         tab2 = ttk.Frame(tab_control)
         tab3 = ttk.Frame(tab_control)
         tab33 = ScrolledFrame(tab3, autohide=True, width=220)
-        tab_control.add(tab1, text="Проект")
+        tab_control.add(tab1, text="Проекты")
         tab_control.add(tab2, text="Упаковка и распаковка")
         tab_control.add(tab3, text="Другое")
         tab33.pack(side=LEFT, expand=YES, fill=BOTH)
         tab11 = ttk.Frame(tab1)
         self.table = ttk.Treeview(tab11, height=10, columns=["Workdir"], show='headings')
         self.table.column('Workdir', width=100, anchor='center')
-        self.table.heading('Workdir', text='Проект')
+        self.table.heading('Workdir', text='Список проектов')
         self.table.pack(side=TOP, fill=BOTH, expand=YES)
         self.table.bind('<ButtonRelease-1>', lambda *x_: self.select_work_dir())
         self.get_work_dir()
         tab12 = ttk.Frame(tab1)
-        ttk.Button(tab12, text='Принять', width=10,
+        ttk.Button(tab12, text='Выбрать', width=10,
                    command=lambda: tab_control.select(tab2) if WorkDir else print("Пожалуйста, выберите файл"),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
@@ -865,17 +865,17 @@ class App:
         tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
         tab21 = ttk.LabelFrame(tab2, text="Распаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab21, text='Извлечь', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
+        ttk.Button(tab21, text='Извлечь zip', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
             row=0, column=0,
             padx=10,
             pady=8)
-        ttk.Button(tab21, text='Умная распаковка', width=10, command=lambda: cz(smart_unpack),
+        ttk.Button(tab21, text='Разобрать', width=10, command=lambda: cz(smart_unpack),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=1,
                                                           padx=10,
                                                           pady=8)
-        tab22 = ttk.LabelFrame(tab2, text="Собрать", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab22, text='Сжатие', width=10, command=lambda: cz(zip_compress),
+        tab22 = ttk.LabelFrame(tab2, text="Упаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        ttk.Button(tab22, text='Собрать zip', width=10, command=lambda: cz(zip_compress),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
@@ -928,16 +928,16 @@ class App:
         tab22.pack(side=TOP, fill=BOTH, expand=YES)
         for t, c in (("Определение формата файла", lambda: print(
                 f"Формат файла : {gettype(filename)}" if os.access((filename := askopenfilename(title="Определение типа файла")),
-                                                                 os.F_OK) else "Error : Файл не существует")), ('Расшифровка OZIP',
+                                                                 os.F_OK) else "Error : Файл не найден")), ('Расшифровать OZIP',
                                                                                                         lambda: ozip_decrypt.main(
                                                                                                             filename) if os.access(
                                                                                                             (
                                                                                                                     filename := askopenfilename(
-                                                                                                                        title="解密ozip")),
+                                                                                                                        title="Расшифровка ozip")),
                                                                                                             os.F_OK) else print(
-                                                                                                            "Error : Файл не существует")),
-                     ('Шифрование OZIP', lambda: cz(ozip_encrypt)), ('Отключить проверку VBMETA', patch_vbmeta),
-                     ('Исправление файла FS_CONFIG', lambda: cz(fspatch.main, askdirectory(title="Выберите раздел (папку), который хотите собрать"),
+                                                                                                            "Error : Файл не найден")),
+                     ('Зашифровать OZIP', lambda: cz(ozip_encrypt)), ('Отключить проверку VBMETA', patch_vbmeta),
+                     ('Исправление FS_CONFIG', lambda: cz(fspatch.main, askdirectory(title="Выберите папку, в которой находится файл"),
                                                         askopenfilename(title="Выберите файл fs_config"))),):
             ttk.Button(tab33, text=t, width=10, command=c, bootstyle="link").pack(
                 side=TOP, expand=NO,
@@ -1010,4 +1010,4 @@ class App:
 
 
 if __name__ == '__main__':
-    App()         
+    App()
