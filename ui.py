@@ -402,28 +402,28 @@ def smart_unpack():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
                                 print("sdat был преобразован в img")
                         else:
-                            print("未能在dat文件所在目录找到对应的transfer.list文件")
+                            print("Не удалось найти transfer.list в папке, где находится файл dat")
                     if filetype == "br":
-                        print("检测到br格式，使用brotli解压")
+                        print("Обнаружен формат br, для распаковки используется brotli")
                         if os.access(filename, os.F_OK):
                             with cartoon():
                                 run_command(f"brotli -dj {filename}")
-                            print("已解压br文件")
+                            print("Файл BR успешно разобран")
                         else:
-                            print("文件不可访问！")
+                            print("Файл недоступен!")
                     if filetype == "dtb":
-                        print("使用device tree compiler 转换反编译dtb --> dts")
+                        print("Используется компилятор дерева устройств для преобразования и декомпиляции dtb-> dts")
                         dtname = os.path.basename(filename)
                         run_command("dtc -q -I dtb -O dts " + filename + " -o " + WorkDir + os.sep + dtname + ".dts")
-                        print("反编译dtb完成")
+                        print("Декомпиляция dtb завершена")
                     if filetype in ["zip"]:
-                        print("请使用解压功能解压zip")
+                        print("Пожалуйста, используйте функцию распаковки, чтобы распаковать zip-файл")
                     if filetype == "Unknow":
-                        print("文件不受支持")
+                        print("Файл не поддерживается")
             else:
-                print("文件不存在")
+                print("Файл не найден")
         else:
-            print("请先选择工作目录")
+            print("Пожалуйста, выберите рабочую  папку")
 
 
 def repackboot():
