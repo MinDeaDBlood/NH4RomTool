@@ -204,7 +204,7 @@ def clear_work_dir():
     else:
         if not os.path.exists(WorkDir):
             return
-        print("Будет очищена: " + WorkDir)
+        print("Папка проекта будет очищена: " + WorkDir)
         try:
             for i in os.listdir(WorkDir):
                 if os.path.isdir(os.path.join(WorkDir, i)):
