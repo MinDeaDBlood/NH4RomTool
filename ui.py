@@ -167,7 +167,7 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='Программа, для работы с образами прошивок\nАвтор оформления: ttkbootstrap\nColdWindScholar Все права защищены Apache 2.0 LICENSE\n3590361911@qq.com',
+              text='Программа, для работы с образами прошивок\nАвтор оформления: ttkbootstrap\nColdWindScholar Все права защищены. Лицензия Apache 2.0\nГруппа в QQ: 3590361911@qq.com',
               font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
     root2.mainloop()
