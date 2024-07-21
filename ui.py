@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import sys
 import time
-import zipfile            
+import zipfile
 from threading import Thread
 from tkinter import PhotoImage, Menu, Toplevel, StringVar, BooleanVar, IntVar
 from tkinter.ttk import Button, Entry, Frame, Checkbutton
@@ -167,7 +167,7 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='沼_Rom工具箱\nTheme by ttkbootstrap\nColdWindScholar Copyright(R) Apache 2.0 LICENSE\n3590361911@qq.com',
+              text='Программа, для работы с образами прошивок\nАвтор оформления: ttkbootstrap\nColdWindScholar Все права защищены Apache 2.0 LICENSE\n3590361911@qq.com',
               font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
     root2.mainloop()
@@ -212,9 +212,9 @@ def clear_work_dir():
                 if os.path.isfile(os.path.join(WorkDir, i)):
                     os.remove(os.path.join(WorkDir, i))
         except IOError:
-            print("Очистка не удалась, пожалуйста, проверьте, не занята ли она какой-либо программой...?")
+            print("Очистка не удалась, пожалуйста, проверьте, не занята ли папка какой-либо программой...?")
         else:
-            print("Очистка успешно завершена, рабочая папка обновляется")
+            print("Очистка успешно завершена")
 
 
 class cartoon:
@@ -264,7 +264,7 @@ def unzip():
         else:
             print("Error : Файл не найден")
     else:
-        print("Error : Пожалуйста, выберите рабочую  папку")
+        print("Error : Пожалуйста, выберите  папку проекта")
 
 
 def zip_file(file, dst_dir):
@@ -290,7 +290,7 @@ def zip_compress():
             cz(zip_file, input_var + ".zip", WorkDir + os.sep + "rom")
         print("zip архив успешно сформирован")
     else:
-        print("Error : Пожалуйста, выберите рабочую  папку")
+        print("Error : Пожалуйста, выберите  папку проекта")
 
 
 def patch_vbmeta():
@@ -423,7 +423,7 @@ def smart_unpack():
             else:
                 print("Файл не найден")
         else:
-            print("Пожалуйста, выберите рабочую  папку")
+            print("Пожалуйста, выберите папку проекта для распаковки")
 
 
 def repackboot():
@@ -519,7 +519,7 @@ def repack_ext():
                 run_command(cmd)
                 print("Сборка завершена")
     else:
-        print("Пожалуйста, выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_erofs():
@@ -535,7 +535,7 @@ def repack_erofs():
             print(cmd)
             run_command(cmd)
     else:
-        print("Пожалуйста, выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_dtbo():
@@ -549,7 +549,7 @@ def repack_dtbo():
         run_command(cmd)
         print("Сборка завершена")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_sparse_image():
@@ -568,7 +568,7 @@ def repack_sparse_image():
                 run_command(cmd)
                 print("Преобразование завершено")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def compress_to_br():
@@ -583,9 +583,9 @@ def compress_to_br():
             print("Преобразование")
             with cartoon():
                 cz(run_command, "brotli.exe -q 6 " + img_file_path)
-            print("После завершения преобразования перейдите рабочую  папку")
+            print("После завершения преобразования перейдите в папку проекта")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_dat():
@@ -623,9 +623,9 @@ def repack_dat():
             print("Начать преобразование")
             with cartoon():
                 cz(img2sdat.main, img_file_path, WorkDir + "/output/", current_version, partition_name)
-            print("После завершения преобразования, перейдите в папку сохранения файла в рабочей папке")
+            print("После завершения преобразования, перейдите в папку проекта")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_dtb():
@@ -641,7 +641,7 @@ def repack_dtb():
         else:
             print("Файл не найден")
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите папку проекта")
 
 
 def repack_super():
@@ -719,7 +719,7 @@ def repack_super():
             print("Super собран успешно") if os.path.join(WorkDir, 'super.img') else print("Сборка super образа завершилась неудачей")
 
     else:
-        print("Пожалуйста,  выберите рабочую  папку")
+        print("Пожалуйста, выберите рабочую папку")
 
 
 def setting():
@@ -815,7 +815,7 @@ class App:
                      "cyborg", "darkly", "solar", "vapor", "superhero"]
         for item in menu_item:
             menu2.add_command(label=item, command=lambda n=item: change_theme(n))
-        menu_bar.add_cascade(label="Тема", menu=menu2)
+        menu_bar.add_cascade(label="Темы", menu=menu2)
         frame = ttk.LabelFrame(root, text="NH4 Rom Tool", labelanchor="nw", relief=GROOVE, borderwidth=1)
         frame1 = ttk.LabelFrame(frame, text="Функциональная зона", labelanchor="nw", relief=SUNKEN, borderwidth=1)
         frame2 = ttk.LabelFrame(frame, text="Логи", labelanchor="nw", relief=SUNKEN, borderwidth=1)
@@ -837,7 +837,7 @@ class App:
         self.get_work_dir()
         tab12 = ttk.Frame(tab1)
         ttk.Button(tab12, text='Выбрать', width=10,
-                   command=lambda: tab_control.select(tab2) if WorkDir else print("Пожалуйста, выберите файл"),
+                   command=lambda: tab_control.select(tab2) if WorkDir else print("Пожалуйста, выберите проект"),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
@@ -865,7 +865,7 @@ class App:
         tab_control.pack(fill=BOTH, expand=YES)
         tab11.pack(side=TOP, fill=BOTH, expand=YES)
         tab21 = ttk.LabelFrame(tab2, text="Распаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab21, text='ИзвлечьZip', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
+        ttk.Button(tab21, text='Извл.Zip', width=10, command=lambda: cz(unzip), style='primiary.Outline.TButton').grid(
             row=0, column=0,
             padx=10,
             pady=8)
@@ -875,7 +875,7 @@ class App:
                                                           padx=10,
                                                           pady=8)
         tab22 = ttk.LabelFrame(tab2, text="Упаковка", labelanchor="nw", relief=SUNKEN, borderwidth=1)
-        ttk.Button(tab22, text='СобратьZip', width=10, command=lambda: cz(zip_compress),
+        ttk.Button(tab22, text='Собр.Zip', width=10, command=lambda: cz(zip_compress),
                    style='primiary.Outline.TButton').grid(row=0,
                                                           column=0,
                                                           padx=10,
@@ -945,7 +945,7 @@ class App:
         self.text = scrolledtext.ScrolledText(frame2, width=180, height=18, font=['Arial', 10], relief=SOLID)
         self.text.pack(side=TOP, expand=YES, fill=BOTH, padx=4, pady=2)
         Mystdout(self.text)
-        frame22 = ttk.LabelFrame(frame2, text="Введите пользовательскую команду", labelanchor="nw", relief=SUNKEN, borderwidth=1)
+        frame22 = ttk.LabelFrame(frame2, text="Введите команду", labelanchor="nw", relief=SUNKEN, borderwidth=1)
 
         def run_cmd():
             cmd = usercmd.get()
