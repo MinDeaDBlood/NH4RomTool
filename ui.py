@@ -242,7 +242,7 @@ class cartoon:
 
 
 def ozip_encrypt():
-    filename = askopenfilename(title="Зашифрованный ozip")
+    filename = askopenfilename(title="Выберите расшифрованный ozip")
     if os.access(filename, os.F_OK):
         with cartoon():
             run_command(f"zip2ozip {filename}")
@@ -259,7 +259,7 @@ def unzip():
             print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
-                    filename) else print('This is not zip')
+                    filename) else print('Это не zip-файл')
             print("Извлечение завершено")
         else:
             print("Error : Файл не найден")
@@ -933,7 +933,7 @@ class App:
                                                                                                             filename) if os.access(
                                                                                                             (
                                                                                                                     filename := askopenfilename(
-                                                                                                                        title="Расшифровка ozip")),
+                                                                                                                        title="Выберите зашифрованный ozip")),
                                                                                                             os.F_OK) else print(
                                                                                                             "Error : Файл не найден")),
                      ('Зашифровать OZIP', lambda: cz(ozip_encrypt)), ('Отключить проверку VBMETA', patch_vbmeta),
