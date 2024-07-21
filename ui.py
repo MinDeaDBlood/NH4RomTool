@@ -351,20 +351,20 @@ def smart_unpack():
                 else:
                     for i in ["super", "dtbo", "boot", "payload"]:
                         if filetype == i:
-                            print("在工作目录创建解包目录 :  " + i)
+                            print("Создание папки для распаковки в рабочей папке :  " + i)
                             if os.path.isdir(unpackdir):
-                                print("文件夹存在，正在删除")
+                                print("Папка уже существует и будет удалена")
                                 shutil.rmtree(unpackdir)
                             mkdir(unpackdir)
                             if i == "payload":
-                                print("正在解包payload")
+                                print("Распаковка payload")
                                 t = Thread(target=run_command, args=[
                                     "payload-dumper-go.exe -o %s\\payload %s" % (WorkDir, filename)],
                                            daemon=True)
                                 t.start()
                                 t.join()
                             if i == "boot":
-                                print("正在解包boot")
+                                print("Распаковка boot")
                                 os.chdir(unpackdir)
                                 shutil.copy(filename, os.path.join(unpackdir, os.path.basename(filename)))
                                 run_command("magiskboot unpack -h %s" % filename)
