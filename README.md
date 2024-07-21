@@ -1,25 +1,25 @@
 # NH4RomTool    
 
 ![join the chat](https://img.shields.io/badge/LICENSE-Apache%202.0-orange)    
-Free Rom Unpack and Repack tool on windows !!! 
+Программа собирает и разбирает образы прошивок - windows !!! 
 
 ## LOGO
 ![image](https://github.com/ColdWindScholar/NH4RomTool/blob/master/bin/logo.png)
 
-## 目前实现的
-***解压压缩***    
-***解包ozip***    
-***工作目录功能***    
-***简单读取文件格式***
-***解包payload***     
-***修补vbmeta***
-***打包Super***
-***解打EXT4/Erofs***
-## 用法
+## В настоящее время реализовано
+***Распаковка и упаковка в zip**    
+***Распаковка ozip***    
+***Функция рабочего каталога проекта***    
+***Удобный для чтения формат файла***
+***Распаковка payload***     
+***Отключение vbmeta***
+***Распаковка и упаковка Super.img***
+***Поддержка EXT4/Erofs***
+## Использование
 ``` Batchfile
 pip install -r requirements.txt
-:: 运行主界面
+:: Запускаем основной интерфейс
 python ui.py
 ```
 ### （删除了石山
-期待更多大佬加入:blush:
+С нетерпением ждем, когда к нам присоединится еще большие людей:blush:
