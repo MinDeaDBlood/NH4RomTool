@@ -259,7 +259,7 @@ def unzip():
             print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
-                    filename) else print('Это не zip файл')
+                    filename) else print('This is not zip')
             print("Извлечение завершено")
         else:
             print("Error : Файл не найден")
