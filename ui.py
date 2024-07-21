@@ -5,7 +5,7 @@ import shutil
 import subprocess
 import sys
 import time
-import zipfile
+import zipfile            
 from threading import Thread
 from tkinter import PhotoImage, Menu, Toplevel, StringVar, BooleanVar, IntVar
 from tkinter.ttk import Button, Entry, Frame, Checkbutton
@@ -321,31 +321,31 @@ def cz(func, *args):
 
 def smart_unpack():
     with cartoon():
-        filename = askopenfilename(title="选择解包的文件")
+        filename = askopenfilename(title="Выберите распакованный файл")
         if WorkDir:
             if os.access(filename, os.F_OK):
                 filetype = gettype(filename)
-                print("智能识别文件类型为 :  " + filetype)
+                print("Автоматическое определение типа файла :  " + filetype)
                 unpackdir = os.path.abspath(WorkDir + "/" + filetype)
                 if filetype == "ozip":
-                    print("正在解密ozip")
+                    print("Расшифровка ozip")
                     ozip_decrypt.main(filename)
-                    print("解密完成")
+                    print("Расшифровка завершена")
                 if filetype in ["ext", "erofs"]:
                     dirname = os.path.basename(filename).split(".")[0]
 
-                    print("在工作目录创建解包目录 : " + dirname)
+                    print("Создание папки для распаковки в рабочей папке : " + dirname)
                     if os.path.isdir(os.path.abspath(WorkDir) + "/" + dirname):
-                        print("文件夹存在，正在删除")
+                        print("Папка уже существует и будет удалена")
                         shutil.rmtree(os.path.abspath(WorkDir) + "/" + dirname)
                     mkdir(os.path.abspath(WorkDir) + "/" + dirname)
 
                     if filetype == "ext":
-                        print("正在解包[ext]: " + filename)
+                        print("Разобрать [ext]: " + filename)
                         imgextractor.Extractor().main(filename, WorkDir + os.sep + dirname + os.sep +
                                                       os.path.basename(filename).split('.')[0])
                     if filetype == "erofs":
-                        print("正在解包[erofs]: " + filename)
+                        print("Разобрать [erofs]: " + filename)
                         cz(run_command, f"extract.erofs.exe -i {filename} -o {WorkDir + os.sep + dirname} -x")
 
                 else:
