@@ -381,26 +381,26 @@ def smart_unpack():
                                     run_command("cpio -i -d -F %s -D %s" % ("ramdisk.cpio", "ramdisk"))
                                 os.chdir(LOCALDIR)
                             if i == "dtbo":
-                                print("使用mkdtboimg")
+                                print("Используется mkdtboimg")
                                 run_command("mkdtboimg.exe dump " + filename + " -b " + unpackdir + "\\dtb")
                             if i == "super":
-                                print("使用 lpunpack")
+                                print("Используется lpunpack")
                                 run_command(f"lpunpack {filename} {unpackdir}")
                     if filetype == "sparse":
-                        print("正在转换Sparse-->Raw")
+                        print("Преобразование Sparse-->Raw")
                         mkdir(WorkDir + os.sep + "rawimg")
                         run_command(f"simg2img {filename} " + WorkDir + "\\rawimg\\" + os.path.basename(
                             filename))
-                        print("sparse image 转换结束")
+                        print("Преобразование sparse образа завершено")
                     if filetype == "dat":
-                        print("正在解包Dat")
+                        print("Распаковка Dat")
                         pname = os.path.basename(filename).split(".")[0]
                         transferpath = os.path.abspath(
                             os.path.dirname(filename)) + os.sep + pname + ".transfer.list"
                         if os.access(transferpath, os.F_OK):
                             with cartoon():
                                 sdat2img.sdat2img(transferpath, filename, WorkDir + os.sep + pname + ".img")
-                                print("sdat已转换为img")
+                                print("sdat был преобразован в img")
                         else:
                             print("未能在dat文件所在目录找到对应的transfer.list文件")
                     if filetype == "br":
