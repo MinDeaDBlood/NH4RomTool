@@ -167,7 +167,7 @@ def about():
                style='success.TButton').pack(side=LEFT, expand=YES,
                                              padx=5)
     ttk.Label(aframe2,
-              text='Программа, для работы с образами прошивок\nАвтор оформления: ttkbootstrap\nColdWindScholar Все права защищены Apache 2.0 LICENSE\n3590361911@qq.com'\nПеревод и адаптация на русский: Rayne Kobayashi',
+              text='Программа, для работы с образами прошивок\nАвтор оформления: ttkbootstrap\nColdWindScholar Все права защищены Apache 2.0 LICENSE\n3590361911@qq.com\nПеревод и адаптация на русский: Rayne Kobayashi',
               font=(None, 15)).pack(
         side=BOTTOM, expand=NO, pady=3)
     root2.mainloop()
@@ -259,7 +259,7 @@ def unzip():
             print("Извлечение файлов: " + filename)
             with cartoon():
                 zipfile.ZipFile(filename, 'r').extractall(WorkDir + os.sep + "rom") if zipfile.is_zipfile(
-                    filename) else print('Это не zip-файл')
+                    filename) else print('This is not zip')
             print("Извлечение завершено")
         else:
             print("Error : Файл не найден")
